@@ -633,7 +633,7 @@ mapCelestialStatistics =  Table('mapCelestialStatistics', metadata,
             Column('orbitPeriod', FLOAT()),
             Column('rotationRate', FLOAT()),
             Column('locked', INTEGER()),
-            Column('pressure', INTEGER()),
+            Column('pressure', BigInteger),
             Column('radius', INTEGER()),
             Column('mass', INTEGER()),
 
