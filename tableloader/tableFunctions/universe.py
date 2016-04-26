@@ -12,19 +12,24 @@ def importyaml(connection,metadata,sourcePath):
 
     print "Importing Universe Data"
 
-    mapCelestialStatistics =  Table('mapCelestialStatistics', metadata)
-    mapConstellationJumps =  Table('mapConstellationJumps', metadata)
+    mapCelestialStatistics =  Table('mapCelestialStatistics', metadata) #done
     mapConstellations =  Table('mapConstellations', metadata) # done
     mapDenormalize =  Table('mapDenormalize', metadata)
-    mapJumps =  Table('mapJumps', metadata)
     mapLandmarks =  Table('mapLandmarks', metadata)
     mapLocationScenes =  Table('mapLocationScenes', metadata)
     mapLocationWormholeClasses =  Table('mapLocationWormholeClasses', metadata)
-    mapRegionJumps =  Table('mapRegionJumps', metadata)
     mapRegions =  Table('mapRegions', metadata) # done
-    mapSolarSystemJumps =  Table('mapSolarSystemJumps', metadata)
-    mapSolarSystems =  Table('mapSolarSystems', metadata)
+    mapSolarSystems =  Table('mapSolarSystems', metadata) # done
+    mapJumps =  Table('mapJumps', metadata) # done
+    
+    # Lookups
     invNames =  Table('invNames', metadata)
+    
+    # Generated Tables
+    mapSolarSystemJumps =  Table('mapSolarSystemJumps', metadata)
+    mapConstellationJumps =  Table('mapConstellationJumps', metadata)
+    mapRegionJumps =  Table('mapRegionJumps', metadata)
+    
     
     
     
@@ -115,19 +120,25 @@ def importyaml(connection,metadata,sourcePath):
                                     sunTypeID=system['sunTypeID'],
                                     securityClass=system.get('securityClass'))
                 print "Importing Statistics"
+                sstats=system['star'].get('statistics',{})
+                sstats['celestialID']=system['star']['id']
+                connection.execute(mapCelestialStatistics.insert(),sstats)
                 for planet in system.get('planets'):
-                    system['planets'][planet]['statistics']['celestialID']=planet
-                    connection.execute(mapCelestialStatistics.insert(),
-                                        system['planets'][planet]['statistics'])
+                    pstats=system['planets'][planet].get('statistics',{})
+                    pstats['celestialID']=planet
+                    connection.execute(mapCelestialStatistics.insert(),pstats)
                     for belt in system['planets'][planet].get('asteroidBelts',[]):
-                        system['planets'][planet]['asteroidBelts'][belt]['statistics']['celestialID']=belt
-                        connection.execute(mapCelestialStatistics.insert(),
-                                        system['planets'][planet]['asteroidBelts'][belt]['statistics'])
+                        bstats=system['planets'][planet]['asteroidBelts'][belt].get('statistics',{})
+                        bstats['celestialID']=belt
+                        connection.execute(mapCelestialStatistics.insert(),bstats)
                     for moon in system['planets'][planet].get('moons',[]):
-                        system['planets'][planet]['moons'][moon]['statistics']['celestialID']=moon
-                        connection.execute(mapCelestialStatistics.insert(),
-                                        system['planets'][planet]['moons'][moon]['statistics'])
-
+                        mstats=system['planets'][planet]['moons'][moon].get('statistics',{})
+                        mstats['celestialID']=moon
+                        connection.execute(mapCelestialStatistics.insert(),mstats)
+                print "Importing Stargates"
+                for stargate in system.get('stargates',[]):
+                    jump={'stargateID':stargate,'destinationID':system['stargates'][stargate]['destination']}
+                    connection.execute(mapJumps.insert(),jump)
             
             
             
