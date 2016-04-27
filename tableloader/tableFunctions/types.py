@@ -58,5 +58,5 @@ def importyaml(connection,metadata,sourcePath):
                                             unitID=typeids[typeid]['traits'][skill][trait].get('unitID'))
                         traitid=result.inserted_primary_key
                         for languageid in typeids[typeid]['traits'][skill][trait].get('bonusText',{}):
-                            connection.execute(trnTranslations.insert(),tcID=1001,keyID=traitid[0],languageID=languageid.decode('utf-8'),text=typeids[typeid]['traits'][skill][trait]['bonusText'][languageid].decode('utf-8'))
+                            connection.execute(trnTranslations.insert(),tcID=1002,keyID=traitid[0],languageID=languageid.decode('utf-8'),text=typeids[typeid]['traits'][skill][trait]['bonusText'][languageid].decode('utf-8'))
     trans.commit()

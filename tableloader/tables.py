@@ -17,20 +17,18 @@ agtAgentTypes =  Table('agtAgentTypes', metadata,
 agtAgents =  Table('agtAgents', metadata,
     Column('agentID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
             Column('divisionID', INTEGER()),
-            Column('corporationID', INTEGER()),
-            Column('locationID', INTEGER()),
+            Column('corporationID', INTEGER(),index=True),
+            Column('locationID', INTEGER(),index=True),
             Column('level', INTEGER()),
             Column('quality', INTEGER()),
             Column('agentTypeID', INTEGER()),
             Column('isLocator', INTEGER()),
-
-
     )
 
 
 agtResearchAgents =  Table('agtResearchAgents', metadata,
     Column('agentID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+            Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False,index=True),
 
 
     )
@@ -57,7 +55,7 @@ certMasteries =  Table('certMasteries', metadata,
 
 certSkills =  Table('certSkills', metadata,
     Column('certID', INTEGER()),
-            Column('skillID', INTEGER()),
+            Column('skillID', INTEGER(),index=True),
             Column('certLevelInt', INTEGER()),
             Column('skillLevel', INTEGER()),
             Column('certLevelText', VARCHAR(length=8)),
@@ -302,7 +300,7 @@ dgmExpressions =  Table('dgmExpressions', metadata,
 
 dgmTypeAttributes =  Table('dgmTypeAttributes', metadata,
     Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('attributeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+            Column('attributeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False,index=True),
             Column('valueInt', INTEGER()),
             Column('valueFloat', FLOAT()),
 
@@ -352,25 +350,24 @@ eveUnits =  Table('eveUnits', metadata,
 
 industryActivity =  Table('industryActivity', metadata,
     Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('activityID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+            Column('activityID', INTEGER(), primary_key=True, autoincrement=False, nullable=False,index=True),
             Column('time', INTEGER())
     )
 
 
 industryActivityMaterials =  Table('industryActivityMaterials', metadata,
-    Column('typeID', INTEGER()),
+    Column('typeID', INTEGER(),index=True),
             Column('activityID', INTEGER()),
             Column('materialTypeID', INTEGER()),
             Column('quantity', INTEGER()),
-
-
     )
+Index('industryActivityMaterials_idx1',industryActivityMaterials.c.typeID,industryActivityMaterials.c.activityID)
 
 
 industryActivityProbabilities =  Table('industryActivityProbabilities', metadata,
-    Column('typeID', INTEGER()),
+    Column('typeID', INTEGER(),index=True),
             Column('activityID', INTEGER()),
-            Column('productTypeID', INTEGER()),
+            Column('productTypeID', INTEGER(),index=True),
             Column('probability', DECIMAL(precision=3, scale=2)),
 
 
@@ -378,9 +375,9 @@ industryActivityProbabilities =  Table('industryActivityProbabilities', metadata
 
 
 industryActivityProducts =  Table('industryActivityProducts', metadata,
-    Column('typeID', INTEGER()),
+    Column('typeID', INTEGER(),index=True),
             Column('activityID', INTEGER()),
-            Column('productTypeID', INTEGER()),
+            Column('productTypeID', INTEGER(),index=True),
             Column('quantity', INTEGER()),
 
 
@@ -388,9 +385,9 @@ industryActivityProducts =  Table('industryActivityProducts', metadata,
 
 
 industryActivityRaces =  Table('industryActivityRaces', metadata,
-    Column('typeID', INTEGER()),
+    Column('typeID', INTEGER(),index=True),
             Column('activityID', INTEGER()),
-            Column('productTypeID', INTEGER()),
+            Column('productTypeID', INTEGER(),index=True),
             Column('raceID', INTEGER()),
 
 
@@ -398,14 +395,12 @@ industryActivityRaces =  Table('industryActivityRaces', metadata,
 
 
 industryActivitySkills =  Table('industryActivitySkills', metadata,
-    Column('typeID', INTEGER()),
+    Column('typeID', INTEGER(),index=True),
             Column('activityID', INTEGER()),
-            Column('skillID', INTEGER()),
+            Column('skillID', INTEGER(),index=True),
             Column('level', INTEGER()),
-
-
     )
-
+Index('industryActivitySkills_idx1',industryActivitySkills.c.typeID,industryActivitySkills.c.activityID)
 
 industryBlueprints =  Table('industryBlueprints', metadata,
     Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
@@ -427,11 +422,11 @@ invCategories =  Table('invCategories', metadata,
 
 invContrabandTypes =  Table('invContrabandTypes', metadata,
     Column('factionID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('standingLoss', FLOAT()),
-            Column('confiscateMinSec', FLOAT()),
-            Column('fineByValue', FLOAT()),
-            Column('attackMinSec', FLOAT()),
+            Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False,index=True),
+            Column('standingLoss', FLOAT(precision=53)),
+            Column('confiscateMinSec', FLOAT(precision=53)),
+            Column('fineByValue', FLOAT(precision=53)),
+            Column('attackMinSec', FLOAT(precision=53)),
 
 
     )
@@ -450,7 +445,7 @@ invControlTowerResources =  Table('invControlTowerResources', metadata,
             Column('resourceTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
             Column('purpose', INTEGER()),
             Column('quantity', INTEGER()),
-            Column('minSecurityLevel', FLOAT()),
+            Column('minSecurityLevel', FLOAT(precision=53)),
             Column('factionID', INTEGER()),
 
 
@@ -469,7 +464,7 @@ invFlags =  Table('invFlags', metadata,
 
 invGroups =  Table('invGroups', metadata,
     Column('groupID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('categoryID', INTEGER()),
+            Column('categoryID', INTEGER(),index=True),
             Column('groupName', VARCHAR(length=100)),
             Column('iconID', INTEGER()),
             Column('useBasePrice', INTEGER()),
@@ -486,12 +481,11 @@ invItems =  Table('invItems', metadata,
     Column('itemID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
             Column('typeID', INTEGER(), nullable=False),
             Column('ownerID', INTEGER(), nullable=False),
-            Column('locationID', INTEGER(), nullable=False),
+            Column('locationID', INTEGER(), nullable=False,index=True),
             Column('flagID', INTEGER(), nullable=False),
             Column('quantity', INTEGER(), nullable=False),
-
-
     )
+Index('items_IX_OwnerLocation',invItems.c.ownerID,invItems.c.locationID)
 
 
 invMarketGroups =  Table('invMarketGroups', metadata,
@@ -579,12 +573,12 @@ invTypeReactions =  Table('invTypeReactions', metadata,
 
 invTypes =  Table('invTypes', metadata,
     Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('groupID', INTEGER()),
+            Column('groupID', INTEGER(),index=True),
             Column('typeName', VARCHAR(length=100)),
             Column('description',UnicodeText()),
-            Column('mass', FLOAT()),
-            Column('volume', FLOAT()),
-            Column('capacity', FLOAT()),
+            Column('mass', FLOAT(precision=53)),
+            Column('volume', FLOAT(precision=53)),
+            Column('capacity', FLOAT(precision=53)),
             Column('portionSize', INTEGER()),
             Column('raceID', INTEGER()),
             Column('basePrice', DECIMAL(precision=19, scale=4)),
@@ -600,11 +594,10 @@ invTypes =  Table('invTypes', metadata,
 
 invUniqueNames =  Table('invUniqueNames', metadata,
     Column('itemID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('itemName', VARCHAR(length=200), nullable=False),
+            Column('itemName', VARCHAR(length=200), nullable=False,index=True,unique=True),
             Column('groupID', INTEGER()),
-
-
     )
+Index('invUniqueNames_IX_GroupName',invUniqueNames.c.groupID,invUniqueNames.c.itemName)
 
 
 invVolumes =  Table('invVolumes', metadata,
@@ -673,23 +666,26 @@ mapConstellations =  Table('mapConstellations', metadata,
 
 mapDenormalize =  Table('mapDenormalize', metadata,
     Column('itemID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('typeID', INTEGER()),
+            Column('typeID', INTEGER(),index=True),
             Column('groupID', INTEGER()),
-            Column('solarSystemID', INTEGER()),
-            Column('constellationID', INTEGER()),
-            Column('regionID', INTEGER()),
-            Column('orbitID', INTEGER()),
-            Column('x', FLOAT()),
-            Column('y', FLOAT()),
-            Column('z', FLOAT()),
-            Column('radius', FLOAT()),
+            Column('solarSystemID', INTEGER(),index=True),
+            Column('constellationID', INTEGER(),index=True),
+            Column('regionID', INTEGER(),index=True),
+            Column('orbitID', INTEGER(),index=True),
+            Column('x', FLOAT(precision=53)),
+            Column('y', FLOAT(precision=53)),
+            Column('z', FLOAT(precision=53)),
+            Column('radius', FLOAT(precision=53)),
             Column('itemName', VARCHAR(length=100)),
-            Column('security', FLOAT()),
+            Column('security', FLOAT(precision=53)),
             Column('celestialIndex', INTEGER()),
             Column('orbitIndex', INTEGER()),
-
-
     )
+Index('mapDenormalize_IX_groupRegion',mapDenormalize.c.groupID,mapDenormalize.c.regionID)
+Index('mapDenormalize_IX_groupSystem',mapDenormalize.c.groupID,mapDenormalize.c.solarSystemID)
+Index('mapDenormalize_IX_groupConstellation',mapDenormalize.c.groupID,mapDenormalize.c.constellationID)
+
+
 
 
 mapJumps =  Table('mapJumps', metadata,
@@ -705,9 +701,9 @@ mapLandmarks =  Table('mapLandmarks', metadata,
             Column('landmarkName', VARCHAR(length=100)),
             Column('description',UnicodeText()),
             Column('locationID', INTEGER()),
-            Column('x', FLOAT()),
-            Column('y', FLOAT()),
-            Column('z', FLOAT()),
+            Column('x', FLOAT(precision=53)),
+            Column('y', FLOAT(precision=53)),
+            Column('z', FLOAT(precision=53)),
             Column('iconID', INTEGER()),
 
 
@@ -741,15 +737,15 @@ mapRegionJumps =  Table('mapRegionJumps', metadata,
 mapRegions =  Table('mapRegions', metadata,
     Column('regionID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
             Column('regionName', VARCHAR(length=100)),
-            Column('x', FLOAT()),
-            Column('y', FLOAT()),
-            Column('z', FLOAT()),
-            Column('xMin', FLOAT()),
-            Column('xMax', FLOAT()),
-            Column('yMin', FLOAT()),
-            Column('yMax', FLOAT()),
-            Column('zMin', FLOAT()),
-            Column('zMax', FLOAT()),
+            Column('x', FLOAT(precision=53)),
+            Column('y', FLOAT(precision=53)),
+            Column('z', FLOAT(precision=53)),
+            Column('xMin', FLOAT(precision=53)),
+            Column('xMax', FLOAT(precision=53)),
+            Column('yMin', FLOAT(precision=53)),
+            Column('yMax', FLOAT(precision=53)),
+            Column('zMin', FLOAT(precision=53)),
+            Column('zMax', FLOAT(precision=53)),
             Column('factionID', INTEGER()),
             Column('radius', FLOAT()),
 
@@ -770,20 +766,20 @@ mapSolarSystemJumps =  Table('mapSolarSystemJumps', metadata,
 
 
 mapSolarSystems =  Table('mapSolarSystems', metadata,
-    Column('regionID', INTEGER()),
-            Column('constellationID', INTEGER()),
+    Column('regionID', INTEGER(),index=True),
+            Column('constellationID', INTEGER(),index=True),
             Column('solarSystemID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
             Column('solarSystemName', VARCHAR(length=100)),
-            Column('x', FLOAT()),
-            Column('y', FLOAT()),
-            Column('z', FLOAT()),
-            Column('xMin', FLOAT()),
-            Column('xMax', FLOAT()),
-            Column('yMin', FLOAT()),
-            Column('yMax', FLOAT()),
-            Column('zMin', FLOAT()),
-            Column('zMax', FLOAT()),
-            Column('luminosity', FLOAT()),
+            Column('x', FLOAT(precision=53)),
+            Column('y', FLOAT(precision=53)),
+            Column('z', FLOAT(precision=53)),
+            Column('xMin', FLOAT(precision=53)),
+            Column('xMax', FLOAT(precision=53)),
+            Column('yMin', FLOAT(precision=53)),
+            Column('yMax', FLOAT(precision=53)),
+            Column('zMin', FLOAT(precision=53)),
+            Column('zMax', FLOAT(precision=53)),
+            Column('luminosity', FLOAT(precision=53)),
             Column('border', INTEGER()),
             Column('fringe', INTEGER()),
             Column('corridor', INTEGER()),
@@ -791,31 +787,27 @@ mapSolarSystems =  Table('mapSolarSystems', metadata,
             Column('international', INTEGER()),
             Column('regional', INTEGER()),
             Column('constellation', INTEGER()),
-            Column('security', FLOAT()),
+            Column('security', FLOAT(precision=53),index=True),
             Column('factionID', INTEGER()),
-            Column('radius', FLOAT()),
+            Column('radius', FLOAT(precision=53)),
             Column('sunTypeID', INTEGER()),
             Column('securityClass', VARCHAR(length=2)),
-
-
     )
 
 
 mapUniverse =  Table('mapUniverse', metadata,
     Column('universeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
             Column('universeName', VARCHAR(length=100)),
-            Column('x', FLOAT()),
-            Column('y', FLOAT()),
-            Column('z', FLOAT()),
-            Column('xMin', FLOAT()),
-            Column('xMax', FLOAT()),
-            Column('yMin', FLOAT()),
-            Column('yMax', FLOAT()),
-            Column('zMin', FLOAT()),
-            Column('zMax', FLOAT()),
-            Column('radius', FLOAT()),
-
-
+            Column('x', FLOAT(precision=53)),
+            Column('y', FLOAT(precision=53)),
+            Column('z', FLOAT(precision=53)),
+            Column('xMin', FLOAT(precision=53)),
+            Column('xMax', FLOAT(precision=53)),
+            Column('yMin', FLOAT(precision=53)),
+            Column('yMax', FLOAT(precision=53)),
+            Column('zMin', FLOAT(precision=53)),
+            Column('zMax', FLOAT(precision=53)),
+            Column('radius', FLOAT(precision=53)),
     )
 
 
@@ -823,16 +815,12 @@ planetSchematics =  Table('planetSchematics', metadata,
     Column('schematicID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
             Column('schematicName', VARCHAR(length=255)),
             Column('cycleTime', INTEGER()),
-
-
     )
 
 
 planetSchematicsPinMap =  Table('planetSchematicsPinMap', metadata,
     Column('schematicID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
             Column('pinTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-
-
     )
 
 
@@ -841,8 +829,6 @@ planetSchematicsTypeMap =  Table('planetSchematicsTypeMap', metadata,
             Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
             Column('quantity', INTEGER()),
             Column('isInput', INTEGER()),
-
-
     )
 
 
@@ -852,8 +838,6 @@ ramActivities =  Table('ramActivities', metadata,
             Column('iconNo', VARCHAR(length=5)),
             Column('description', VARCHAR(length=1000)),
             Column('published', INTEGER()),
-
-
     )
 
 
@@ -862,9 +846,9 @@ ramAssemblyLineStations =  Table('ramAssemblyLineStations', metadata,
             Column('assemblyLineTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
             Column('quantity', INTEGER()),
             Column('stationTypeID', INTEGER()),
-            Column('ownerID', INTEGER()),
-            Column('solarSystemID', INTEGER()),
-            Column('regionID', INTEGER()),
+            Column('ownerID', INTEGER(),index=True),
+            Column('solarSystemID', INTEGER(),index=True),
+            Column('regionID', INTEGER(),index=True),
 
 
     )
@@ -873,22 +857,18 @@ ramAssemblyLineStations =  Table('ramAssemblyLineStations', metadata,
 ramAssemblyLineTypeDetailPerCategory =  Table('ramAssemblyLineTypeDetailPerCategory', metadata,
     Column('assemblyLineTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
             Column('categoryID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('timeMultiplier', FLOAT()),
-            Column('materialMultiplier', FLOAT()),
-            Column('costMultiplier', FLOAT()),
-
-
+            Column('timeMultiplier', FLOAT(precision=53)),
+            Column('materialMultiplier', FLOAT(precision=53)),
+            Column('costMultiplier', FLOAT(precision=53)),
     )
 
 
 ramAssemblyLineTypeDetailPerGroup =  Table('ramAssemblyLineTypeDetailPerGroup', metadata,
     Column('assemblyLineTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
             Column('groupID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('timeMultiplier', FLOAT()),
-            Column('materialMultiplier', FLOAT()),
-            Column('costMultiplier', FLOAT()),
-
-
+            Column('timeMultiplier', FLOAT(precision=53)),
+            Column('materialMultiplier', FLOAT(precision=53)),
+            Column('costMultiplier', FLOAT(precision=53)),
     )
 
 
@@ -896,12 +876,12 @@ ramAssemblyLineTypes =  Table('ramAssemblyLineTypes', metadata,
     Column('assemblyLineTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
             Column('assemblyLineTypeName', VARCHAR(length=100)),
             Column('description', VARCHAR(length=1000)),
-            Column('baseTimeMultiplier', FLOAT()),
-            Column('baseMaterialMultiplier', FLOAT()),
-            Column('baseCostMultiplier', FLOAT()),
-            Column('volume', FLOAT()),
+            Column('baseTimeMultiplier', FLOAT(precision=53)),
+            Column('baseMaterialMultiplier', FLOAT(precision=53)),
+            Column('baseCostMultiplier', FLOAT(precision=53)),
+            Column('volume', FLOAT(precision=53)),
             Column('activityID', INTEGER()),
-            Column('minCostPerHour', FLOAT()),
+            Column('minCostPerHour', FLOAT(precision=53)),
 
 
     )
@@ -935,8 +915,8 @@ skinMaterials =  Table('skinMaterials', metadata,
 
 
 skinShip =  Table('skinShip', metadata,
-    Column('skinID', INTEGER()),
-            Column('typeID', INTEGER()),
+    Column('skinID', INTEGER(),index=True),
+            Column('typeID', INTEGER(),index=True),
 
 
     )
@@ -990,15 +970,15 @@ staServices =  Table('staServices', metadata,
 
 staStationTypes =  Table('staStationTypes', metadata,
     Column('stationTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('dockEntryX', FLOAT()),
-            Column('dockEntryY', FLOAT()),
-            Column('dockEntryZ', FLOAT()),
-            Column('dockOrientationX', FLOAT()),
-            Column('dockOrientationY', FLOAT()),
-            Column('dockOrientationZ', FLOAT()),
+            Column('dockEntryX', FLOAT(precision=53)),
+            Column('dockEntryY', FLOAT(precision=53)),
+            Column('dockEntryZ', FLOAT(precision=53)),
+            Column('dockOrientationX', FLOAT(precision=53)),
+            Column('dockOrientationY', FLOAT(precision=53)),
+            Column('dockOrientationZ', FLOAT(precision=53)),
             Column('operationID', INTEGER()),
             Column('officeSlots', INTEGER()),
-            Column('reprocessingEfficiency', FLOAT()),
+            Column('reprocessingEfficiency', FLOAT(precision=53)),
             Column('conquerable', INTEGER()),
 
 
@@ -1008,21 +988,21 @@ staStationTypes =  Table('staStationTypes', metadata,
 staStations =  Table('staStations', metadata,
     Column('stationID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
             Column('security', INTEGER()),
-            Column('dockingCostPerVolume', FLOAT()),
-            Column('maxShipVolumeDockable', FLOAT()),
+            Column('dockingCostPerVolume', FLOAT(precision=53)),
+            Column('maxShipVolumeDockable', FLOAT(precision=53)),
             Column('officeRentalCost', INTEGER()),
-            Column('operationID', INTEGER()),
-            Column('stationTypeID', INTEGER()),
-            Column('corporationID', INTEGER()),
-            Column('solarSystemID', INTEGER()),
-            Column('constellationID', INTEGER()),
-            Column('regionID', INTEGER()),
+            Column('operationID', INTEGER(),index=True),
+            Column('stationTypeID', INTEGER(),index=True),
+            Column('corporationID', INTEGER(),index=True),
+            Column('solarSystemID', INTEGER(),index=True),
+            Column('constellationID', INTEGER(),index=True),
+            Column('regionID', INTEGER(),index=True),
             Column('stationName', VARCHAR(length=100)),
-            Column('x', FLOAT()),
-            Column('y', FLOAT()),
-            Column('z', FLOAT()),
-            Column('reprocessingEfficiency', FLOAT()),
-            Column('reprocessingStationsTake', FLOAT()),
+            Column('x', FLOAT(precision=53)),
+            Column('y', FLOAT(precision=53)),
+            Column('z', FLOAT(precision=53)),
+            Column('reprocessingEfficiency', FLOAT(precision=53)),
+            Column('reprocessingStationsTake', FLOAT(precision=53)),
             Column('reprocessingHangarFlag', INTEGER()),
 
 
