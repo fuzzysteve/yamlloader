@@ -33,7 +33,7 @@ def importyaml(connection,metadata,sourcePath):
 
     mapCelestialStatistics =  Table('mapCelestialStatistics', metadata) #done
     mapConstellations =  Table('mapConstellations', metadata) # done
-    mapDenormalize =  Table('mapDenormalize', metadata)
+    mapDenormalize =  Table('mapDenormalize', metadata) # done
     mapRegions =  Table('mapRegions', metadata) # done
     mapSolarSystems =  Table('mapSolarSystems', metadata) # done
     mapJumps =  Table('mapJumps', metadata) # done
@@ -262,6 +262,23 @@ def importyaml(connection,metadata,sourcePath):
                                             security=system['security'],
                                             celestialIndex=system['planets'][planet]['celestialIndex'],
                                             orbitIndex=x)
+                    for npcstation in system['planets'][planet].get('npcStations',[]):
+                            stationname=connection.execute(
+                                invNames.select().where( invNames.c.itemID == npcstation )
+                                ).fetchall()[0]['itemName']
+                            connection.execute(mapDenormalize.insert(),
+                                                itemID=npcstation,
+                                                typeID=system['planets'][planet]['npcStations'][npcstation]['typeID'],
+                                                groupID=grouplookup(connection,metadata,system['planets'][planet]['npcStations'][npcstation]['typeID']),
+                                                solarSystemID=system['solarSystemID'],
+                                                constellationID=constellation['constellationID'],
+                                                regionID=region['regionID'],
+                                                orbitID=planet,
+                                                x=system['planets'][planet]['npcStations'][npcstation]['position'][0],
+                                                y=system['planets'][planet]['npcStations'][npcstation]['position'][1],
+                                                z=system['planets'][planet]['npcStations'][npcstation]['position'][2],
+                                                itemName=stationname,
+                                                security=system['security'])
                     x=0
                     for moon in system['planets'][planet].get('moons',[]):
                         x+=1
