@@ -37,9 +37,11 @@ def importyaml(connection,metadata,sourcePath):
     mapRegions =  Table('mapRegions', metadata) # done
     mapSolarSystems =  Table('mapSolarSystems', metadata) # done
     mapJumps =  Table('mapJumps', metadata) # done
+    mapLocationScenes =  Table('mapLocationScenes', metadata) # done
+    
 
     mapLandmarks =  Table('mapLandmarks', metadata)
-    mapLocationScenes =  Table('mapLocationScenes', metadata)
+    
     mapLocationWormholeClasses =  Table('mapLocationWormholeClasses', metadata)
     
     # Lookups
@@ -89,6 +91,12 @@ def importyaml(connection,metadata,sourcePath):
         connection.execute(mapLocationScenes.insert(),
                             locationID=region['regionID'],
                             graphicID=region['nebula'])
+                            
+        if  region.get('wormholeClassID'):
+            connection.execute(mapLocationWormholeClasses.insert(),
+                                locationID=region['regionID'],
+                                wormholeClassID=region['wormholeClassID']);
+                            
         print "Importing Constellations."
         constellations=glob.glob(os.path.join(head,'*','constellation.staticdata'))
         for constellationfile in constellations:
@@ -122,6 +130,12 @@ def importyaml(connection,metadata,sourcePath):
                                 x=region['center'][0],
                                 y=region['center'][1],
                                 z=region['center'][2])
+
+            if  constellation.get('wormholeClassID'):
+                connection.execute(mapLocationWormholeClasses.insert(),
+                                locationID=constellation['constellationID'],
+                                wormholeClassID=constellation['wormholeClassID']);
+
             systems=glob.glob(os.path.join(chead,'*','solarsystem.staticdata'))
             print "Importing Systems"
             for systemfile in systems:
@@ -188,6 +202,12 @@ def importyaml(connection,metadata,sourcePath):
                                     radius=system['radius'],
                                     sunTypeID=system['sunTypeID'],
                                     securityClass=system.get('securityClass'))
+                if  system.get('wormholeClassID'):
+                    connection.execute(mapLocationWormholeClasses.insert(),
+                                locationID=system['solarSystemID'],
+                                wormholeClassID=system['wormholeClassID']);
+
+
                 print "Importing Statistics"
                 sstats=system['star'].get('statistics',{})
                 sstats['celestialID']=system['star']['id']

@@ -37,5 +37,5 @@ import tableloader.tableFunctions
 # icons.importyaml(connection,metadata,sourcePath)
 # skins.importyaml(connection,metadata,sourcePath)
 # types.importyaml(connection,metadata,sourcePath)
-#bsdTables.importyaml(connection,metadata,sourcePath)
+# bsdTables.importyaml(connection,metadata,sourcePath)
 universe.importyaml(connection,metadata,sourcePath)
