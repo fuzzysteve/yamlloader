@@ -25,7 +25,21 @@ def grouplookup(connection,metadata,typeid):
     typeidcache[typeid]=groupid
     return groupid
 
+def get_distance_squared(c1, c2):
+    pos = c1['position']
+    mx, my, mz = pos[0], pos[1], pos[2]
+    pos = c2['position']
+    px, py, pz = pos[0], pos[1], pos[2]
+    dx, dy, dz = mx - px, my - py, mz - pz
 
+    return dx * dx + dy * dy + dz * dz
+
+def get_sorted_objects(planet, key):
+    with_radius = [(get_distance_squared(obj, planet), obj_id)
+                   for (obj_id, obj)
+                   in planet.get(key, {}).items()]
+    with_radius.sort()
+    return [obj_id for (radius, obj_id) in with_radius]
 
 def importyaml(connection,metadata,sourcePath):
 
@@ -261,7 +275,7 @@ def importyaml(connection,metadata,sourcePath):
                                         security=system['security'],
                                         celestialIndex=system['planets'][planet]['celestialIndex'])
                     x=0
-                    for belt in system['planets'][planet].get('asteroidBelts',[]):
+                    for belt in get_sorted_objects(system['planets'][planet], 'asteroidBelts'):
                         x+=1
                         beltname=connection.execute(
                             invNames.select().where( invNames.c.itemID == belt )
@@ -300,7 +314,7 @@ def importyaml(connection,metadata,sourcePath):
                                                 itemName=stationname,
                                                 security=system['security'])
                     x=0
-                    for moon in system['planets'][planet].get('moons',[]):
+                    for moon in get_sorted_objects(system['planets'][planet], 'moons'):
                         x+=1
                         moonname=connection.execute(
                             invNames.select().where( invNames.c.itemID == moon )
