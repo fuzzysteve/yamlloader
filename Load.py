@@ -1,24 +1,51 @@
-from tableloader.tables import metadata
 from sqlalchemy import create_engine
 import warnings
 
+import sys
+
+
+
+
+
 warnings.filterwarnings('ignore', '^Unicode type received non-unicode bind param value')
 
-from tableloader.tableFunctions import *
+
+if len(sys.argv)<2:
+    print "Load.py destination"
+    exit()
+
+
+database=sys.argv[1]
+
 
 import ConfigParser, os
 fileLocation = os.path.dirname(os.path.realpath(__file__))
 inifile=fileLocation+'/sdeloader.cfg'
 config = ConfigParser.ConfigParser()
 config.read(inifile)
-destination=config.get('Database','destination')
+destination=config.get('Database',database)
 sourcePath=config.get('Files','sourcePath')
+
+
+
+
+
+
+from tableloader.tableFunctions import *
+from tableloader.tables import metadata
+
+
 
 print "connecting to DB"
 
 
 engine = create_engine(destination)
 connection = engine.connect()
+
+
+if database=="postgresschema":
+    connection.execute("SET search_path TO evesde")
+
 
 print "Creating Tables"
 
