@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine,Table
 import warnings
 
 import sys
@@ -32,7 +32,6 @@ sourcePath=config.get('Files','sourcePath')
 
 
 from tableloader.tableFunctions import *
-from tableloader.tables import metadata
 
 
 
@@ -43,8 +42,15 @@ engine = create_engine(destination)
 connection = engine.connect()
 
 
+
+from tableloader.tables import metadataCreator
+
+schema=None
 if database=="postgresschema":
-    connection.execute("SET search_path TO evesde")
+    schema="evesde"
+
+metadata=metadataCreator(schema)
+
 
 
 print "Creating Tables"
