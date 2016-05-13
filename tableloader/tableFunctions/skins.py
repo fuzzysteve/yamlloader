@@ -25,7 +25,7 @@ def importyaml(connection,metadata,sourcePath):
                             skinMaterialID=skins[skinid].get('skinMaterialID',''))
             for ship in skins[skinid]['types']:
                 connection.execute(skinShip.insert(),
-                                licenseTypeID=skinid,
+                                skinID=skinid,
                                 typeID=ship)
 
 
