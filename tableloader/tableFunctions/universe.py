@@ -134,7 +134,9 @@ def importyaml(connection,metadata,sourcePath):
                                 xMin=constellation['min'][0],
                                 yMin=constellation['min'][1],
                                 zMin=constellation['min'][2],
-                                radius=constellation['radius'])
+                                radius=constellation['radius'],
+                                factionID=constellation.get('factionID',region.get('factionID'))
+                                )
             connection.execute(mapDenormalize.insert(),
                                 itemID=constellation['constellationID'],
                                 regionID=region['regionID'],
@@ -212,7 +214,7 @@ def importyaml(connection,metadata,sourcePath):
                                     international=system['international'],
                                     regional=system['regional'],
                                     security=system['security'],
-                                    factionid=system.get('factionID'),
+                                    factionid=system.get('factionID',constellation.get('factionID',region.get('factionID'))),
                                     radius=system['radius'],
                                     sunTypeID=system['sunTypeID'],
                                     securityClass=system.get('securityClass'))
@@ -367,3 +369,46 @@ def importyaml(connection,metadata,sourcePath):
                                         security=system['security'])
 
         trans.commit()
+
+
+def buildJumps(connection,connectiontype):
+
+    sql={}
+    sql['postgres']=[]
+    sql['postgresschema']=[]
+    sql['other']=[]
+
+    sql['postgres'].append("""insert into "mapSolarSystemJumps" ("fromRegionID","fromConstellationID","fromSolarSystemID","toRegionID","toConstellationID","toSolarSystemID")
+    select f."regionID" "fromRegionID",f."constellationID" "fromConstellationID",f."solarSystemID" "fromSolarSystemID",t."regionID" "toRegionID",t."constellationID" "toConstellationID",t."solarSystemID" "toSolarSystemID"
+    from "mapJumps" join "mapDenormalize" f on "mapJumps"."stargateID"=f."itemID" join "mapDenormalize" t on "mapJumps"."destinationID"=t."itemID" """)
+    sql['postgres'].append("""insert into "mapRegionJumps"
+    select distinct f."regionID",t."regionID"
+    from "mapJumps" join "mapDenormalize" f on "mapJumps"."stargateID"=f."itemID" join "mapDenormalize" t on "mapJumps"."destinationID"=t."itemID" where f."regionID"!=t."regionID" """)
+    sql['postgres'].append("""insert into "mapConstellationJumps"
+    select distinct f."regionID",f."constellationID",t."constellationID",t."regionID"
+    from "mapJumps" join "mapDenormalize" f on "mapJumps"."stargateID"=f."itemID" join "mapDenormalize" t on "mapJumps"."destinationID"=t."itemID" where f."constellationID"!=t."constellationID" """)
+    sql['postgresschema'].append("""insert into evesde."mapSolarSystemJumps" ("fromRegionID","fromConstellationID","fromSolarSystemID","toRegionID","toConstellationID","toSolarSystemID")
+    select f."regionID" "fromRegionID",f."constellationID" "fromConstellationID",f."solarSystemID" "fromSolarSystemID",t."regionID" "toRegionID",t."constellationID" "toConstellationID",t."solarSystemID" "toSolarSystemID"
+    from  evesde."mapJumps" join  evesde."mapDenormalize" f on "mapJumps"."stargateID"=f."itemID" join  evesde."mapDenormalize" t on "mapJumps"."destinationID"=t."itemID" """)
+    sql['postgresschema'].append("""insert into  evesde."mapRegionJumps"
+    select distinct f."regionID",t."regionID"
+    from  evesde."mapJumps" join  evesde."mapDenormalize" f on "mapJumps"."stargateID"=f."itemID" join  evesde."mapDenormalize" t on "mapJumps"."destinationID"=t."itemID" where f."regionID"!=t."regionID" """)
+    sql['postgresschema'].append("""insert into  evesde."mapConstellationJumps"
+    select distinct f."regionID",f."constellationID",t."constellationID",t."regionID"
+    from  evesde."mapJumps" join  evesde."mapDenormalize" f on "mapJumps"."stargateID"=f."itemID" join  evesde."mapDenormalize" t on "mapJumps"."destinationID"=t."itemID" where f."constellationID"!=t."constellationID" """)
+
+    sql['other'].append("""insert into mapSolarSystemJumps (fromRegionID,fromConstellationID,fromSolarSystemID,toRegionID,toConstellationID,toSolarSystemID)
+    select f.regionID fromRegionID,f.constellationID fromConstellationID,f.solarSystemID fromSolarSystemID,t.regionID toRegionID,t.constellationID toConstellationID,t.solarSystemID toSolarSystemID
+    from mapJumps join mapDenormalize f on mapJumps.stargateID=f.itemID join mapDenormalize t on mapJumps.destinationID=t.itemID""")
+    sql['other'].append("""insert into mapRegionJumps
+    select distinct f.regionID,t.regionID
+    from mapJumps join mapDenormalize f on mapJumps.stargateID=f.itemID join mapDenormalize t on mapJumps.destinationID=t.itemID where f.regionID!=t.regionID""")
+    sql['other'].append("""insert into mapConstellationJumps
+    select distinct f.regionID,f.constellationID,t.constellationID,t.regionID
+    from mapJumps join mapDenormalize f on mapJumps.stargateID=f.itemID join mapDenormalize t on mapJumps.destinationID=t.itemID where f.constellationID!=t.constellationID""")
+
+    if connectiontype == "sqlite" or connectiontype == "mysql":
+        connectiontype="other"
+    connection.execute(sql[connectiontype][0])
+    connection.execute(sql[connectiontype][1])
+    connection.execute(sql[connectiontype][2])
