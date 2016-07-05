@@ -48,15 +48,27 @@ def importyaml(connection,metadata,sourcePath):
                 for lang in typeids[typeid]['description']:
                     connection.execute(trnTranslations.insert(),tcID=33,keyID=typeid,languageID=lang.decode('utf-8'),text=typeids[typeid]['description'][lang].decode('utf-8'))
             if (typeids[typeid].has_key('traits')):
-                for skill in typeids[typeid]['traits']:
-                    for trait in typeids[typeid]['traits'][skill]:
+                if typeids[typeid]['traits'].has_key('types'):
+                    for skill in typeids[typeid]['traits']['types']:
+                        for trait in typeids[typeid]['traits']['types'][skill]:
+                            result=connection.execute(invTraits.insert(),
+                                                typeID=typeid,
+                                                skillID=skill,
+                                                bonus=trait.get('bonus'),
+                                                bonusText=trait.get('bonusText',{}).get('en',''),
+                                                unitID=trait.get('unitID'))
+                            traitid=result.inserted_primary_key
+                            for languageid in trait.get('bonusText',{}):
+                                connection.execute(trnTranslations.insert(),tcID=1002,keyID=traitid[0],languageID=languageid.decode('utf-8'),text=trait['bonusText'][languageid].decode('utf-8'))
+                if typeids[typeid]['traits'].has_key('roleBonuses'):
+                    for trait in typeids[typeid]['traits']['roleBonuses']:
                         result=connection.execute(invTraits.insert(),
-                                            typeID=typeid,
-                                            skillID=skill,
-                                            bonus=typeids[typeid]['traits'][skill][trait].get('bonus'),
-                                            bonusText=typeids[typeid]['traits'][skill][trait].get('bonusText',{}).get('en',''),
-                                            unitID=typeids[typeid]['traits'][skill][trait].get('unitID'))
+                                typeID=typeid,
+                                skillID=-1,
+                                bonus=trait.get('bonus'),
+                                bonusText=trait.get('bonusText',{}).get('en',''),
+                                unitID=trait.get('unitID'))
                         traitid=result.inserted_primary_key
-                        for languageid in typeids[typeid]['traits'][skill][trait].get('bonusText',{}):
-                            connection.execute(trnTranslations.insert(),tcID=1002,keyID=traitid[0],languageID=languageid.decode('utf-8'),text=typeids[typeid]['traits'][skill][trait]['bonusText'][languageid].decode('utf-8'))
+                        for languageid in trait.get('bonusText',{}):
+                            connection.execute(trnTranslations.insert(),tcID=1002,keyID=traitid[0],languageID=languageid.decode('utf-8'),text=trait['bonusText'][languageid].decode('utf-8'))
     trans.commit()
