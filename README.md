@@ -16,3 +16,9 @@ or
     export C_INCLUDE_PATH=/opt/local/include (not sure what Homebrew path would be)
 
 For PostgreSQL, you will also need to install `psycopg2`.
+
+# Database Engines
+
+## PostgresSQL with Schema
+
+You must create the "evesde" schema before using the loader.
