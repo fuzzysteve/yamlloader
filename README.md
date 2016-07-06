@@ -13,6 +13,6 @@ Remember to install libyaml first, and adjust the include path for clang:
 
 or
     brew install libyaml
-    export C_INCLUDE_PATH=/opt/local/include
+    export C_INCLUDE_PATH=/opt/local/include (not sure what Homebrew path would be)
 
 For PostgreSQL, you will also need to install `psycopg2`.
