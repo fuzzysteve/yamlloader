@@ -5,6 +5,13 @@ from yaml import Loader, SafeLoader
 import glob
 from sqlalchemy import Table
 
+from yaml import load
+try:
+	from yaml import CSafeLoader as SafeLoader
+	print "Using CSafeLoader"
+except ImportError:
+	from yaml import SafeLoader
+	print "Using Python SafeLoader"
 
 def construct_yaml_str(self, node):
     # Override the default string handling function

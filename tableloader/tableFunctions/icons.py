@@ -3,7 +3,6 @@ import os
 import yaml
 from sqlalchemy import Table
 
-
 def importyaml(connection,metadata,sourcePath):
     eveIcons = Table('eveIcons',metadata)
     print("Importing Icons")

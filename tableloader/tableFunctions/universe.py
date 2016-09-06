@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
-import glob
-import yaml
 from sqlalchemy import Table
+import glob
 
 typeidcache={}
 
@@ -72,7 +71,7 @@ def importyaml(connection,metadata,sourcePath):
         print("Importing Region {}".format(head))
         trans = connection.begin()
         with open(regionfile,'r') as yamlstream:
-            region=yaml.load(yamlstream,Loader=yaml.CSafeLoader)
+            region=load(yamlstream,Loader=SafeLoader)
         regionname=connection.execute(
             invNames.select().where( invNames.c.itemID == region['regionID'] )
         ).fetchall()[0]['itemName']
@@ -113,7 +112,7 @@ def importyaml(connection,metadata,sourcePath):
         for constellationfile in constellations:
             chead, tail = os.path.split(constellationfile)
             with open(constellationfile,'r') as yamlstream:
-                constellation=yaml.load(yamlstream,Loader=yaml.CSafeLoader)
+                constellation=load(yamlstream,Loader=SafeLoader)
             constellationname=connection.execute(
                 invNames.select().where( invNames.c.itemID == constellation['constellationID'] )
             ).fetchall()[0]['itemName']
@@ -153,7 +152,7 @@ def importyaml(connection,metadata,sourcePath):
             print("Importing Systems")
             for systemfile in systems:
                 with open(systemfile,'r') as yamlstream:
-                    system=yaml.load(yamlstream,Loader=yaml.CSafeLoader)
+                    system=load(yamlstream,Loader=SafeLoader)
                 systemname=connection.execute(
                     invNames.select().where( invNames.c.itemID == system['solarSystemID'] )
                 ).fetchall()[0]['itemName']

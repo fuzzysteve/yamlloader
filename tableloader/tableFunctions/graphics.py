@@ -3,8 +3,6 @@ import os
 import yaml
 from sqlalchemy import Table
 
-
-
 def importyaml(connection,metadata,sourcePath):
     eveGraphics = Table('eveGraphics',metadata)
     print("Importing Graphics")

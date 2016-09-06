@@ -3,6 +3,15 @@ import os
 import yaml
 from sqlalchemy import Table
 
+from yaml import load
+try:
+	from yaml import CSafeLoader as SafeLoader
+	print "Using CSafeLoader"
+except ImportError:
+	from yaml import SafeLoader
+	print "Using Python SafeLoader"
+
+
 def importyaml(connection,metadata,sourcePath):
     print("Importing Categories")
     invCategories = Table('invCategories',metadata)

@@ -1,7 +1,14 @@
 # -*- coding: utf-8 -*-
-import yaml
+from yaml import load
+try:
+	from yaml import CSafeLoader as SafeLoader
+	print "Using CSafeLoader"
+except ImportError:
+	from yaml import SafeLoader
+	print "Using Python SafeLoader"
+
 import os
-from sqlalchemy import Table;
+from sqlalchemy import Table
 
 
 def importyaml(connection,metadata,sourcePath):
