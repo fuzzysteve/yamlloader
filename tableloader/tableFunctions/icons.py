@@ -1,11 +1,17 @@
 # -*- coding: utf-8 -*-
-import sys
+from yaml import load, dump
+try:
+	from yaml import CSafeLoader as SafeLoader
+	print "Using CSafeLoader"
+except ImportError:
+	from yaml import SafeLoader
+	print "Using Python SafeLoader"
+
 import os
+import sys
 reload(sys)
 sys.setdefaultencoding("utf-8")
-import yaml
 from sqlalchemy import Table
-
 
 def importyaml(connection,metadata,sourcePath):
     eveIcons = Table('eveIcons',metadata)
@@ -13,7 +19,7 @@ def importyaml(connection,metadata,sourcePath):
     print "Opening Yaml"
     with open(os.path.join(sourcePath,'fsd','iconIDs.yaml'),'r') as yamlstream:
         trans = connection.begin()
-        icons=yaml.load(yamlstream,Loader=yaml.CSafeLoader)
+        icons=load(yamlstream,Loader=SafeLoader)
         print "Yaml Processed into memory"
         for icon in icons:
             connection.execute(eveIcons.insert(),

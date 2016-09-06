@@ -1,12 +1,16 @@
 # -*- coding: utf-8 -*-
-import sys
+from yaml import load, dump
+try:
+	from yaml import CSafeLoader as SafeLoader
+	print "Using CSafeLoader"
+except ImportError:
+	from yaml import SafeLoader
+	print "Using Python SafeLoader"
+
 import os
 reload(sys)
 sys.setdefaultencoding("utf-8")
-import yaml
 from sqlalchemy import Table
-
-
 
 def importyaml(connection,metadata,sourcePath):
     eveGraphics = Table('eveGraphics',metadata)
@@ -15,7 +19,7 @@ def importyaml(connection,metadata,sourcePath):
     with open(os.path.join(sourcePath,'fsd','graphicIDs.yaml'),'r') as yamlstream:
         print "importing"
         trans = connection.begin()
-        graphics=yaml.load(yamlstream,Loader=yaml.CSafeLoader)
+        graphics=load(yamlstream,Loader=SafeLoader)
         print "Yaml Processed into memory"
         for graphic in graphics:
             connection.execute(eveGraphics.insert(),
