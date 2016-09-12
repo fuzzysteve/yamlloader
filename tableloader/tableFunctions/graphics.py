@@ -8,6 +8,7 @@ except ImportError:
 	print "Using Python SafeLoader"
 
 import os
+import sys
 reload(sys)
 sys.setdefaultencoding("utf-8")
 from sqlalchemy import Table

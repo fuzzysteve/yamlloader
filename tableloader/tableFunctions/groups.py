@@ -20,7 +20,7 @@ def importyaml(connection,metadata,sourcePath):
     print "opening Yaml"
     with open(os.path.join(sourcePath,'fsd','groupIDs.yaml'),'r') as yamlstream:
         trans = connection.begin()
-        groupids=yaml.load(yamlstream,Loader=yaml.CSafeLoader)
+        groupids=load(yamlstream,Loader=SafeLoader)
         print "Yaml Processed into memory"
         for groupid in groupids:
             connection.execute(invGroups.insert(),
