@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
-import sys
 import os
-reload(sys)
-sys.setdefaultencoding("utf-8")
 import yaml
 from sqlalchemy import Table
 
@@ -21,14 +18,15 @@ def importyaml(connection,metadata,sourcePath):
         for categoryid in categoryids:
             connection.execute(invCategories.insert(),
                             categoryID=categoryid,
-                            categoryName=categoryids[categoryid].get('name',{}).get('en','').decode('utf-8'),
+                            categoryName=categoryids[categoryid].get('name',{}).get('en',''),
                             iconID=categoryids[categoryid].get('iconID'),
                             published=categoryids[categoryid].get('published',0))
             
             if (categoryids[categoryid].has_key('name')):
                 for lang in categoryids[categoryid]['name']:
                     try:
-                        connection.execute(trnTranslations.insert(),tcID=6,keyID=categoryid,languageID=lang,text=categoryids[categoryid]['name'][lang].decode('utf-8'));
+                        category_text = categoryids[categoryid]['name'][lang]
+                        connection.execute(trnTranslations.insert(),tcID=6,keyID=categoryid,languageID=lang,text=category_text);
                     except:                        
-                        print '{} {} has a category problem'.format(categoryid,lang)
+                        print '{} {} has a category problem: {}'.format(categoryid, lang, category_text)
     trans.commit()

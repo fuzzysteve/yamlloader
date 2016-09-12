@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
-import sys
 import os
-reload(sys)
-sys.setdefaultencoding("utf-8")
 import yaml
 from sqlalchemy import Table
 

@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
-import sys
 import os
-reload(sys)
-sys.setdefaultencoding("utf-8")
 import yaml
 from sqlalchemy import Table
 
@@ -19,7 +16,7 @@ def importyaml(connection,metadata,sourcePath):
             connection.execute(invGroups.insert(),
                             groupID=groupid,
                             categoryID=groupids[groupid].get('categoryID',0),
-                            groupName=groupids[groupid].get('name',{}).get('en','').decode('utf-8'),
+                            groupName=groupids[groupid].get('name',{}).get('en',''),
                             iconID=groupids[groupid].get('iconID'),
                             useBasePrice=groupids[groupid].get('useBasePrice'),
                             anchored=groupids[groupid].get('anchored',0),
@@ -28,5 +25,5 @@ def importyaml(connection,metadata,sourcePath):
                             published=groupids[groupid].get('published',0))
             if (groupids[groupid].has_key('name')):
                 for lang in groupids[groupid]['name']:
-                    connection.execute(trnTranslations.insert(),tcID=7,keyID=groupid,languageID=lang,text=groupids[groupid]['name'][lang].decode('utf-8'));
+                    connection.execute(trnTranslations.insert(),tcID=7,keyID=groupid,languageID=lang,text=groupids[groupid]['name'][lang]);
     trans.commit()

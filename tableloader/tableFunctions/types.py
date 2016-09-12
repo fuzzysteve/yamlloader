@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
-import sys
 import os
-reload(sys)
-sys.setdefaultencoding("utf-8")
 import yaml
 from sqlalchemy import Table
 
@@ -21,8 +18,8 @@ def importyaml(connection,metadata,sourcePath):
             connection.execute(invTypes.insert(),
                             typeID=typeid,
                             groupID=typeids[typeid].get('groupID',0),
-                            typeName=typeids[typeid].get('name',{}).get('en','').decode('utf-8'),
-                            description=typeids[typeid].get('description',{}).get('en','').decode('utf-8'),
+                            typeName=typeids[typeid].get('name',{}).get('en',''),
+                            description=typeids[typeid].get('description',{}).get('en',''),
                             mass=typeids[typeid].get('mass',0),
                             volume=typeids[typeid].get('volume',0),
                             capacity=typeids[typeid].get('capacity',0),
@@ -43,10 +40,10 @@ def importyaml(connection,metadata,sourcePath):
                                             certID=cert)
             if (typeids[typeid].has_key('name')):
                 for lang in typeids[typeid]['name']:
-                    connection.execute(trnTranslations.insert(),tcID=8,keyID=typeid,languageID=lang.decode('utf-8'),text=typeids[typeid]['name'][lang].decode('utf-8'))
+                    connection.execute(trnTranslations.insert(),tcID=8,keyID=typeid,languageID=lang,text=typeids[typeid]['name'][lang])
             if (typeids[typeid].has_key('description')):
                 for lang in typeids[typeid]['description']:
-                    connection.execute(trnTranslations.insert(),tcID=33,keyID=typeid,languageID=lang.decode('utf-8'),text=typeids[typeid]['description'][lang].decode('utf-8'))
+                    connection.execute(trnTranslations.insert(),tcID=33,keyID=typeid,languageID=lang,text=typeids[typeid]['description'][lang])
             if (typeids[typeid].has_key('traits')):
                 if typeids[typeid]['traits'].has_key('types'):
                     for skill in typeids[typeid]['traits']['types']:
@@ -59,7 +56,7 @@ def importyaml(connection,metadata,sourcePath):
                                                 unitID=trait.get('unitID'))
                             traitid=result.inserted_primary_key
                             for languageid in trait.get('bonusText',{}):
-                                connection.execute(trnTranslations.insert(),tcID=1002,keyID=traitid[0],languageID=languageid.decode('utf-8'),text=trait['bonusText'][languageid].decode('utf-8'))
+                                connection.execute(trnTranslations.insert(),tcID=1002,keyID=traitid[0],languageID=languageid,text=trait['bonusText'][languageid])
                 if typeids[typeid]['traits'].has_key('roleBonuses'):
                     for trait in typeids[typeid]['traits']['roleBonuses']:
                         result=connection.execute(invTraits.insert(),
@@ -70,5 +67,5 @@ def importyaml(connection,metadata,sourcePath):
                                 unitID=trait.get('unitID'))
                         traitid=result.inserted_primary_key
                         for languageid in trait.get('bonusText',{}):
-                            connection.execute(trnTranslations.insert(),tcID=1002,keyID=traitid[0],languageID=languageid.decode('utf-8'),text=trait['bonusText'][languageid].decode('utf-8'))
+                            connection.execute(trnTranslations.insert(),tcID=1002,keyID=traitid[0],languageID=languageid,text=trait['bonusText'][languageid])
     trans.commit()
