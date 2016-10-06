@@ -652,11 +652,9 @@ def metadataCreator(schema):
 
 
     invVolumes =  Table('invVolumes', metadata,
-            Column('typeid', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+            Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
             Column('volume', INTEGER()),
             schema=schema
-
-
     )
 
 
