@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
-import sys
 import os
 from sqlalchemy import Table
-reload(sys)
-sys.setdefaultencoding("utf-8")
 import yaml
 
 def importyaml(connection,metadata,sourcePath):
@@ -11,12 +8,12 @@ def importyaml(connection,metadata,sourcePath):
     certSkills = Table('certSkills',metadata,)
     skillmap={"basic":0,"standard":1,"improved":2,"advanced":3,"elite":4}
 
-    print "Importing Certificates"
-    print "opening Yaml"
+    print("Importing Certificates")
+    print("opening Yaml")
     with open(os.path.join(sourcePath,'fsd','certificates.yaml'),'r') as yamlstream:
         trans = connection.begin()
         certificates=yaml.load(yamlstream,Loader=yaml.CSafeLoader)
-        print "Yaml Processed into memory"
+        print("Yaml Processed into memory")
         for certificate in certificates:
             connection.execute(certCerts.insert(),
                             certID=certificate,

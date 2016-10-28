@@ -1,34 +1,31 @@
 # -*- coding: utf-8 -*-
-import sys
 import os
-reload(sys)
-sys.setdefaultencoding("utf-8")
 import yaml
 from sqlalchemy import Table
 
 def importyaml(connection,metadata,sourcePath):
-    print "Importing Categories"
+    print("Importing Categories")
     invCategories = Table('invCategories',metadata)
     trnTranslations = Table('trnTranslations',metadata)
     
-    print "opening Yaml"
+    print("opening Yaml")
         
     trans = connection.begin()
     with open(os.path.join(sourcePath,'fsd','categoryIDs.yaml'),'r') as yamlstream:
-        print "importing"
+        print("importing")
         categoryids=yaml.load(yamlstream,Loader=yaml.CSafeLoader)
-        print "Yaml Processed into memory"
+        print("Yaml Processed into memory")
         for categoryid in categoryids:
             connection.execute(invCategories.insert(),
                             categoryID=categoryid,
-                            categoryName=categoryids[categoryid].get('name',{}).get('en','').decode('utf-8'),
+                            categoryName=categoryids[categoryid].get('name',{}).get('en',''),
                             iconID=categoryids[categoryid].get('iconID'),
                             published=categoryids[categoryid].get('published',0))
             
-            if (categoryids[categoryid].has_key('name')):
+            if 'name' in categoryids[categoryid]:
                 for lang in categoryids[categoryid]['name']:
                     try:
-                        connection.execute(trnTranslations.insert(),tcID=6,keyID=categoryid,languageID=lang,text=categoryids[categoryid]['name'][lang].decode('utf-8'));
+                        connection.execute(trnTranslations.insert(),tcID=6,keyID=categoryid,languageID=lang,text=categoryids[categoryid]['name'][lang]);
                     except:                        
-                        print '{} {} has a category problem'.format(categoryid,lang)
+                        print('{} {} has a category problem'.format(categoryid,lang))
     trans.commit()

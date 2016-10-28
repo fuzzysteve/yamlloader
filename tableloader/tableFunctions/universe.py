@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-import sys
-reload(sys)
-sys.setdefaultencoding("utf-8")
 import os
 import glob
 import yaml
@@ -20,7 +17,7 @@ def grouplookup(connection,metadata,typeid):
                 invTypes.select().where( invTypes.c.typeID == typeid )
             ).fetchall()[0]['groupID']
     except:
-        print typeid
+        print(typeid)
         exit()
     typeidcache[typeid]=groupid
     return groupid
@@ -43,7 +40,7 @@ def get_sorted_objects(planet, key):
 
 def importyaml(connection,metadata,sourcePath):
 
-    print "Importing Universe Data"
+    print("Importing Universe Data")
 
     mapCelestialStatistics =  Table('mapCelestialStatistics', metadata) #done
     mapConstellations =  Table('mapConstellations', metadata) # done
@@ -72,14 +69,14 @@ def importyaml(connection,metadata,sourcePath):
     regions=glob.glob(os.path.join(sourcePath,'fsd','universe','*','*','region.staticdata'))
     for regionfile in regions:
         head, tail = os.path.split(regionfile)
-        print "Importing Region {}".format(head)
+        print("Importing Region {}".format(head))
         trans = connection.begin()
         with open(regionfile,'r') as yamlstream:
             region=yaml.load(yamlstream,Loader=yaml.CSafeLoader)
         regionname=connection.execute(
             invNames.select().where( invNames.c.itemID == region['regionID'] )
         ).fetchall()[0]['itemName']
-        print "Region {}".format(regionname)
+        print("Region {}".format(regionname))
         connection.execute(mapRegions.insert(),
                             regionID=region['regionID'],
                             regionName=regionname,
@@ -111,7 +108,7 @@ def importyaml(connection,metadata,sourcePath):
                                 locationID=region['regionID'],
                                 wormholeClassID=region['wormholeClassID']);
                             
-        print "Importing Constellations."
+        print("Importing Constellations.")
         constellations=glob.glob(os.path.join(head,'*','constellation.staticdata'))
         for constellationfile in constellations:
             chead, tail = os.path.split(constellationfile)
@@ -120,7 +117,7 @@ def importyaml(connection,metadata,sourcePath):
             constellationname=connection.execute(
                 invNames.select().where( invNames.c.itemID == constellation['constellationID'] )
             ).fetchall()[0]['itemName']
-            print "Constellation {}".format(constellationname)
+            print("Constellation {}".format(constellationname))
             connection.execute(mapConstellations.insert(),
                                 regionID=region['regionID'],
                                 constellationID=constellation['constellationID'],
@@ -153,14 +150,14 @@ def importyaml(connection,metadata,sourcePath):
                                 wormholeClassID=constellation['wormholeClassID']);
 
             systems=glob.glob(os.path.join(chead,'*','solarsystem.staticdata'))
-            print "Importing Systems"
+            print("Importing Systems")
             for systemfile in systems:
                 with open(systemfile,'r') as yamlstream:
                     system=yaml.load(yamlstream,Loader=yaml.CSafeLoader)
                 systemname=connection.execute(
                     invNames.select().where( invNames.c.itemID == system['solarSystemID'] )
                 ).fetchall()[0]['itemName']
-                print "System {}".format(systemname)
+                print("System {}".format(systemname))
                 starname=connection.execute(
                     invNames.select().where( invNames.c.itemID == system['star']['id'] )
                 ).fetchall()[0]['itemName']
@@ -224,7 +221,7 @@ def importyaml(connection,metadata,sourcePath):
                                 wormholeClassID=system['wormholeClassID']);
 
 
-                print "Importing Statistics"
+                print("Importing Statistics")
                 sstats=system['star'].get('statistics',{})
                 sstats['celestialID']=system['star']['id']
                 connection.execute(mapCelestialStatistics.insert(),sstats)
@@ -240,11 +237,11 @@ def importyaml(connection,metadata,sourcePath):
                         mstats=system['planets'][planet]['moons'][moon].get('statistics',{})
                         mstats['celestialID']=moon
                         connection.execute(mapCelestialStatistics.insert(),mstats)
-                print "Importing Stargates"
+                print("Importing Stargates")
                 for stargate in system.get('stargates',[]):
                     jump={'stargateID':stargate,'destinationID':system['stargates'][stargate]['destination']}
                     connection.execute(mapJumps.insert(),jump)
-                print "Importing to mapDenormalize"
+                print("Importing to mapDenormalize")
                 connection.execute(mapDenormalize.insert(),
                                         itemID=system['solarSystemID'],
                                         typeID=5,
@@ -279,9 +276,14 @@ def importyaml(connection,metadata,sourcePath):
                     x=0
                     for belt in get_sorted_objects(system['planets'][planet], 'asteroidBelts'):
                         x+=1
-                        beltname=connection.execute(
+                        print(belt)
+                        beltnameRow=connection.execute(
                             invNames.select().where( invNames.c.itemID == belt )
-                            ).fetchall()[0]['itemName']
+                            ).fetchall()
+                        if 0 < len(beltnameRow):
+                            beltname = beltnameRow[0]['itemName']
+                        else:
+                            beltname = 'Unavailable'
                         connection.execute(mapDenormalize.insert(),
                                             itemID=belt,
                                             typeID=system['planets'][planet]['asteroidBelts'][belt]['typeID'],

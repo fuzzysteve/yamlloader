@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
-import sys
 import os
-reload(sys)
-sys.setdefaultencoding("utf-8")
 import yaml
 from sqlalchemy import Table
 
@@ -10,13 +7,13 @@ from sqlalchemy import Table
 
 def importyaml(connection,metadata,sourcePath):
     eveGraphics = Table('eveGraphics',metadata)
-    print "Importing Graphics"
-    print "opening Yaml"
+    print("Importing Graphics")
+    print("opening Yaml")
     with open(os.path.join(sourcePath,'fsd','graphicIDs.yaml'),'r') as yamlstream:
-        print "importing"
+        print("importing")
         trans = connection.begin()
         graphics=yaml.load(yamlstream,Loader=yaml.CSafeLoader)
-        print "Yaml Processed into memory"
+        print("Yaml Processed into memory")
         for graphic in graphics:
             connection.execute(eveGraphics.insert(),
                             graphicID=graphic,
