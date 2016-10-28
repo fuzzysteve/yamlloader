@@ -19,6 +19,8 @@ For PostgreSQL, you will also need to install `psycopg2`.
 
 ## Arch Linux
 
+    pacman -S python-mysql-connector
+    pacman -Ss yaml
 
 
 # Database Engines
