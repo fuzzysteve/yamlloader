@@ -215,7 +215,7 @@ def importyaml(connection,metadata,sourcePath):
                                     radius=system['radius'],
                                     sunTypeID=system['sunTypeID'],
                                     securityClass=system.get('securityClass'))
-                if  system.get('wormholeClassID'):
+                if system.get('wormholeClassID'):
                     connection.execute(mapLocationWormholeClasses.insert(),
                                 locationID=system['solarSystemID'],
                                 wormholeClassID=system['wormholeClassID']);
@@ -284,6 +284,7 @@ def importyaml(connection,metadata,sourcePath):
                             beltname = beltnameRow[0]['itemName']
                         else:
                             beltname = 'Unavailable'
+                        print(beltname)
                         connection.execute(mapDenormalize.insert(),
                                             itemID=belt,
                                             typeID=system['planets'][planet]['asteroidBelts'][belt]['typeID'],

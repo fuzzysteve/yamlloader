@@ -74,3 +74,5 @@ bsdTables.importyaml(connection,metadata,sourcePath)
 universe.importyaml(connection,metadata,sourcePath)
 universe.buildJumps(connection,database)
 volumes.importVolumes(connection,metadata,sourcePath)
+
+print("Finished")
