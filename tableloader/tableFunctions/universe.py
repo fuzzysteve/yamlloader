@@ -211,7 +211,7 @@ def importyaml(connection,metadata,sourcePath):
                                     international=system['international'],
                                     regional=system['regional'],
                                     security=system['security'],
-                                    factionid=system.get('factionID',constellation.get('factionID',region.get('factionID'))),
+                                    factionID=system.get('factionID',constellation.get('factionID',region.get('factionID'))),
                                     radius=system['radius'],
                                     sunTypeID=system['sunTypeID'],
                                     securityClass=system.get('securityClass'))
