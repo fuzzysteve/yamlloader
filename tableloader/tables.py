@@ -1066,7 +1066,7 @@ def metadataCreator(schema):
 
 
     staStations =  Table('staStations', metadata,
-            Column('stationID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+            Column('stationID', BigInteger, primary_key=True, autoincrement=False, nullable=False),
             Column('security', INTEGER()),
             Column('dockingCostPerVolume', FLOAT(precision=53)),
             Column('maxShipVolumeDockable', FLOAT(precision=53)),
