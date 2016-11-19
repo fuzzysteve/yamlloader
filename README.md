@@ -2,6 +2,8 @@ A data loader, to bring in the YAML version of the SDE
 
 Loads data back into approximately the same structure.
 
+Fetch the [YAML SDE from CCP's Developer site](https://developers.eveonline.com/resource/resources).
+
 # Installation
 
 ## macOS
