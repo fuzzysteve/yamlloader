@@ -1,7 +1,14 @@
 # -*- coding: utf-8 -*-
-import yaml
+from yaml import load
+try:
+	from yaml import CSafeLoader as SafeLoader
+	print "Using CSafeLoader"
+except ImportError:
+	from yaml import SafeLoader
+	print "Using Python SafeLoader"
+
 import os
-from sqlalchemy import Table;
+from sqlalchemy import Table
 
 def importyaml(connection,metadata,sourcePath):
 
@@ -21,7 +28,7 @@ def importyaml(connection,metadata,sourcePath):
     print "opening Yaml"
     trans = connection.begin()
     with open(os.path.join(sourcePath,'fsd','blueprints.yaml'),'r') as yamlstream:
-        blueprints=yaml.load(yamlstream,Loader=yaml.CSafeLoader)
+        blueprints=load(yamlstream,Loader=SafeLoader)
         print "Yaml Processed into memory"
         for blueprint in blueprints:
             connection.execute(industryBlueprints.insert(),typeID=blueprint,maxProductionLimit=blueprints[blueprint]["maxProductionLimit"])

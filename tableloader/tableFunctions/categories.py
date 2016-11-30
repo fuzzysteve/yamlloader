@@ -3,8 +3,16 @@ import sys
 import os
 reload(sys)
 sys.setdefaultencoding("utf-8")
-import yaml
 from sqlalchemy import Table
+
+from yaml import load
+try:
+	from yaml import CSafeLoader as SafeLoader
+	print "Using CSafeLoader"
+except ImportError:
+	from yaml import SafeLoader
+	print "Using Python SafeLoader"
+
 
 def importyaml(connection,metadata,sourcePath):
     print "Importing Categories"
@@ -16,7 +24,7 @@ def importyaml(connection,metadata,sourcePath):
     trans = connection.begin()
     with open(os.path.join(sourcePath,'fsd','categoryIDs.yaml'),'r') as yamlstream:
         print "importing"
-        categoryids=yaml.load(yamlstream,Loader=yaml.CSafeLoader)
+        categoryids=load(yamlstream,Loader=SafeLoader)
         print "Yaml Processed into memory"
         for categoryid in categoryids:
             connection.execute(invCategories.insert(),
