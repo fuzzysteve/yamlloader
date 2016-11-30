@@ -407,7 +407,7 @@ def buildJumps(connection,connectiontype):
     select distinct f.regionID,f.constellationID,t.constellationID,t.regionID
     from mapJumps join mapDenormalize f on mapJumps.stargateID=f.itemID join mapDenormalize t on mapJumps.destinationID=t.itemID where f.constellationID!=t.constellationID""")
 
-    if connectiontype == "sqlite" or connectiontype == "mysql":
+    if connectiontype == "sqlite" or connectiontype == "mysql" or connectiontype=="mssql":
         connectiontype="other"
     connection.execute(sql[connectiontype][0])
     connection.execute(sql[connectiontype][1])
