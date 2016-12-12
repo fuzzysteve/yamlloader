@@ -26,10 +26,11 @@ For PostgreSQL, you will also need to install `psycopg2`.
 
 # Operation
 
--Alter the settings in sdeloader.cfg, specifically the DSN/URI for the database you'll be using, and the source path for the SDE files.
--Then run the loader:
- -
- -    python Load.py «database engine»
+Alter the settings in sdeloader.cfg, specifically the DSN/URI for the database you'll be using, and the source path for the SDE files.
+
+Then run the loader:
+
+    python Load.py «database engine»
 
 # Database Engines
 
