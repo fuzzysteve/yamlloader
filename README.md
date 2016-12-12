@@ -24,6 +24,12 @@ For PostgreSQL, you will also need to install `psycopg2`.
     pacman -S python-mysql-connector
     pacman -Ss yaml
 
+# Operation
+
+-Alter the settings in sdeloader.cfg, specifically the DSN/URI for the database you'll be using, and the source path for the SDE files.
+-Then run the loader:
+ -
+ -    python Load.py «database engine»
 
 # Database Engines
 
