@@ -51,6 +51,7 @@ def metadataCreator(schema):
 
 
     certMasteries =  Table('certMasteries', metadata,
+            Column('certMasteryID', INTEGER(), primary_key=True, autoincrement=True, nullable=False),
             Column('typeID', INTEGER()),
             Column('masteryLevel', INTEGER()),
             Column('certID', INTEGER()),
@@ -60,6 +61,7 @@ def metadataCreator(schema):
 
 
     certSkills =  Table('certSkills', metadata,
+            Column('certSkillID', INTEGER(), primary_key=True, autoincrement=True, nullable=False),
             Column('certID', INTEGER()),
             Column('skillID', INTEGER(),index=True),
             Column('certLevelInt', INTEGER()),
