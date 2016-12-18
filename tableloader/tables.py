@@ -51,6 +51,7 @@ def metadataCreator(schema):
 
 
     certMasteries =  Table('certMasteries', metadata,
+            Column('certMasteryID', INTEGER(), primary_key=True, autoincrement=True, nullable=False),
             Column('typeID', INTEGER()),
             Column('masteryLevel', INTEGER()),
             Column('certID', INTEGER()),
@@ -60,6 +61,7 @@ def metadataCreator(schema):
 
 
     certSkills =  Table('certSkills', metadata,
+            Column('certSkillID', INTEGER(), primary_key=True, autoincrement=True, nullable=False),
             Column('certID', INTEGER()),
             Column('skillID', INTEGER(),index=True),
             Column('certLevelInt', INTEGER()),
@@ -170,6 +172,7 @@ def metadataCreator(schema):
             Column('corporationID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
             Column('divisionID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
             Column('size', INTEGER()),
+            Column('id', INTEGER(), primary_key=True, autoincrement=True, nullable=False),
             schema=schema
 
 
@@ -179,6 +182,7 @@ def metadataCreator(schema):
     crpNPCCorporationResearchFields =  Table('crpNPCCorporationResearchFields', metadata,
             Column('skillID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
             Column('corporationID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+            Column('id', INTEGER(), primary_key=True, autoincrement=True, nullable=False),
             schema=schema
 
 
@@ -188,6 +192,7 @@ def metadataCreator(schema):
     crpNPCCorporationTrades =  Table('crpNPCCorporationTrades', metadata,
             Column('corporationID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
             Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+            Column('id', INTEGER(), primary_key=True, autoincrement=True, nullable=False),
             schema=schema
 
 
@@ -335,6 +340,7 @@ def metadataCreator(schema):
             Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
             Column('effectID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
             Column('isDefault', Boolean),
+            Column('id', INTEGER(), primary_key=True, autoincrement=True, nullable=False),
             schema=schema
 
 
@@ -379,6 +385,7 @@ def metadataCreator(schema):
             Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
             Column('activityID', INTEGER(), primary_key=True, autoincrement=False, nullable=False,index=True),
             Column('time', INTEGER()),
+            Column('id', INTEGER(), primary_key=True, autoincrement=True, nullable=False),
             schema=schema
     )
 
@@ -388,6 +395,7 @@ def metadataCreator(schema):
             Column('activityID', INTEGER()),
             Column('materialTypeID', INTEGER()),
             Column('quantity', INTEGER()),
+            Column('id', INTEGER(), primary_key=True, autoincrement=True, nullable=False),
             schema=schema
     )
     Index('industryActivityMaterials_idx1',industryActivityMaterials.c.typeID,industryActivityMaterials.c.activityID)
@@ -398,6 +406,7 @@ def metadataCreator(schema):
             Column('activityID', INTEGER()),
             Column('productTypeID', INTEGER(),index=True),
             Column('probability', DECIMAL(precision=3, scale=2)),
+            Column('id', INTEGER(), primary_key=True, autoincrement=True, nullable=False),
             schema=schema
 
 
@@ -409,6 +418,7 @@ def metadataCreator(schema):
             Column('activityID', INTEGER()),
             Column('productTypeID', INTEGER(),index=True),
             Column('quantity', INTEGER()),
+            Column('id', INTEGER(), primary_key=True, autoincrement=True, nullable=False),
             schema=schema
 
 
@@ -420,6 +430,7 @@ def metadataCreator(schema):
             Column('activityID', INTEGER()),
             Column('productTypeID', INTEGER(),index=True),
             Column('raceID', INTEGER()),
+            Column('id', INTEGER(), primary_key=True, autoincrement=True, nullable=False),
             schema=schema
 
 
@@ -431,6 +442,7 @@ def metadataCreator(schema):
             Column('activityID', INTEGER()),
             Column('skillID', INTEGER(),index=True),
             Column('level', INTEGER()),
+            Column('id', INTEGER(), primary_key=True, autoincrement=True, nullable=False),
             schema=schema
     )
     Index('industryActivitySkills_idx1',industryActivitySkills.c.typeID,industryActivitySkills.c.activityID)
@@ -462,6 +474,7 @@ def metadataCreator(schema):
             Column('confiscateMinSec', FLOAT(precision=53)),
             Column('fineByValue', FLOAT(precision=53)),
             Column('attackMinSec', FLOAT(precision=53)),
+            Column('id', INTEGER(), primary_key=True, autoincrement=True, nullable=False),
             schema=schema
 
 
@@ -471,6 +484,7 @@ def metadataCreator(schema):
     invControlTowerResourcePurposes =  Table('invControlTowerResourcePurposes', metadata,
             Column('purpose', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
             Column('purposeText', VARCHAR(length=100)),
+            Column('id', INTEGER(), primary_key=True, autoincrement=True, nullable=False),
             schema=schema
 
 
@@ -484,6 +498,7 @@ def metadataCreator(schema):
             Column('quantity', INTEGER()),
             Column('minSecurityLevel', FLOAT(precision=53)),
             Column('factionID', INTEGER()),
+            Column('id', INTEGER(), primary_key=True, autoincrement=True, nullable=False),
             schema=schema
 
 
@@ -603,6 +618,7 @@ def metadataCreator(schema):
             Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
             Column('materialTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
             Column('quantity', INTEGER(), nullable=False, default=text(u"'0'")),
+            Column('id', INTEGER(), primary_key=True, autoincrement=True, nullable=False),
             schema=schema
 
 
@@ -614,6 +630,7 @@ def metadataCreator(schema):
             Column('input', Boolean, primary_key=True, autoincrement=False, nullable=False),
             Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
             Column('quantity', INTEGER()),
+            Column('id', INTEGER(), primary_key=True, autoincrement=True, nullable=False),
             schema=schema
 
 
@@ -690,6 +707,7 @@ def metadataCreator(schema):
             Column('fromConstellationID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
             Column('toConstellationID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
             Column('toRegionID', INTEGER()),
+            Column('id', INTEGER(), primary_key=True, autoincrement=True, nullable=False),
             schema=schema
 
 
@@ -787,6 +805,7 @@ def metadataCreator(schema):
     mapRegionJumps =  Table('mapRegionJumps', metadata,
             Column('fromRegionID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
             Column('toRegionID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+            Column('id', INTEGER(), primary_key=True, autoincrement=True, nullable=False),
             schema=schema
 
 
@@ -820,6 +839,7 @@ def metadataCreator(schema):
             Column('toSolarSystemID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
             Column('toConstellationID', INTEGER()),
             Column('toRegionID', INTEGER()),
+            Column('id', INTEGER(), primary_key=True, autoincrement=True, nullable=False),
             schema=schema
 
 
@@ -962,6 +982,7 @@ def metadataCreator(schema):
             Column('installationTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
             Column('assemblyLineTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
             Column('quantity', INTEGER()),
+            Column('id', INTEGER(), primary_key=True, autoincrement=True, nullable=False),
             schema=schema
 
 
@@ -1010,6 +1031,7 @@ def metadataCreator(schema):
     staOperationServices =  Table('staOperationServices', metadata,
             Column('operationID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
             Column('serviceID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+            Column('id', INTEGER(), primary_key=True, autoincrement=True, nullable=False),
             schema=schema
 
 
