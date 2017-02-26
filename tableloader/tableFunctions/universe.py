@@ -2,10 +2,17 @@
 import sys
 reload(sys)
 sys.setdefaultencoding("utf-8")
+from yaml import load, dump
+try:
+	from yaml import CSafeLoader as SafeLoader
+	print "Using CSafeLoader"
+except ImportError:
+	from yaml import SafeLoader
+	print "Using Python SafeLoader"
+
 import os
-import glob
-import yaml
 from sqlalchemy import Table
+import glob
 
 typeidcache={}
 
@@ -75,7 +82,7 @@ def importyaml(connection,metadata,sourcePath):
         print "Importing Region {}".format(head)
         trans = connection.begin()
         with open(regionfile,'r') as yamlstream:
-            region=yaml.load(yamlstream,Loader=yaml.CSafeLoader)
+            region=load(yamlstream,Loader=SafeLoader)
         regionname=connection.execute(
             invNames.select().where( invNames.c.itemID == region['regionID'] )
         ).fetchall()[0]['itemName']
@@ -116,7 +123,7 @@ def importyaml(connection,metadata,sourcePath):
         for constellationfile in constellations:
             chead, tail = os.path.split(constellationfile)
             with open(constellationfile,'r') as yamlstream:
-                constellation=yaml.load(yamlstream,Loader=yaml.CSafeLoader)
+                constellation=load(yamlstream,Loader=SafeLoader)
             constellationname=connection.execute(
                 invNames.select().where( invNames.c.itemID == constellation['constellationID'] )
             ).fetchall()[0]['itemName']
@@ -156,7 +163,7 @@ def importyaml(connection,metadata,sourcePath):
             print "Importing Systems"
             for systemfile in systems:
                 with open(systemfile,'r') as yamlstream:
-                    system=yaml.load(yamlstream,Loader=yaml.CSafeLoader)
+                    system=load(yamlstream,Loader=SafeLoader)
                 systemname=connection.execute(
                     invNames.select().where( invNames.c.itemID == system['solarSystemID'] )
                 ).fetchall()[0]['itemName']
@@ -407,7 +414,7 @@ def buildJumps(connection,connectiontype):
     select distinct f.regionID,f.constellationID,t.constellationID,t.regionID
     from mapJumps join mapDenormalize f on mapJumps.stargateID=f.itemID join mapDenormalize t on mapJumps.destinationID=t.itemID where f.constellationID!=t.constellationID""")
 
-    if connectiontype == "sqlite" or connectiontype == "mysql":
+    if connectiontype == "sqlite" or connectiontype == "mysql" or connectiontype=="mssql":
         connectiontype="other"
     connection.execute(sql[connectiontype][0])
     connection.execute(sql[connectiontype][1])

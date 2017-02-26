@@ -5,6 +5,13 @@ sys.setdefaultencoding("utf-8")
 import yaml
 import json
 import os
+try:
+	from yaml import CSafeLoader as SafeLoader
+	print "Using CSafeLoader"
+except ImportError:
+	from yaml import SafeLoader
+	print "Using Python SafeLoader"
+
 
 import ConfigParser, os
 fileLocation = os.path.dirname(os.path.realpath(__file__))
@@ -21,7 +28,7 @@ destinationPath=config.get('Files','destinationPath')
 print "opening Yaml"
 with open(os.path.join(sourcePath,'fsd','typeIDs.yaml'),'r') as yamlstream:
     print "importing"
-    typeids=yaml.load(yamlstream,Loader=yaml.CSafeLoader)
+    typeids=load(yamlstream,Loader=SafeLoader)
     print "Yaml Processed into memory"
     with open(os.path.join(destinationPath,'typeid.json'),"w") as output:
         json.dump(typeids,output)

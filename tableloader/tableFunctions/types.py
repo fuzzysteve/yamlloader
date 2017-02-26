@@ -1,9 +1,16 @@
 # -*- coding: utf-8 -*-
-import sys
+from yaml import load, dump
+try:
+	from yaml import CSafeLoader as SafeLoader
+	print "Using CSafeLoader"
+except ImportError:
+	from yaml import SafeLoader
+	print "Using Python SafeLoader"
+
 import os
+import sys
 reload(sys)
 sys.setdefaultencoding("utf-8")
-import yaml
 from sqlalchemy import Table
 
 def importyaml(connection,metadata,sourcePath):
@@ -15,7 +22,7 @@ def importyaml(connection,metadata,sourcePath):
     print "Opening Yaml"
     with open(os.path.join(sourcePath,'fsd','typeIDs.yaml'),'r') as yamlstream:
         trans = connection.begin()
-        typeids=yaml.load(yamlstream,Loader=yaml.CSafeLoader)
+        typeids=load(yamlstream,Loader=SafeLoader)
         print "Yaml Processed into memory"
         for typeid in typeids:
             connection.execute(invTypes.insert(),
