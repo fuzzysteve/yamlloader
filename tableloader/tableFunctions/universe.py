@@ -11,7 +11,7 @@ except ImportError:
 	print "Using Python SafeLoader"
 
 import os
-from sqlalchemy import Table
+from sqlalchemy import Table,select
 import glob
 
 typeidcache={}
@@ -419,3 +419,12 @@ def buildJumps(connection,connectiontype):
     connection.execute(sql[connectiontype][0])
     connection.execute(sql[connectiontype][1])
     connection.execute(sql[connectiontype][2])
+
+
+def fixStationNames(connection,metadata):
+    invNames =  Table('invNames', metadata)
+    staStations = Table('staStations',metadata)
+    
+    connection.execute(staStations.update().values(stationName=select([invNames.c.itemName]).where(staStations.c.stationID==invNames.c.itemID)))
+
+
