@@ -150,9 +150,9 @@ def importyaml(connection,metadata,sourcePath):
                                 typeID=4,
                                 groupID=4,
                                 itemName=constellationname,
-                                x=region['center'][0],
-                                y=region['center'][1],
-                                z=region['center'][2])
+                                x=constellation['center'][0],
+                                y=constellation['center'][1],
+                                z=constellation['center'][2])
 
             if  constellation.get('wormholeClassID'):
                 connection.execute(mapLocationWormholeClasses.insert(),
