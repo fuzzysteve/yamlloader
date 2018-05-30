@@ -78,4 +78,15 @@ def importyaml(connection,metadata,sourcePath):
                         traitid=result.inserted_primary_key
                         for languageid in trait.get('bonusText',{}):
                             connection.execute(trnTranslations.insert(),tcID=1002,keyID=traitid[0],languageID=languageid.decode('utf-8'),text=trait['bonusText'][languageid].decode('utf-8'))
+                if typeids[typeid]['traits'].has_key('miscBonuses'):
+                    for trait in typeids[typeid]['traits']['miscBonuses']:
+                        result=connection.execute(invTraits.insert(),
+                                typeID=typeid,
+                                skillID=-2,
+                                bonus=trait.get('bonus'),
+                                bonusText=trait.get('bonusText',{}).get('en',''),
+                                unitID=trait.get('unitID'))
+                        traitid=result.inserted_primary_key
+                        for languageid in trait.get('bonusText',{}):
+                            connection.execute(trnTranslations.insert(),tcID=1002,keyID=traitid[0],languageID=languageid.decode('utf-8'),text=trait['bonusText'][languageid].decode('utf-8'))
     trans.commit()

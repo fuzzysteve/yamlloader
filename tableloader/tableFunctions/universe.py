@@ -168,10 +168,11 @@ def importyaml(connection,metadata,sourcePath):
                     invNames.select().where( invNames.c.itemID == system['solarSystemID'] )
                 ).fetchall()[0]['itemName']
                 print "System {}".format(systemname)
-                starname=connection.execute(
-                    invNames.select().where( invNames.c.itemID == system['star']['id'] )
-                ).fetchall()[0]['itemName']
-                connection.execute(mapDenormalize.insert(),
+                if 'star' in system:
+                    starname=connection.execute(
+                        invNames.select().where( invNames.c.itemID == system['star']['id'] )
+                    ).fetchall()[0]['itemName']
+                    connection.execute(mapDenormalize.insert(),
                                     itemID=system['star']['id'],
                                     typeID=system['star']['typeID'],
                                     groupID=6,
@@ -223,7 +224,7 @@ def importyaml(connection,metadata,sourcePath):
                                     security=system['security'],
                                     factionID=system.get('factionID',constellation.get('factionID',region.get('factionID'))),
                                     radius=system['radius'],
-                                    sunTypeID=system['sunTypeID'],
+                                    sunTypeID=system.get('sunTypeID',None),
                                     securityClass=system.get('securityClass'))
                 if  system.get('wormholeClassID'):
                     connection.execute(mapLocationWormholeClasses.insert(),
@@ -232,9 +233,10 @@ def importyaml(connection,metadata,sourcePath):
 
 
                 print "Importing Statistics"
-                sstats=system['star'].get('statistics',{})
-                sstats['celestialID']=system['star']['id']
-                connection.execute(mapCelestialStatistics.insert(),sstats)
+                if 'star' in system:
+                    sstats=system['star'].get('statistics',{})
+                    sstats['celestialID']=system['star']['id']
+                    connection.execute(mapCelestialStatistics.insert(),sstats)
                 for planet in system.get('planets'):
                     pstats=system['planets'][planet].get('statistics',{})
                     pstats['celestialID']=planet
