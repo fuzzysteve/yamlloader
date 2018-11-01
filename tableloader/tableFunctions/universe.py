@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
-from sqlalchemy import Table
+from sqlalchemy import Table,select
 import glob
 
 typeidcache={}
@@ -139,9 +139,9 @@ def importyaml(connection,metadata,sourcePath):
                                 typeID=4,
                                 groupID=4,
                                 itemName=constellationname,
-                                x=region['center'][0],
-                                y=region['center'][1],
-                                z=region['center'][2])
+                                x=constellation['center'][0],
+                                y=constellation['center'][1],
+                                z=constellation['center'][2])
 
             if  constellation.get('wormholeClassID'):
                 connection.execute(mapLocationWormholeClasses.insert(),
@@ -157,10 +157,11 @@ def importyaml(connection,metadata,sourcePath):
                     invNames.select().where( invNames.c.itemID == system['solarSystemID'] )
                 ).fetchall()[0]['itemName']
                 print("System {}".format(systemname))
-                starname=connection.execute(
-                    invNames.select().where( invNames.c.itemID == system['star']['id'] )
-                ).fetchall()[0]['itemName']
-                connection.execute(mapDenormalize.insert(),
+                if 'star' in system:
+                    starname=connection.execute(
+                        invNames.select().where( invNames.c.itemID == system['star']['id'] )
+                    ).fetchall()[0]['itemName']
+                    connection.execute(mapDenormalize.insert(),
                                     itemID=system['star']['id'],
                                     typeID=system['star']['typeID'],
                                     groupID=6,
@@ -212,7 +213,7 @@ def importyaml(connection,metadata,sourcePath):
                                     security=system['security'],
                                     factionID=system.get('factionID',constellation.get('factionID',region.get('factionID'))),
                                     radius=system['radius'],
-                                    sunTypeID=system['sunTypeID'],
+                                    sunTypeID=system.get('sunTypeID',None),
                                     securityClass=system.get('securityClass'))
                 if system.get('wormholeClassID'):
                     connection.execute(mapLocationWormholeClasses.insert(),
@@ -221,9 +222,11 @@ def importyaml(connection,metadata,sourcePath):
 
 
                 print("Importing Statistics")
-                sstats=system['star'].get('statistics',{})
-                sstats['celestialID']=system['star']['id']
-                connection.execute(mapCelestialStatistics.insert(),sstats)
+                if 'star' in system:
+                    sstats=system['star'].get('statistics',{})
+                    sstats['celestialID']=system['star']['id']
+                    connection.execute(mapCelestialStatistics.insert(),sstats)
+
                 for planet in system.get('planets'):
                     pstats=system['planets'][planet].get('statistics',{})
                     pstats['celestialID']=planet
@@ -414,3 +417,12 @@ def buildJumps(connection,connectiontype):
     connection.execute(sql[connectiontype][0])
     connection.execute(sql[connectiontype][1])
     connection.execute(sql[connectiontype][2])
+
+
+def fixStationNames(connection,metadata):
+    invNames =  Table('invNames', metadata)
+    staStations = Table('staStations',metadata)
+    
+    connection.execute(staStations.update().values(stationName=select([invNames.c.itemName]).where(staStations.c.stationID==invNames.c.itemID)))
+
+

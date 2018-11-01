@@ -676,8 +676,8 @@ def metadataCreator(schema):
             Column('orbitPeriod', FLOAT(precision=53)),
             Column('rotationRate', FLOAT(precision=53)),
             Column('locked', Boolean),
-            Column('pressure', BigInteger),
-            Column('radius', BigInteger),
+            Column('pressure', FLOAT(precision=53)),
+            Column('radius', FLOAT(precision=53)),
             Column('mass', INTEGER()),
             schema=schema
 
@@ -1067,7 +1067,7 @@ def metadataCreator(schema):
 
     staStations =  Table('staStations', metadata,
             Column('stationID', BigInteger, primary_key=True, autoincrement=False, nullable=False),
-            Column('security', INTEGER()),
+            Column('security', FLOAT(precision=53)),
             Column('dockingCostPerVolume', FLOAT(precision=53)),
             Column('maxShipVolumeDockable', FLOAT(precision=53)),
             Column('officeRentalCost', INTEGER()),

@@ -13,7 +13,7 @@ from sqlalchemy import Table
 
 def importyaml(connection,metadata,sourcePath):
 
-    activityIDs={"copying":5,"manufacturing":1,"research_material":4,"research_time":3,"invention":8};
+    activityIDs={"copying":5,"manufacturing":1,"research_material":4,"research_time":3,"invention":8,"reaction":11};
 
     industryBlueprints=Table('industryBlueprints',metadata)
     industryActivity = Table('industryActivity',metadata)

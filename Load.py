@@ -72,6 +72,7 @@ types.importyaml(connection,metadata,sourcePath)
 bsdTables.importyaml(connection,metadata,sourcePath)
 universe.importyaml(connection,metadata,sourcePath)
 universe.buildJumps(connection,database)
+universe.fixStationNames(connection,metadata)
 volumes.importVolumes(connection,metadata,sourcePath)
 
 print("Finished")
