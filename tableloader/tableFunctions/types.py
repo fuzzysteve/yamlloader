@@ -2,6 +2,14 @@
 import os
 import yaml
 from sqlalchemy import Table
+from yaml import load
+
+try:
+	from yaml import CSafeLoader as SafeLoader
+	print("Using CSafeLoader")
+except ImportError:
+	from yaml import SafeLoader
+	print("Using Python SafeLoader")
 
 def importyaml(connection,metadata,sourcePath):
     invTypes = Table('invTypes',metadata)
@@ -12,7 +20,7 @@ def importyaml(connection,metadata,sourcePath):
     print("Opening Yaml")
     with open(os.path.join(sourcePath,'fsd','typeIDs.yaml'),'r') as yamlstream:
         trans = connection.begin()
-        typeids=yaml.load(yamlstream,Loader=yaml.CSafeLoader)
+        typeids=load(yamlstream,Loader=SafeLoader)
         print("Yaml Processed into memory")
         for typeid in typeids:
             connection.execute(invTypes.insert(),
@@ -68,8 +76,8 @@ def importyaml(connection,metadata,sourcePath):
                         traitid=result.inserted_primary_key
                         for languageid in trait.get('bonusText',{}):
 
-                            connection.execute(trnTranslations.insert(),tcID=1002,keyID=traitid[0],languageID=languageid.decode('utf-8'),text=trait['bonusText'][languageid].decode('utf-8'))
-                if typeids[typeid]['traits'].has_key('miscBonuses'):
+                            connection.execute(trnTranslations.insert(),tcID=1002,keyID=traitid[0],languageID=languageid,text=trait['bonusText'][languageid])
+                if 'miscBonuses' in typeids[typeid]['traits']:
                     for trait in typeids[typeid]['traits']['miscBonuses']:
                         result=connection.execute(invTraits.insert(),
                                 typeID=typeid,
@@ -79,5 +87,5 @@ def importyaml(connection,metadata,sourcePath):
                                 unitID=trait.get('unitID'))
                         traitid=result.inserted_primary_key
                         for languageid in trait.get('bonusText',{}):
-                            connection.execute(trnTranslations.insert(),tcID=1002,keyID=traitid[0],languageID=languageid.decode('utf-8'),text=trait['bonusText'][languageid].decode('utf-8'))
+                            connection.execute(trnTranslations.insert(),tcID=1002,keyID=traitid[0],languageID=languageid,text=trait['bonusText'][languageid])
     trans.commit()
