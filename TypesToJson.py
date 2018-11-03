@@ -2,18 +2,20 @@
 import sys
 reload(sys)
 sys.setdefaultencoding("utf-8")
-import yaml
+
+from yaml import load
 import json
 import os
+import ConfigParser
+
 try:
 	from yaml import CSafeLoader as SafeLoader
-	print "Using CSafeLoader"
+	print("Using CSafeLoader")
 except ImportError:
 	from yaml import SafeLoader
-	print "Using Python SafeLoader"
+	print("Using Python SafeLoader")
 
 
-import ConfigParser, os
 fileLocation = os.path.dirname(os.path.realpath(__file__))
 inifile=fileLocation+'/sdeloader.cfg'
 config = ConfigParser.ConfigParser()
@@ -22,13 +24,10 @@ sourcePath=config.get('Files','sourcePath')
 destinationPath=config.get('Files','destinationPath')
 
 
-
-
-
-print "opening Yaml"
+print("opening Yaml")
 with open(os.path.join(sourcePath,'fsd','typeIDs.yaml'),'r') as yamlstream:
-    print "importing"
+    print("importing")
     typeids=load(yamlstream,Loader=SafeLoader)
-    print "Yaml Processed into memory"
+    print("Yaml Processed into memory")
     with open(os.path.join(destinationPath,'typeid.json'),"w") as output:
         json.dump(typeids,output)
