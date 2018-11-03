@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import os
-import yaml
 from sqlalchemy import Table,literal_column,select
 import csv
 
