@@ -1,7 +1,15 @@
 # -*- coding: utf-8 -*-
 import os
-import yaml
 from sqlalchemy import Table
+from yaml import load
+
+try:
+	from yaml import CSafeLoader as SafeLoader
+	print("Using CSafeLoader")
+except ImportError:
+	from yaml import SafeLoader
+	print("Using Python SafeLoader")
+
 
 def importyaml(connection,metadata,sourcePath):
     skinLicense = Table('skinLicense',metadata)
@@ -13,7 +21,7 @@ def importyaml(connection,metadata,sourcePath):
     print("Importing Skins")
     print("opening Yaml1")
     with open(os.path.join(sourcePath,'fsd','skins.yaml'),'r') as yamlstream:
-        skins=yaml.load(yamlstream,Loader=yaml.CSafeLoader)
+        skins=load(yamlstream,Loader=SafeLoader)
         print("Yaml Processed into memory")
         for skinid in skins:
             connection.execute(skins_table.insert(),
@@ -28,7 +36,7 @@ def importyaml(connection,metadata,sourcePath):
 
     print("opening Yaml2")
     with open(os.path.join(sourcePath,'fsd','skinLicenses.yaml'),'r') as yamlstream:
-        skinlicenses=yaml.load(yamlstream,Loader=yaml.CSafeLoader)
+        skinlicenses=load(yamlstream,Loader=SafeLoader)
         print("Yaml Processed into memory")
         for licenseid in skinlicenses:
             connection.execute(skinLicense.insert(),
@@ -37,7 +45,7 @@ def importyaml(connection,metadata,sourcePath):
                                 skinID=skinlicenses[licenseid]['skinID'])
     print("opening Yaml3")
     with open(os.path.join(sourcePath,'fsd','skinMaterials.yaml'),'r') as yamlstream:
-        skinmaterials=yaml.load(yamlstream,Loader=yaml.CSafeLoader)
+        skinmaterials=load(yamlstream,Loader=SafeLoader)
         print("Yaml Processed into memory")
         for materialid in skinmaterials:
             connection.execute(skinMaterials.insert(),

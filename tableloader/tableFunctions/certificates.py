@@ -1,7 +1,14 @@
 # -*- coding: utf-8 -*-
 import os
 from sqlalchemy import Table
-import yaml
+from yaml import load
+
+try:
+	from yaml import CSafeLoader as SafeLoader
+	print("Using CSafeLoader")
+except ImportError:
+	from yaml import SafeLoader
+	print("Using Python SafeLoader")
 
 def importyaml(connection,metadata,sourcePath):
     certCerts = Table('certCerts',metadata)
@@ -12,7 +19,7 @@ def importyaml(connection,metadata,sourcePath):
     print("opening Yaml")
     with open(os.path.join(sourcePath,'fsd','certificates.yaml'),'r') as yamlstream:
         trans = connection.begin()
-        certificates=yaml.load(yamlstream,Loader=yaml.CSafeLoader)
+        certificates=load(yamlstream,Loader=SafeLoader)
         print("Yaml Processed into memory")
         for certificate in certificates:
             connection.execute(certCerts.insert(),

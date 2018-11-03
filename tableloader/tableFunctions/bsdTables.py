@@ -1,17 +1,16 @@
 # -*- coding: utf-8 -*-
 import os
-import yaml
-from yaml import Loader, SafeLoader
 import glob
+
+from yaml import Loader, load
 from sqlalchemy import Table
 
-from yaml import load
 try:
 	from yaml import CSafeLoader as SafeLoader
-	print "Using CSafeLoader"
+	print("Using CSafeLoader")
 except ImportError:
 	from yaml import SafeLoader
-	print "Using Python SafeLoader"
+	print("Using Python SafeLoader")
 
 def construct_yaml_str(self, node):
     # Override the default string handling function
@@ -19,15 +18,6 @@ def construct_yaml_str(self, node):
     return self.construct_scalar(node)
 Loader.add_constructor(u'tag:yaml.org,2002:str', construct_yaml_str)
 SafeLoader.add_constructor(u'tag:yaml.org,2002:str', construct_yaml_str)
-
-
-from yaml import load
-try:
-	from yaml import CSafeLoader as SafeLoader
-	print "Using CSafeLoader"
-except ImportError:
-	from yaml import SafeLoader
-	print "Using Python SafeLoader"
 
 def importyaml(connection,metadata,sourcePath):
 
@@ -70,7 +60,7 @@ def importyaml(connection,metadata,sourcePath):
                         y = str(y) + str(l)
                     else:
 
-                        oneYaml = yaml.load(y, Loader=yaml.CSafeLoader)
+                        oneYaml = load(y, Loader=SafeLoader)
                         connection.execute(tablevar.insert().values(oneYaml))
 
                         # start next section concat
