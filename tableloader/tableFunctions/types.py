@@ -13,7 +13,7 @@ reload(sys)
 sys.setdefaultencoding("utf-8")
 from sqlalchemy import Table
 
-def importyaml(connection,metadata,sourcePath):
+def importyaml(connection,metadata,sourcePath,language='en'):
     invTypes = Table('invTypes',metadata)
     trnTranslations = Table('trnTranslations',metadata)
     certMasteries = Table('certMasteries',metadata)
@@ -28,8 +28,8 @@ def importyaml(connection,metadata,sourcePath):
             connection.execute(invTypes.insert(),
                             typeID=typeid,
                             groupID=typeids[typeid].get('groupID',0),
-                            typeName=typeids[typeid].get('name',{}).get('en','').decode('utf-8'),
-                            description=typeids[typeid].get('description',{}).get('en','').decode('utf-8'),
+                            typeName=typeids[typeid].get('name',{}).get(language,'').decode('utf-8'),
+                            description=typeids[typeid].get('description',{}).get(language,'').decode('utf-8'),
                             mass=typeids[typeid].get('mass',0),
                             volume=typeids[typeid].get('volume',0),
                             capacity=typeids[typeid].get('capacity',0),
@@ -62,7 +62,7 @@ def importyaml(connection,metadata,sourcePath):
                                                 typeID=typeid,
                                                 skillID=skill,
                                                 bonus=trait.get('bonus'),
-                                                bonusText=trait.get('bonusText',{}).get('en',''),
+                                                bonusText=trait.get('bonusText',{}).get(language,''),
                                                 unitID=trait.get('unitID'))
                             traitid=result.inserted_primary_key
                             for languageid in trait.get('bonusText',{}):
@@ -73,7 +73,7 @@ def importyaml(connection,metadata,sourcePath):
                                 typeID=typeid,
                                 skillID=-1,
                                 bonus=trait.get('bonus'),
-                                bonusText=trait.get('bonusText',{}).get('en',''),
+                                bonusText=trait.get('bonusText',{}).get(language,''),
                                 unitID=trait.get('unitID'))
                         traitid=result.inserted_primary_key
                         for languageid in trait.get('bonusText',{}):
@@ -84,7 +84,7 @@ def importyaml(connection,metadata,sourcePath):
                                 typeID=typeid,
                                 skillID=-2,
                                 bonus=trait.get('bonus'),
-                                bonusText=trait.get('bonusText',{}).get('en',''),
+                                bonusText=trait.get('bonusText',{}).get(language,''),
                                 unitID=trait.get('unitID'))
                         traitid=result.inserted_primary_key
                         for languageid in trait.get('bonusText',{}):

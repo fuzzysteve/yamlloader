@@ -13,7 +13,7 @@ reload(sys)
 sys.setdefaultencoding("utf-8")
 from sqlalchemy import Table
 
-def importyaml(connection,metadata,sourcePath):
+def importyaml(connection,metadata,sourcePath,language='en'):
     invGroups = Table('invGroups',metadata)
     trnTranslations = Table('trnTranslations',metadata)
     print "Importing Groups"
@@ -26,7 +26,7 @@ def importyaml(connection,metadata,sourcePath):
             connection.execute(invGroups.insert(),
                             groupID=groupid,
                             categoryID=groupids[groupid].get('categoryID',0),
-                            groupName=groupids[groupid].get('name',{}).get('en','').decode('utf-8'),
+                            groupName=groupids[groupid].get('name',{}).get(language,'').decode('utf-8'),
                             iconID=groupids[groupid].get('iconID'),
                             useBasePrice=groupids[groupid].get('useBasePrice'),
                             anchored=groupids[groupid].get('anchored',0),

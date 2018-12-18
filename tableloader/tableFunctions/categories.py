@@ -14,7 +14,7 @@ except ImportError:
 	print "Using Python SafeLoader"
 
 
-def importyaml(connection,metadata,sourcePath):
+def importyaml(connection,metadata,sourcePath,language='en'):
     print "Importing Categories"
     invCategories = Table('invCategories',metadata)
     trnTranslations = Table('trnTranslations',metadata)
@@ -29,7 +29,7 @@ def importyaml(connection,metadata,sourcePath):
         for categoryid in categoryids:
             connection.execute(invCategories.insert(),
                             categoryID=categoryid,
-                            categoryName=categoryids[categoryid].get('name',{}).get('en','').decode('utf-8'),
+                            categoryName=categoryids[categoryid].get('name',{}).get(language,'').decode('utf-8'),
                             iconID=categoryids[categoryid].get('iconID'),
                             published=categoryids[categoryid].get('published',0))
             
