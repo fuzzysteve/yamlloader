@@ -99,3 +99,7 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+# Local App tmp folders
+filesDestination/
+filesSource/

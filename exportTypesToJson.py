@@ -17,7 +17,7 @@ except ImportError:
 
 
 fileLocation = os.path.dirname(os.path.realpath(__file__))
-inifile=fileLocation+'/sdeloader.cfg'
+inifile=fileLocation+'/config.cfg'
 config = ConfigParser.ConfigParser()
 config.read(inifile)
 sourcePath=config.get('Files','sourcePath')

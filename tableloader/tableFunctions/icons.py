@@ -1,26 +1,23 @@
 # -*- coding: utf-8 -*-
+
 import os
+
+from utils import yaml_stream
+
 from sqlalchemy import Table
-from yaml import load
 
-try:
-	from yaml import CSafeLoader as SafeLoader
-	print("Using CSafeLoader")
-except ImportError:
-	from yaml import SafeLoader
-	print("Using Python SafeLoader")
+def load(connection, metadata, sourcePath):
 
-def importyaml(connection,metadata,sourcePath):
     eveIcons = Table('eveIcons',metadata)
     print("Importing Icons")
-    print("Opening Yaml")
-    with open(os.path.join(sourcePath,'fsd','iconIDs.yaml'),'r') as yamlstream:
-        trans = connection.begin()
-        icons=load(yamlstream,Loader=SafeLoader)
-        print("Yaml Processed into memory")
-        for icon in icons:
-            connection.execute(eveIcons.insert(),
-                            iconID=icon,
-                            iconFile=icons[icon].get('iconFile',''),
-                            description=icons[icon].get('description',''))
+
+    trans = connection.begin()
+
+    with open(os.path.join(sourcePath,'fsd','groupIDs.yaml'),'r') as yamlstream:
+        for icon in yaml_stream.read_by_any(yamlstream):
+            for icon_id, icon_details in icon.items():
+                connection.execute(eveIcons.insert(),
+                                iconID=icon_id,
+                                iconFile=icon_details.get('iconFile',''),
+                                description=icon_details.get('description',''))
     trans.commit()

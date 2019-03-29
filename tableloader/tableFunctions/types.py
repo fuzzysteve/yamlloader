@@ -1,90 +1,87 @@
 # -*- coding: utf-8 -*-
+
 import os
+
+from utils import yaml_stream
+
 from sqlalchemy import Table
-from yaml import load
 
-try:
-	from yaml import CSafeLoader as SafeLoader
-	print("Using CSafeLoader")
-except ImportError:
-	from yaml import SafeLoader
-	print("Using Python SafeLoader")
+def load(connection, metadata, sourcePath):
 
-def importyaml(connection,metadata,sourcePath):
-    invTypes = Table('invTypes',metadata)
+    invTypes        = Table('invTypes',metadata)
     trnTranslations = Table('trnTranslations',metadata)
-    certMasteries = Table('certMasteries',metadata)
-    invTraits = Table('invTraits',metadata)
+    certMasteries   = Table('certMasteries',metadata)
+    invTraits       = Table('invTraits',metadata)
+
     print("Importing Types")
-    print("Opening Yaml")
+    trans = connection.begin()
+
     with open(os.path.join(sourcePath,'fsd','typeIDs.yaml'),'r') as yamlstream:
-        trans = connection.begin()
-        typeids=load(yamlstream,Loader=SafeLoader)
-        print("Yaml Processed into memory")
-        for typeid in typeids:
-            connection.execute(invTypes.insert(),
-                            typeID=typeid,
-                            groupID=typeids[typeid].get('groupID',0),
-                            typeName=typeids[typeid].get('name',{}).get('en',''),
-                            description=typeids[typeid].get('description',{}).get('en',''),
-                            mass=typeids[typeid].get('mass',0),
-                            volume=typeids[typeid].get('volume',0),
-                            capacity=typeids[typeid].get('capacity',0),
-                            portionSize=typeids[typeid].get('portionSize'),
-                            raceID=typeids[typeid].get('raceID'),
-                            basePrice=typeids[typeid].get('basePrice'),
-                            published=typeids[typeid].get('published',0),
-                            marketGroupID=typeids[typeid].get('marketGroupID'),
-                            graphicID=typeids[typeid].get('graphicID',0),
-                            iconID=typeids[typeid].get('iconID'),
-                            soundID=typeids[typeid].get('soundID'))
-            if  "masteries" in typeids[typeid]:
-                for level in typeids[typeid]["masteries"]:
-                    for cert in typeids[typeid]["masteries"][level]:
-                        connection.execute(certMasteries.insert(),
-                                            typeID=typeid,
-                                            masteryLevel=level,
-                                            certID=cert)
-            if ('name' in typeids[typeid]):
-                for lang in typeids[typeid]['name']:
-                    connection.execute(trnTranslations.insert(),tcID=8,keyID=typeid,languageID=lang,text=typeids[typeid]['name'][lang])
-            if ('description' in typeids[typeid]):
-                for lang in typeids[typeid]['description']:
-                    connection.execute(trnTranslations.insert(),tcID=33,keyID=typeid,languageID=lang,text=typeids[typeid]['description'][lang])
-            if ('traits' in typeids[typeid]):
-                if 'types' in typeids[typeid]['traits']:
-                    for skill in typeids[typeid]['traits']['types']:
-                        for trait in typeids[typeid]['traits']['types'][skill]:
+        for inv_type in yaml_stream.read_by_any(yamlstream):
+            for inv_type_id, inv_type_details in inv_type.items():
+                connection.execute(invTypes.insert(),
+                                typeID=inv_type_id,
+                                groupID=inv_type_details.get('groupID',0),
+                                typeName=inv_type_details.get('name',{}).get('en',''),
+                                description=inv_type_details.get('description',{}).get('en',''),
+                                mass=inv_type_details.get('mass',0),
+                                volume=inv_type_details.get('volume',0),
+                                capacity=inv_type_details.get('capacity',0),
+                                portionSize=inv_type_details.get('portionSize'),
+                                raceID=inv_type_details.get('raceID'),
+                                basePrice=inv_type_details.get('basePrice'),
+                                published=inv_type_details.get('published',0),
+                                marketGroupID=inv_type_details.get('marketGroupID'),
+                                graphicID=inv_type_details.get('graphicID',0),
+                                iconID=inv_type_details.get('iconID'),
+                                soundID=inv_type_details.get('soundID'))
+                if  "masteries" in inv_type_details:
+                    for level in inv_type_details["masteries"]:
+                        for cert in inv_type_details["masteries"][level]:
+                            connection.execute(certMasteries.insert(),
+                                                typeID=inv_type_id,
+                                                masteryLevel=level,
+                                                certID=cert)
+                if ('name' in inv_type_details):
+                    for lang in inv_type_details['name']:
+                        connection.execute(trnTranslations.insert(),tcID=8,keyID=inv_type_id,languageID=lang,text=inv_type_details['name'][lang])
+                if ('description' in inv_type_details):
+                    for lang in inv_type_details['description']:
+                        connection.execute(trnTranslations.insert(),tcID=33,keyID=inv_type_id,languageID=lang,text=inv_type_details['description'][lang])
+                if ('traits' in inv_type_details):
+                    if 'types' in inv_type_details['traits']:
+                        for skill in inv_type_details['traits']['types']:
+                            for trait in inv_type_details['traits']['types'][skill]:
+                                result=connection.execute(invTraits.insert(),
+                                                    typeID=inv_type_id,
+                                                    skillID=skill,
+                                                    bonus=trait.get('bonus'),
+                                                    bonusText=trait.get('bonusText',{}).get('en',''),
+                                                    unitID=trait.get('unitID'))
+                                traitid=result.inserted_primary_key
+                                for languageid in trait.get('bonusText',{}):
+                                    connection.execute(trnTranslations.insert(),tcID=1002,keyID=traitid[0],languageID=languageid,text=trait['bonusText'][languageid])
+                    if 'roleBonuses' in inv_type_details['traits']:
+                        for trait in inv_type_details['traits']['roleBonuses']:
                             result=connection.execute(invTraits.insert(),
-                                                typeID=typeid,
-                                                skillID=skill,
-                                                bonus=trait.get('bonus'),
-                                                bonusText=trait.get('bonusText',{}).get('en',''),
-                                                unitID=trait.get('unitID'))
+                                    typeID=inv_type_id,
+                                    skillID=-1,
+                                    bonus=trait.get('bonus'),
+                                    bonusText=trait.get('bonusText',{}).get('en',''),
+                                    unitID=trait.get('unitID'))
+                            traitid=result.inserted_primary_key
+                            for languageid in trait.get('bonusText',{}):
+
+                                connection.execute(trnTranslations.insert(),tcID=1002,keyID=traitid[0],languageID=languageid,text=trait['bonusText'][languageid])
+                    if 'miscBonuses' in inv_type_details['traits']:
+                        for trait in inv_type_details['traits']['miscBonuses']:
+                            result=connection.execute(invTraits.insert(),
+                                    typeID=inv_type_id,
+                                    skillID=-2,
+                                    bonus=trait.get('bonus'),
+                                    bonusText=trait.get('bonusText',{}).get('en',''),
+                                    unitID=trait.get('unitID'))
                             traitid=result.inserted_primary_key
                             for languageid in trait.get('bonusText',{}):
                                 connection.execute(trnTranslations.insert(),tcID=1002,keyID=traitid[0],languageID=languageid,text=trait['bonusText'][languageid])
-                if 'roleBonuses' in typeids[typeid]['traits']:
-                    for trait in typeids[typeid]['traits']['roleBonuses']:
-                        result=connection.execute(invTraits.insert(),
-                                typeID=typeid,
-                                skillID=-1,
-                                bonus=trait.get('bonus'),
-                                bonusText=trait.get('bonusText',{}).get('en',''),
-                                unitID=trait.get('unitID'))
-                        traitid=result.inserted_primary_key
-                        for languageid in trait.get('bonusText',{}):
-
-                            connection.execute(trnTranslations.insert(),tcID=1002,keyID=traitid[0],languageID=languageid,text=trait['bonusText'][languageid])
-                if 'miscBonuses' in typeids[typeid]['traits']:
-                    for trait in typeids[typeid]['traits']['miscBonuses']:
-                        result=connection.execute(invTraits.insert(),
-                                typeID=typeid,
-                                skillID=-2,
-                                bonus=trait.get('bonus'),
-                                bonusText=trait.get('bonusText',{}).get('en',''),
-                                unitID=trait.get('unitID'))
-                        traitid=result.inserted_primary_key
-                        for languageid in trait.get('bonusText',{}):
-                            connection.execute(trnTranslations.insert(),tcID=1002,keyID=traitid[0],languageID=languageid,text=trait['bonusText'][languageid])
     trans.commit()

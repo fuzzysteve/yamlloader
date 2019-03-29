@@ -3,10 +3,11 @@ import os
 from sqlalchemy import Table,literal_column,select
 import csv
 
-def importVolumes(connection,metadata,sourcePath):
+def importVolumes(connection, metadata, sourcePath):
 
     invVolumes = Table('invVolumes',metadata)
-    invTypes = Table('invTypes',metadata)
+    invTypes   = Table('invTypes',metadata)
+
     with open(os.path.join(sourcePath,'invVolumes1.csv'), 'r') as groupVolumes:
         volumereader=csv.reader(groupVolumes, delimiter=',')
         for group in volumereader:

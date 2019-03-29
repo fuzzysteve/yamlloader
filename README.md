@@ -21,12 +21,14 @@ For PostgreSQL, you will also need to install `psycopg2`.
 
 ## Arch Linux
 
-    pacman -S python-mysql-connector
-    pacman -Ss yaml
+    sudo pacman -S python-mysql-connector
+    sudo pacman -S python-yaml
+    sudo pacman -S python-pip
+    sudo pip install flask_sqlalchemy
 
 # Operation
 
-Alter the settings in sdeloader.cfg, specifically the DSN/URI for the database you'll be using, and the source path for the SDE files.
+Alter the settings in config.cfg, specifically the DSN/URI for the database you'll be using, and the source path for the SDE files.
 
 Make sure to copy the two csv files to the place you've stuck the SDE.
 

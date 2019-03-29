@@ -577,9 +577,9 @@ def metadataCreator(schema):
             Column('x', FLOAT(), nullable=False, default=text(u"'0'")),
             Column('y', FLOAT(), nullable=False, default=text(u"'0'")),
             Column('z', FLOAT(), nullable=False, default=text(u"'0'")),
-            Column('yaw', FLOAT(precision=24, scale=0)),
-            Column('pitch', FLOAT(precision=24, scale=0)),
-            Column('roll', FLOAT(precision=24, scale=0)),
+            Column('yaw', FLOAT(precision=24)),
+            Column('pitch', FLOAT(precision=24)),
+            Column('roll', FLOAT(precision=24)),
             schema=schema
 
 

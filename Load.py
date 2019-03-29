@@ -1,48 +1,36 @@
-from sqlalchemy import create_engine,Table
-import warnings
-import sys
+# -*- coding: utf-8 -*-
 
+import sys, io, os
 
+from utils import app_config
 
+from sqlalchemy import create_engine, Table
 
+from tableloader.tables import metadataCreator
+from tableloader.tableFunctions import *
+import tableloader.tableFunctions
 
-warnings.filterwarnings('ignore', '^Unicode type received non-unicode bind param value')
+# Fire up application configuration
+config = app_config.read()
 
-
+# Check required parameters
 if len(sys.argv)<2:
-    print("Load.py destination")
+    print("usage: Load.py destination")
+    print("destination must be one of: ("+"|".join(config.options('Database'))+")")
     exit()
 
-
 database=sys.argv[1]
-
-
-import configparser, os
-fileLocation = os.path.dirname(os.path.realpath(__file__))
-inifile=fileLocation+'/sdeloader.cfg'
-config = configparser.ConfigParser()
-config.read(inifile)
 destination=config.get('Database',database)
 sourcePath=config.get('Files','sourcePath')
 
+print("Connecting to storage engine: " + database)
 
-
-
-
-
-from tableloader.tableFunctions import *
-
-
-
-print("connecting to DB")
-
-
-engine = create_engine(destination)
-connection = engine.connect()
-
-
-
-from tableloader.tables import metadataCreator
+try:
+    engine = create_engine(destination)
+    connection = engine.connect()
+except Exception as e:
+    print(e)
+    exit()
 
 schema=None
 if database=="postgresschema":
@@ -50,27 +38,25 @@ if database=="postgresschema":
 
 metadata=metadataCreator(schema)
 
-
-
 print("Creating Tables")
 
 metadata.drop_all(engine,checkfirst=True)
 metadata.create_all(engine,checkfirst=True)
 
-print("created")
+print("Created Tables")
 
-import tableloader.tableFunctions
+print("Starting yaml imports")
 
-blueprints.importyaml(connection,metadata,sourcePath)
-categories.importyaml(connection,metadata,sourcePath)
-certificates.importyaml(connection,metadata,sourcePath)
-graphics.importyaml(connection,metadata,sourcePath)
-groups.importyaml(connection,metadata,sourcePath)
-icons.importyaml(connection,metadata,sourcePath)
-skins.importyaml(connection,metadata,sourcePath)
-types.importyaml(connection,metadata,sourcePath)
-bsdTables.importyaml(connection,metadata,sourcePath)
-universe.importyaml(connection,metadata,sourcePath)
+blueprints.load(connection,metadata,sourcePath)
+categories.load(connection,metadata,sourcePath)
+certificates.load(connection,metadata,sourcePath)
+graphics.load(connection,metadata,sourcePath)
+groups.load(connection,metadata,sourcePath)
+icons.load(connection,metadata,sourcePath)
+skins.load(connection,metadata,sourcePath)
+types.load(connection,metadata,sourcePath)
+bsdTables.load(connection,metadata,sourcePath)
+universe.load(connection,metadata,sourcePath)
 universe.buildJumps(connection,database)
 universe.fixStationNames(connection,metadata)
 volumes.importVolumes(connection,metadata,sourcePath)

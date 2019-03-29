@@ -1,30 +1,26 @@
 # -*- coding: utf-8 -*-
 import os
+
+from utils import yaml_stream
+
 from sqlalchemy import Table
-from yaml import load
 
-try:
-	from yaml import CSafeLoader as SafeLoader
-	print("Using CSafeLoader")
-except ImportError:
-	from yaml import SafeLoader
-	print("Using Python SafeLoader")
+def load(connection, metadata, sourcePath):
 
-def importyaml(connection,metadata,sourcePath):
     eveGraphics = Table('eveGraphics',metadata)
+
     print("Importing Graphics")
-    print("opening Yaml")
+
+    trans = connection.begin()
+
     with open(os.path.join(sourcePath,'fsd','graphicIDs.yaml'),'r') as yamlstream:
-        print("importing")
-        trans = connection.begin()
-        graphics=load(yamlstream,Loader=SafeLoader)
-        print("Yaml Processed into memory")
-        for graphic in graphics:
-            connection.execute(eveGraphics.insert(),
-                            graphicID=graphic,
-                            sofFactionName=graphics[graphic].get('sofFactionName',''),
-                            graphicFile=graphics[graphic].get('graphicFile',''),
-                            sofHullName=graphics[graphic].get('sofHullName',''),
-                            sofRaceName=graphics[graphic].get('sofRaceName',''),
-                            description=graphics[graphic].get('description',''))
+        for graphic in yaml_stream.read_by_any(yamlstream):
+            for graphic_id, graphic_details in graphic.items():
+                connection.execute(eveGraphics.insert(),
+                                graphicID=graphic_id,
+                                sofFactionName=graphic_details.get('sofFactionName',''),
+                                graphicFile=graphic_details.get('graphicFile',''),
+                                sofHullName=graphic_details.get('sofHullName',''),
+                                sofRaceName=graphic_details.get('sofRaceName',''),
+                                description=graphic_details.get('description',''))
     trans.commit()

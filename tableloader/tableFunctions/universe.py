@@ -1,32 +1,26 @@
 # -*- coding: utf-8 -*-
-import os
+import os, glob
+
+from utils import yaml_stream
+
 from sqlalchemy import Table,select
-import glob
-from yaml import load
 
-try:
-	from yaml import CSafeLoader as SafeLoader
-	print("Using CSafeLoader")
-except ImportError:
-	from yaml import SafeLoader
-	print("Using Python SafeLoader")
+type_id_cache={}
 
-typeidcache={}
+def grouplookup(connection, metadata, type_id):
 
-def grouplookup(connection,metadata,typeid):
+    if type_id_cache.get(type_id):
+        return type_id_cache.get(type_id)
 
-    if typeidcache.get(typeid):
-        return typeidcache.get(typeid)
-        
     invTypes =  Table('invTypes', metadata)
     try:
         groupid=connection.execute(
-                invTypes.select().where( invTypes.c.typeID == typeid )
+                invTypes.select().where( invTypes.c.typeID == type_id )
             ).fetchall()[0]['groupID']
     except:
-        print(typeid)
+        print("Missing typeID {0}".format(type_id))
         exit()
-    typeidcache[typeid]=groupid
+    type_id_cache[type_id]=groupid
     return groupid
 
 def get_distance_squared(c1, c2):
@@ -45,41 +39,36 @@ def get_sorted_objects(planet, key):
     with_radius.sort()
     return [obj_id for (radius, obj_id) in with_radius]
 
-def importyaml(connection,metadata,sourcePath):
+def load(connection, metadata, sourcePath):
 
     print("Importing Universe Data")
 
-    mapCelestialStatistics =  Table('mapCelestialStatistics', metadata) #done
-    mapConstellations =  Table('mapConstellations', metadata) # done
-    mapDenormalize =  Table('mapDenormalize', metadata) # done
-    mapRegions =  Table('mapRegions', metadata) # done
-    mapSolarSystems =  Table('mapSolarSystems', metadata) # done
-    mapJumps =  Table('mapJumps', metadata) # done
-    mapLocationScenes =  Table('mapLocationScenes', metadata) # done
-    
+    mapCelestialStatistics     = Table('mapCelestialStatistics', metadata)
+    mapConstellations          =  Table('mapConstellations', metadata)
+    mapDenormalize             =  Table('mapDenormalize', metadata)
+    mapRegions                 = Table('mapRegions', metadata)
+    mapSolarSystems            =  Table('mapSolarSystems', metadata)
+    mapJumps                   = Table('mapJumps', metadata)
+    mapLocationScenes          = Table('mapLocationScenes', metadata)
+    mapLandmarks               = Table('mapLandmarks', metadata)
+    mapLocationWormholeClasses = Table('mapLocationWormholeClasses', metadata)
 
-    mapLandmarks =  Table('mapLandmarks', metadata)
-    
-    mapLocationWormholeClasses =  Table('mapLocationWormholeClasses', metadata)
-    
     # Lookups
     invNames =  Table('invNames', metadata)
-    
+
     # Generated Tables
-    mapSolarSystemJumps =  Table('mapSolarSystemJumps', metadata)
-    mapConstellationJumps =  Table('mapConstellationJumps', metadata)
-    mapRegionJumps =  Table('mapRegionJumps', metadata)
-    
-    
-    
-    
+    mapSolarSystemJumps   = Table('mapSolarSystemJumps', metadata)
+    mapConstellationJumps = Table('mapConstellationJumps', metadata)
+    mapRegionJumps        = Table('mapRegionJumps', metadata)
+
+
     regions=glob.glob(os.path.join(sourcePath,'fsd','universe','*','*','region.staticdata'))
     for regionfile in regions:
         head, tail = os.path.split(regionfile)
         print("Importing Region {}".format(head))
         trans = connection.begin()
         with open(regionfile,'r') as yamlstream:
-            region=load(yamlstream,Loader=SafeLoader)
+            region=yaml_stream.read_all(yamlstream)
         regionname=connection.execute(
             invNames.select().where( invNames.c.itemID == region['regionID'] )
         ).fetchall()[0]['itemName']
@@ -120,7 +109,7 @@ def importyaml(connection,metadata,sourcePath):
         for constellationfile in constellations:
             chead, tail = os.path.split(constellationfile)
             with open(constellationfile,'r') as yamlstream:
-                constellation=load(yamlstream,Loader=SafeLoader)
+                constellation=yaml_stream.read_all(yamlstream)
             constellationname=connection.execute(
                 invNames.select().where( invNames.c.itemID == constellation['constellationID'] )
             ).fetchall()[0]['itemName']
@@ -160,7 +149,7 @@ def importyaml(connection,metadata,sourcePath):
             print("Importing Systems")
             for systemfile in systems:
                 with open(systemfile,'r') as yamlstream:
-                    system=load(yamlstream,Loader=SafeLoader)
+                    system=yaml_stream.read_all(yamlstream)
                 systemname=connection.execute(
                     invNames.select().where( invNames.c.itemID == system['solarSystemID'] )
                 ).fetchall()[0]['itemName']
@@ -384,7 +373,7 @@ def importyaml(connection,metadata,sourcePath):
         trans.commit()
 
 
-def buildJumps(connection,connectiontype):
+def buildJumps(connection, connectiontype):
 
     sql={}
     sql['postgres']=[]
@@ -427,10 +416,9 @@ def buildJumps(connection,connectiontype):
     connection.execute(sql[connectiontype][2])
 
 
-def fixStationNames(connection,metadata):
-    invNames =  Table('invNames', metadata)
+def fixStationNames(connection, metadata):
+    invNames    =  Table('invNames', metadata)
     staStations = Table('staStations',metadata)
-    
     connection.execute(staStations.update().values(stationName=select([invNames.c.itemName]).where(staStations.c.stationID==invNames.c.itemID)))
 
 
