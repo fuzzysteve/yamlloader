@@ -16,6 +16,10 @@ if len(sys.argv)<2:
 
 database=sys.argv[1]
 
+if len(sys.argv)==3:
+    language=sys.argv[2]
+else:
+    language='en'
 
 import configparser, os
 fileLocation = os.path.dirname(os.path.realpath(__file__))
@@ -62,13 +66,13 @@ print("created")
 import tableloader.tableFunctions
 
 blueprints.importyaml(connection,metadata,sourcePath)
-categories.importyaml(connection,metadata,sourcePath)
+categories.importyaml(connection,metadata,sourcePath,language)
 certificates.importyaml(connection,metadata,sourcePath)
 graphics.importyaml(connection,metadata,sourcePath)
-groups.importyaml(connection,metadata,sourcePath)
+groups.importyaml(connection,metadata,sourcePath,language)
 icons.importyaml(connection,metadata,sourcePath)
 skins.importyaml(connection,metadata,sourcePath)
-types.importyaml(connection,metadata,sourcePath)
+types.importyaml(connection,metadata,sourcePath,language)
 bsdTables.importyaml(connection,metadata,sourcePath)
 universe.importyaml(connection,metadata,sourcePath)
 universe.buildJumps(connection,database)
