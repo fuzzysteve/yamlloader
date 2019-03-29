@@ -5,7 +5,7 @@ from utils import yaml_stream
 
 from sqlalchemy import Table
 
-def load(connection, metadata, sourcePath):
+def load(connection, metadata, sourcePath, language='en'):
 
     invGroups       = Table('invGroups',metadata)
     trnTranslations = Table('trnTranslations',metadata)
@@ -20,7 +20,7 @@ def load(connection, metadata, sourcePath):
                 connection.execute(invGroups.insert(),
                                 groupID=group_id,
                                 categoryID=group_details.get('categoryID',0),
-                                groupName=group_details.get('name',{}).get('en',''),
+                                groupName=group_details.get('name',{}).get(language,''),
                                 iconID=group_details.get('iconID'),
                                 useBasePrice=group_details.get('useBasePrice'),
                                 anchored=group_details.get('anchored',0),

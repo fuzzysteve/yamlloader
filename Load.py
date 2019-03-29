@@ -20,6 +20,12 @@ if len(sys.argv)<2:
     exit()
 
 database=sys.argv[1]
+
+if len(sys.argv)==3:
+    language=sys.argv[2]
+else:
+    language='en'
+
 destination=config.get('Database',database)
 sourcePath=config.get('Files','sourcePath')
 
@@ -47,18 +53,18 @@ print("Created Tables")
 
 print("Starting yaml imports")
 
-blueprints.load(connection,metadata,sourcePath)
-categories.load(connection,metadata,sourcePath)
-certificates.load(connection,metadata,sourcePath)
-graphics.load(connection,metadata,sourcePath)
-groups.load(connection,metadata,sourcePath)
-icons.load(connection,metadata,sourcePath)
-skins.load(connection,metadata,sourcePath)
-types.load(connection,metadata,sourcePath)
-bsdTables.load(connection,metadata,sourcePath)
-universe.load(connection,metadata,sourcePath)
-universe.buildJumps(connection,database)
-universe.fixStationNames(connection,metadata)
-volumes.importVolumes(connection,metadata,sourcePath)
+blueprints.load(connection, metadata, sourcePath)
+categories.load(connection, metadata, sourcePath, language)
+certificates.load(connection, metadata, sourcePath)
+graphics.load(connection, metadata, sourcePath)
+groups.load(connection, metadata, sourcePath, language)
+icons.load(connection, metadata, sourcePath)
+skins.load(connection, metadata, sourcePath)
+types.load(connection, metadata, sourcePath, language)
+bsdTables.load(connection, metadata, sourcePath)
+universe.load(connection, metadata, sourcePath)
+universe.buildJumps(connection, database)
+universe.fixStationNames(connection, metadata)
+volumes.importVolumes(connection, metadata, sourcePath)
 
 print("Finished")

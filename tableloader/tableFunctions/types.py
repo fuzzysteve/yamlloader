@@ -6,7 +6,7 @@ from utils import yaml_stream
 
 from sqlalchemy import Table
 
-def load(connection, metadata, sourcePath):
+def load(connection, metadata, sourcePath, language='en'):
 
     invTypes        = Table('invTypes',metadata)
     trnTranslations = Table('trnTranslations',metadata)
@@ -22,8 +22,8 @@ def load(connection, metadata, sourcePath):
                 connection.execute(invTypes.insert(),
                                 typeID=inv_type_id,
                                 groupID=inv_type_details.get('groupID',0),
-                                typeName=inv_type_details.get('name',{}).get('en',''),
-                                description=inv_type_details.get('description',{}).get('en',''),
+                                typeName=inv_type_details.get('name',{}).get(language,''),
+                                description=inv_type_details.get('description',{}).get(language,''),
                                 mass=inv_type_details.get('mass',0),
                                 volume=inv_type_details.get('volume',0),
                                 capacity=inv_type_details.get('capacity',0),
@@ -56,7 +56,7 @@ def load(connection, metadata, sourcePath):
                                                     typeID=inv_type_id,
                                                     skillID=skill,
                                                     bonus=trait.get('bonus'),
-                                                    bonusText=trait.get('bonusText',{}).get('en',''),
+                                                    bonusText=trait.get('bonusText',{}).get(language,''),
                                                     unitID=trait.get('unitID'))
                                 traitid=result.inserted_primary_key
                                 for languageid in trait.get('bonusText',{}):
@@ -67,7 +67,7 @@ def load(connection, metadata, sourcePath):
                                     typeID=inv_type_id,
                                     skillID=-1,
                                     bonus=trait.get('bonus'),
-                                    bonusText=trait.get('bonusText',{}).get('en',''),
+                                    bonusText=trait.get('bonusText',{}).get(language,''),
                                     unitID=trait.get('unitID'))
                             traitid=result.inserted_primary_key
                             for languageid in trait.get('bonusText',{}):
@@ -79,7 +79,7 @@ def load(connection, metadata, sourcePath):
                                     typeID=inv_type_id,
                                     skillID=-2,
                                     bonus=trait.get('bonus'),
-                                    bonusText=trait.get('bonusText',{}).get('en',''),
+                                    bonusText=trait.get('bonusText',{}).get(language,''),
                                     unitID=trait.get('unitID'))
                             traitid=result.inserted_primary_key
                             for languageid in trait.get('bonusText',{}):

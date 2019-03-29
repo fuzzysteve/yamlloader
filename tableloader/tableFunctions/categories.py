@@ -5,7 +5,7 @@ from utils import yaml_stream
 
 from sqlalchemy import Table
 
-def load(connection, metadata, sourcePath):
+def load(connection, metadata, sourcePath, language='en'):
 
     print("Importing Categories")
 
@@ -20,7 +20,7 @@ def load(connection, metadata, sourcePath):
             for category_id, category_details in category.items():
                 connection.execute(invCategories.insert(),
                                 categoryID=category_id,
-                                categoryName=category_details.get('name',{}).get('en',''),
+                                categoryName=category_details.get('name',{}).get(language,''),
                                 iconID=category_details.get('iconID'),
                                 published=category_details.get('published',0))
 
