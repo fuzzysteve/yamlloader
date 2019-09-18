@@ -67,6 +67,8 @@ print "created"
 import tableloader.tableFunctions
 
 blueprints.importyaml(connection,metadata,sourcePath)
+marketGroups.importyaml(connection,metadata,sourcePath,language)
+metaGroups.importyaml(connection,metadata,sourcePath,language)
 categories.importyaml(connection,metadata,sourcePath,language)
 certificates.importyaml(connection,metadata,sourcePath)
 graphics.importyaml(connection,metadata,sourcePath)
