@@ -25,7 +25,7 @@ def metadataCreator(schema):
             Column('level', INTEGER()),
             Column('quality', INTEGER()),
             Column('agentTypeID', INTEGER()),
-            Column('isLocator', Boolean),
+            Column('isLocator', Boolean(name='aa_isloc')),
             schema=schema
     )
 
@@ -212,7 +212,7 @@ def metadataCreator(schema):
             Column('publicShares', INTEGER()),
             Column('initialPrice', INTEGER()),
             Column('minSecurity', FLOAT()),
-            Column('scattered', Boolean),
+            Column('scattered', Boolean(name='cnpcc_scatt')),
             Column('fringe', INTEGER()),
             Column('corridor', INTEGER()),
             Column('hub', INTEGER()),
@@ -256,11 +256,11 @@ def metadataCreator(schema):
             Column('description', VARCHAR(length=1000)),
             Column('iconID', INTEGER()),
             Column('defaultValue', FLOAT()),
-            Column('published', Boolean),
+            Column('published', Boolean(name='dat_pub')),
             Column('displayName', VARCHAR(length=150)),
             Column('unitID', INTEGER()),
-            Column('stackable', Boolean),
-            Column('highIsGood', Boolean),
+            Column('stackable', Boolean(name='dat_stack')),
+            Column('highIsGood', Boolean(name='dat_hig')),
             Column('categoryID', INTEGER()),
             schema=schema
 
@@ -277,20 +277,20 @@ def metadataCreator(schema):
             Column('description', VARCHAR(length=1000)),
             Column('guid', VARCHAR(length=60)),
             Column('iconID', INTEGER()),
-            Column('isOffensive', Boolean),
-            Column('isAssistance', Boolean),
+            Column('isOffensive', Boolean(name='de_offense')),
+            Column('isAssistance', Boolean(name='de_assist')),
             Column('durationAttributeID', INTEGER()),
             Column('trackingSpeedAttributeID', INTEGER()),
             Column('dischargeAttributeID', INTEGER()),
             Column('rangeAttributeID', INTEGER()),
             Column('falloffAttributeID', INTEGER()),
-            Column('disallowAutoRepeat', Boolean),
-            Column('published', Boolean),
+            Column('disallowAutoRepeat', Boolean(name='de_disallowar')),
+            Column('published', Boolean(name='de_published')),
             Column('displayName', VARCHAR(length=100)),
-            Column('isWarpSafe', Boolean),
-            Column('rangeChance', Boolean),
-            Column('electronicChance', Boolean),
-            Column('propulsionChance', Boolean),
+            Column('isWarpSafe', Boolean(name='de_warpsafe')),
+            Column('rangeChance', Boolean(name='de_rangechance')),
+            Column('electronicChance', Boolean(name='de_elecchance')),
+            Column('propulsionChance', Boolean(name='de_propchance')),
             Column('distribution', INTEGER()),
             Column('sfxName', VARCHAR(length=20)),
             Column('npcUsageChanceAttributeID', INTEGER()),
@@ -334,7 +334,7 @@ def metadataCreator(schema):
     dgmTypeEffects =  Table('dgmTypeEffects', metadata,
             Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
             Column('effectID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('isDefault', Boolean),
+            Column('isDefault', Boolean(name='dte_default')),
             schema=schema
 
 
@@ -448,7 +448,7 @@ def metadataCreator(schema):
             Column('categoryID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
             Column('categoryName', VARCHAR(length=100)),
             Column('iconID', INTEGER()),
-            Column('published', Boolean),
+            Column('published', Boolean(name='invcat_published')),
             schema=schema
 
 
@@ -506,11 +506,11 @@ def metadataCreator(schema):
             Column('categoryID', INTEGER(),index=True),
             Column('groupName', VARCHAR(length=100)),
             Column('iconID', INTEGER()),
-            Column('useBasePrice', Boolean),
-            Column('anchored', Boolean),
-            Column('anchorable', Boolean),
-            Column('fittableNonSingleton', Boolean),
-            Column('published', Boolean),
+            Column('useBasePrice', Boolean(name='invgroup_usebaseprice')),
+            Column('anchored', Boolean(name='invgroup_anchored')),
+            Column('anchorable', Boolean(name='invgroup_anchorable')),
+            Column('fittableNonSingleton', Boolean(name='invgroup_fitnonsingle')),
+            Column('published', Boolean(name='invgroup_published')),
             schema=schema
 
 
@@ -535,7 +535,7 @@ def metadataCreator(schema):
             Column('marketGroupName', VARCHAR(length=100)),
             Column('description', VARCHAR(length=3000)),
             Column('iconID', INTEGER()),
-            Column('hasTypes', Boolean),
+            Column('hasTypes', Boolean(name='invmarketgroups_hastypes')),
             schema=schema
 
 
@@ -577,9 +577,9 @@ def metadataCreator(schema):
             Column('x', FLOAT(), nullable=False, default=text(u"'0'")),
             Column('y', FLOAT(), nullable=False, default=text(u"'0'")),
             Column('z', FLOAT(), nullable=False, default=text(u"'0'")),
-            Column('yaw', FLOAT(precision=24, scale=0)),
-            Column('pitch', FLOAT(precision=24, scale=0)),
-            Column('roll', FLOAT(precision=24, scale=0)),
+            Column('yaw', FLOAT(precision=24)),
+            Column('pitch', FLOAT(precision=24)),
+            Column('roll', FLOAT(precision=24)),
             schema=schema
 
 
@@ -611,7 +611,7 @@ def metadataCreator(schema):
 
     invTypeReactions =  Table('invTypeReactions', metadata,
             Column('reactionTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('input', Boolean, primary_key=True, autoincrement=False, nullable=False),
+            Column('input', Boolean(name='invtypereactions_input'), primary_key=True, autoincrement=False, nullable=False),
             Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
             Column('quantity', INTEGER()),
             schema=schema
@@ -631,7 +631,7 @@ def metadataCreator(schema):
             Column('portionSize', INTEGER()),
             Column('raceID', INTEGER()),
             Column('basePrice', DECIMAL(precision=19, scale=4)),
-            Column('published', Boolean),
+            Column('published', Boolean(name='invtype_published')),
             Column('marketGroupID', INTEGER()),
             Column('iconID', INTEGER()),
             Column('soundID', INTEGER()),
@@ -669,13 +669,13 @@ def metadataCreator(schema):
             Column('eccentricity', FLOAT(precision=53)),
             Column('massDust', FLOAT(precision=53)),
             Column('massGas', FLOAT(precision=53)),
-            Column('fragmented', Boolean),
+            Column('fragmented', Boolean(name='mapcelestialstats_frag')),
             Column('density', FLOAT(precision=53)),
             Column('surfaceGravity', FLOAT(precision=53)),
             Column('escapeVelocity', FLOAT(precision=53)),
             Column('orbitPeriod', FLOAT(precision=53)),
             Column('rotationRate', FLOAT(precision=53)),
-            Column('locked', Boolean),
+            Column('locked', Boolean(name='mapcelestialstats_locked')),
             Column('pressure', FLOAT(precision=53)),
             Column('radius', FLOAT(precision=53)),
             Column('mass', INTEGER()),
@@ -841,13 +841,13 @@ def metadataCreator(schema):
             Column('zMin', FLOAT(precision=53)),
             Column('zMax', FLOAT(precision=53)),
             Column('luminosity', FLOAT(precision=53)),
-            Column('border', Boolean),
-            Column('fringe', Boolean),
-            Column('corridor', Boolean),
-            Column('hub', Boolean),
-            Column('international', Boolean),
-            Column('regional', Boolean),
-            Column('constellation', Boolean),
+            Column('border', Boolean(name='mapss_border')),
+            Column('fringe', Boolean(name='mapss_fringe')),
+            Column('corridor', Boolean(name='mapss_corridor')),
+            Column('hub', Boolean(name='mapss_hub')),
+            Column('international', Boolean(name='mapss_internat')),
+            Column('regional', Boolean(name='mapss_regional')),
+            Column('constellation', Boolean(name='mapss_constel')),
             Column('security', FLOAT(precision=53),index=True),
             Column('factionID', INTEGER()),
             Column('radius', FLOAT(precision=53)),
@@ -893,7 +893,7 @@ def metadataCreator(schema):
             Column('schematicID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
             Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
             Column('quantity', INTEGER()),
-            Column('isInput', Boolean),
+            Column('isInput', Boolean(name='pstm_input')),
             schema=schema
     )
 
@@ -903,7 +903,7 @@ def metadataCreator(schema):
             Column('activityName', VARCHAR(length=100)),
             Column('iconNo', VARCHAR(length=5)),
             Column('description', VARCHAR(length=1000)),
-            Column('published', Boolean()),
+            Column('published', Boolean(name='ra_pub')),
             schema=schema
     )
 
@@ -1058,7 +1058,7 @@ def metadataCreator(schema):
             Column('operationID', INTEGER()),
             Column('officeSlots', INTEGER()),
             Column('reprocessingEfficiency', FLOAT(precision=53)),
-            Column('conquerable', Boolean),
+            Column('conquerable', Boolean(name='stastat_conq')),
             schema=schema
 
 
