@@ -30,8 +30,8 @@ def importyaml(connection,metadata,sourcePath,language='en'):
         dogmaEffects=load(yamlstream,Loader=SafeLoader)
         print "Yaml Processed into memory"
         for dogmaEffectsid in dogmaEffects:
-            for effect in dogmaEffects[dogmaEffectsid]:
-                connection.execute(dgmEffects.insert(),
+            effect=dogmaEffects[dogmaEffectsid]:
+            connection.execute(dgmEffects.insert(),
                                 effectID=dogmaEffectsid,
                                 effectName=effect['effectName'],
                                 effectCategory=effectcategory.get(effect['effectCategory']),
@@ -59,5 +59,5 @@ def importyaml(connection,metadata,sourcePath,language='en'):
                                 fittingUsageChanceAttributeID=effect.get('fittingUsageChanceAttributeID'),
                                 modifierInfo=dump(effect.get('modifierInfo')
                                 
-                )
+            )
     trans.commit()

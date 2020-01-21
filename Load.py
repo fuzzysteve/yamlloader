@@ -66,9 +66,14 @@ print "created"
 
 import tableloader.tableFunctions
 
+dogmaTypes.importyaml(connection,metadata,sourcePath,language)
+dogmaEffects.importyaml(connection,metadata,sourcePath,language)
+dogmaAttributes.importyaml(connection,metadata,sourcePath,language)
+dogmaAttributeCategories.importyaml(connection,metadata,sourcePath,language)
 blueprints.importyaml(connection,metadata,sourcePath)
 marketGroups.importyaml(connection,metadata,sourcePath,language)
 metaGroups.importyaml(connection,metadata,sourcePath,language)
+controlTowerResources.importyaml(connection,metadata,sourcePath,language)
 categories.importyaml(connection,metadata,sourcePath,language)
 certificates.importyaml(connection,metadata,sourcePath)
 graphics.importyaml(connection,metadata,sourcePath)
