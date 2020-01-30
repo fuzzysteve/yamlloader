@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
 from yaml import load, dump
+import importlib
 try:
 	from yaml import CSafeLoader as SafeLoader
-	print "Using CSafeLoader"
+	print("Using CSafeLoader")
 except ImportError:
 	from yaml import SafeLoader
-	print "Using Python SafeLoader"
+	print("Using Python SafeLoader")
 
 import os
 import sys
-reload(sys)
-sys.setdefaultencoding("utf-8")
+importlib.reload(sys)
 from sqlalchemy import Table
 
 def importyaml(connection,metadata,sourcePath):
@@ -20,11 +20,11 @@ def importyaml(connection,metadata,sourcePath):
     skinShip = Table('skinShip',metadata)            
                 
     trans = connection.begin()
-    print "Importing Skins"
-    print "opening Yaml1"
+    print("Importing Skins")
+    print("opening Yaml1")
     with open(os.path.join(sourcePath,'fsd','skins.yaml'),'r') as yamlstream:
         skins=load(yamlstream,Loader=SafeLoader)
-        print "Yaml Processed into memory"
+        print("Yaml Processed into memory")
         for skinid in skins:
             connection.execute(skins_table.insert(),
                             skinID=skinid,
@@ -36,19 +36,19 @@ def importyaml(connection,metadata,sourcePath):
                                 typeID=ship)
 
 
-    print "opening Yaml2"
+    print("opening Yaml2")
     with open(os.path.join(sourcePath,'fsd','skinLicenses.yaml'),'r') as yamlstream:
         skinlicenses=load(yamlstream,Loader=SafeLoader)
-        print "Yaml Processed into memory"
+        print("Yaml Processed into memory")
         for licenseid in skinlicenses:
             connection.execute(skinLicense.insert(),
                                 licenseTypeID=licenseid,
                                 duration=skinlicenses[licenseid]['duration'],
                                 skinID=skinlicenses[licenseid]['skinID'])
-    print "opening Yaml3"
+    print("opening Yaml3")
     with open(os.path.join(sourcePath,'fsd','skinMaterials.yaml'),'r') as yamlstream:
         skinmaterials=load(yamlstream,Loader=SafeLoader)
-        print "Yaml Processed into memory"
+        print("Yaml Processed into memory")
         for materialid in skinmaterials:
             connection.execute(skinMaterials.insert(),
                                 skinMaterialID=materialid,

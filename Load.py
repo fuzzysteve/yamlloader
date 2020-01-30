@@ -2,7 +2,7 @@ from sqlalchemy import create_engine,Table
 import warnings
 
 import sys
-
+import os
 
 
 
@@ -11,7 +11,7 @@ warnings.filterwarnings('ignore', '^Unicode type received non-unicode bind param
 
 
 if len(sys.argv)<2:
-    print "Load.py destination"
+    print("Load.py destination")
     exit()
 
 
@@ -22,10 +22,10 @@ if len(sys.argv)==3:
 else:
     language='en'
 
-import ConfigParser, os
-fileLocation = os.path.dirname(os.path.realpath(__file__))
-inifile=fileLocation+'/sdeloader.cfg'
-config = ConfigParser.ConfigParser()
+import configparser
+loader_dirname = os.path.dirname(os.path.realpath(__file__))
+inifile = os.path.join(loader_dirname, 'sdeloader.cfg')
+config = configparser.ConfigParser()
 config.read(inifile)
 destination=config.get('Database',database)
 sourcePath=config.get('Files','sourcePath')
@@ -39,7 +39,7 @@ from tableloader.tableFunctions import *
 
 
 
-print "connecting to DB"
+print("connecting to DB")
 
 
 engine = create_engine(destination)
@@ -57,12 +57,12 @@ metadata=metadataCreator(schema)
 
 
 
-print "Creating Tables"
+print("Creating Tables")
 
 metadata.drop_all(engine,checkfirst=True)
 metadata.create_all(engine,checkfirst=True)
 
-print "created"
+print("created")
 
 import tableloader.tableFunctions
 
@@ -79,5 +79,5 @@ types.importyaml(connection,metadata,sourcePath,language)
 bsdTables.importyaml(connection,metadata,sourcePath)
 universe.importyaml(connection,metadata,sourcePath)
 universe.buildJumps(connection,database)
-volumes.importVolumes(connection,metadata,sourcePath)
+volumes.importVolumes(connection,metadata,loader_dirname)
 universe.fixStationNames(connection,metadata)

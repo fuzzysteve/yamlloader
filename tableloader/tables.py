@@ -574,9 +574,9 @@ def metadataCreator(schema):
 
     invPositions =  Table('invPositions', metadata,
             Column('itemID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('x', FLOAT(), nullable=False, default=text(u"'0'")),
-            Column('y', FLOAT(), nullable=False, default=text(u"'0'")),
-            Column('z', FLOAT(), nullable=False, default=text(u"'0'")),
+            Column('x', FLOAT(), nullable=False, default=text("'0'")),
+            Column('y', FLOAT(), nullable=False, default=text("'0'")),
+            Column('z', FLOAT(), nullable=False, default=text("'0'")),
             Column('yaw', FLOAT(precision=24)),
             Column('pitch', FLOAT(precision=24)),
             Column('roll', FLOAT(precision=24)),
@@ -602,7 +602,7 @@ def metadataCreator(schema):
     invTypeMaterials =  Table('invTypeMaterials', metadata,
             Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
             Column('materialTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('quantity', INTEGER(), nullable=False, default=text(u"'0'")),
+            Column('quantity', INTEGER(), nullable=False, default=text("'0'")),
             schema=schema
 
 

@@ -2,17 +2,17 @@
 from yaml import load
 try:
 	from yaml import CSafeLoader as SafeLoader
-	print "Using CSafeLoader"
+	print("Using CSafeLoader")
 except ImportError:
 	from yaml import SafeLoader
-	print "Using Python SafeLoader"
+	print("Using Python SafeLoader")
 
 import os
 from sqlalchemy import Table
 
 def importyaml(connection,metadata,sourcePath):
 
-    activityIDs={"copying":5,"manufacturing":1,"research_material":4,"research_time":3,"invention":8,"reaction":11};
+    activityIDs={"copying":5,"manufacturing":1,"research_material":4,"research_time":3,"invention":8,"reaction":11}
 
     industryBlueprints=Table('industryBlueprints',metadata)
     industryActivity = Table('industryActivity',metadata)
@@ -24,12 +24,12 @@ def importyaml(connection,metadata,sourcePath):
     
     
 
-    print "importing Blueprints"
-    print "opening Yaml"
+    print("importing Blueprints")
+    print("opening Yaml")
     trans = connection.begin()
     with open(os.path.join(sourcePath,'fsd','blueprints.yaml'),'r') as yamlstream:
         blueprints=load(yamlstream,Loader=SafeLoader)
-        print "Yaml Processed into memory"
+        print("Yaml Processed into memory")
         for blueprint in blueprints:
             connection.execute(industryBlueprints.insert(),typeID=blueprint,maxProductionLimit=blueprints[blueprint]["maxProductionLimit"])
             for activity in blueprints[blueprint]['activities']:
@@ -37,28 +37,28 @@ def importyaml(connection,metadata,sourcePath):
                                     typeID=blueprint,
                                     activityID=activityIDs[activity],
                                     time=blueprints[blueprint]['activities'][activity]['time'])
-                if blueprints[blueprint]['activities'][activity].has_key('materials'):
+                if 'materials' in blueprints[blueprint]['activities'][activity]:
                     for material in blueprints[blueprint]['activities'][activity]['materials']:
                         connection.execute(industryActivityMaterials.insert(),
                                             typeID=blueprint,
                                             activityID=activityIDs[activity],
                                             materialTypeID=material['typeID'],
                                             quantity=material['quantity'])
-                if blueprints[blueprint]['activities'][activity].has_key('products'):
+                if 'products' in blueprints[blueprint]['activities'][activity]:
                     for product in blueprints[blueprint]['activities'][activity]['products']:
                         connection.execute(industryActivityProducts.insert(),
                                             typeID=blueprint,
                                             activityID=activityIDs[activity],
                                             productTypeID=product['typeID'],
                                             quantity=product['quantity'])
-                        if product.has_key('probability'):
+                        if 'probability' in product:
                             connection.execute(industryActivityProbabilities.insert(),
                                                 typeID=blueprint,
                                                 activityID=activityIDs[activity],
                                                 productTypeID=product['typeID'],
                                                 probability=product['probability'])
                 try:
-                    if blueprints[blueprint]['activities'][activity].has_key('skills'):
+                    if 'skills' in blueprints[blueprint]['activities'][activity]:
                         for skill in blueprints[blueprint]['activities'][activity]['skills']:
                             connection.execute(industryActivitySkills.insert(),
                                                 typeID=blueprint,
@@ -66,5 +66,5 @@ def importyaml(connection,metadata,sourcePath):
                                                 skillID=skill['typeID'],
                                                 level=skill['level'])
                 except:
-                    print '{} has a bad skill'.format(blueprint)
+                    print('{} has a bad skill'.format(blueprint))
     trans.commit()

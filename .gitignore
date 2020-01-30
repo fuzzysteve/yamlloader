@@ -66,6 +66,7 @@ target/
 
 # Thumbnails
 ._*
+*.bak
 
 # Files that might appear on external disk
 .Spotlight-V100
