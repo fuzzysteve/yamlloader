@@ -34,13 +34,13 @@ def importyaml(connection,metadata,sourcePath,language='en'):
             for effect in dogmaEffects[typeid]['dogmaEffects']:
                 connection.execute(dgmEffects.insert(),
                                 typeID=typeid,
-                                effectID=effect.effectID,
+                                effectID=effect['effectID'],
                                 isDefault=effect.get('isDefault')
                 )
             for attribute in dogmaEffects[typeid]['dogmaAttributes']:
                 connection.execute(dgmAttributes.insert(),
                                 typeID=typeid,
-                                attributeID=attribute.attributeID,
-                                valueFloat=attribute.value
+                                attributeID=attribute.get('attributeID'),
+                                valueFloat=attribute.get('value')
                 )
     trans.commit()
