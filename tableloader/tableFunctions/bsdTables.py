@@ -21,8 +21,13 @@ def importyaml(connection,metadata,sourcePath):
     files=glob.glob(os.path.join(sourcePath,'bsd','*.yaml'))
     for file in files:
         head, tail = os.path.split(file)
+
         tablename=tail.split('.')[0]
         print(tablename)
+        if tablename in [ 'dgmAttributeCategories', 'dgmAttributeTypes', 'dgmEffects', 'dgmTypeEffects', 'dgmTypeAttributes' ]:
+            print("skipping {}".format(tablename))
+            continue
+
         tablevar = Table(tablename,metadata)
         print("Importing {}".format(file))
         print("Opening Yaml")

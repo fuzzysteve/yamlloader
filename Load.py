@@ -2,7 +2,7 @@ from sqlalchemy import create_engine,Table
 import warnings
 
 import sys
-import os
+
 
 
 
@@ -22,9 +22,9 @@ if len(sys.argv)==3:
 else:
     language='en'
 
-import configparser
-loader_dirname = os.path.dirname(os.path.realpath(__file__))
-inifile = os.path.join(loader_dirname, 'sdeloader.cfg')
+import configparser, os
+fileLocation = os.path.dirname(os.path.realpath(__file__))
+inifile=os.path.join(fileLocation,'sdeloader.cfg')
 config = configparser.ConfigParser()
 config.read(inifile)
 destination=config.get('Database',database)
@@ -66,9 +66,14 @@ print("created")
 
 import tableloader.tableFunctions
 
+dogmaTypes.importyaml(connection,metadata,sourcePath,language)
+dogmaEffects.importyaml(connection,metadata,sourcePath,language)
+dogmaAttributes.importyaml(connection,metadata,sourcePath,language)
+dogmaAttributeCategories.importyaml(connection,metadata,sourcePath,language)
 blueprints.importyaml(connection,metadata,sourcePath)
 marketGroups.importyaml(connection,metadata,sourcePath,language)
 metaGroups.importyaml(connection,metadata,sourcePath,language)
+controlTowerResources.importyaml(connection,metadata,sourcePath,language)
 categories.importyaml(connection,metadata,sourcePath,language)
 certificates.importyaml(connection,metadata,sourcePath)
 graphics.importyaml(connection,metadata,sourcePath)
@@ -79,5 +84,5 @@ types.importyaml(connection,metadata,sourcePath,language)
 bsdTables.importyaml(connection,metadata,sourcePath)
 universe.importyaml(connection,metadata,sourcePath)
 universe.buildJumps(connection,database)
-volumes.importVolumes(connection,metadata,loader_dirname)
+volumes.importVolumes(connection,metadata,fileLocation)
 universe.fixStationNames(connection,metadata)

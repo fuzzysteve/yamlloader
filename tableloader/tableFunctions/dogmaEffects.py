@@ -30,14 +30,14 @@ def importyaml(connection,metadata,sourcePath,language='en'):
         dogmaEffects=load(yamlstream,Loader=SafeLoader)
         print("Yaml Processed into memory")
         for dogmaEffectsid in dogmaEffects:
-            for effect in dogmaEffects[dogmaEffectsid]:
-                connection.execute(dgmEffects.insert(),
+            effect=dogmaEffects[dogmaEffectsid]
+            connection.execute(dgmEffects.insert(),
                                 effectID=dogmaEffectsid,
-                                effectName=effect['effectName'],
+                                effectName=effect.get('effectName'),
                                 effectCategory=effectcategory.get(effect['effectCategory']),
-                                description=effect['descriptionID'][language],
-                                guid=effect['guid'],
-                                iconID=effect.get['iconID'],
+                                description=effect.get('descriptionID',{}).get(language),
+                                guid=effect.get('guid'),
+                                iconID=effect.get('iconID'),
                                 isOffensive=effect['isOffensive'],
                                 isAssistance=effect['isAssistance'],
                                 durationAttributeID=effect.get('durationAttributeID'),
@@ -47,7 +47,7 @@ def importyaml(connection,metadata,sourcePath,language='en'):
                                 falloffAttributeID=effect.get('falloffAttributeID'),
                                 disallowAutoRepeat=effect.get('disallowAutoRepeat'),
                                 published=effect.get('published'),
-                                displayName=effect.get('displayNameID',[]).get(language),
+                                displayName=effect.get('displayNameID',{}).get(language),
                                 isWarpSafe=effect.get('isWarpSafe'),
                                 rangeChance=effect.get('rangeChance'),
                                 electronicChance=effect.get('electronicChance'),
@@ -59,5 +59,5 @@ def importyaml(connection,metadata,sourcePath,language='en'):
                                 fittingUsageChanceAttributeID=effect.get('fittingUsageChanceAttributeID'),
                                 modifierInfo=dump(effect.get('modifierInfo'))
                                 
-                )
+            )
     trans.commit()

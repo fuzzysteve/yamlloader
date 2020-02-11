@@ -27,10 +27,11 @@ def importyaml(connection,metadata,sourcePath,language='en'):
         dogmaAttributeCategories=load(yamlstream,Loader=SafeLoader)
         print("Yaml Processed into memory")
         for dogmaAttributeCategoryID in dogmaAttributeCategories:
-          attribute = dogmaAttributeCategories[dogmaAttributeCategoryID]
-          connection.execute(dgmAttributeCategories.insert(),
-                             categoryID=dogmaAttributeCategoryID,
-                             categoryName=attribute['name'],
-                             categoryDescription=attribute['description']
-                )
+            attribute = dogmaAttributeCategories[dogmaAttributeCategoryID]
+            connection.execute(dgmAttributeCategories.insert(),
+                categoryID=dogmaAttributeCategoryID,
+                categoryName=attribute['name'],
+                categoryDescription=attribute['description']
+            )
     trans.commit()
+

@@ -18,6 +18,7 @@ def importyaml(connection,metadata,sourcePath,language='en'):
     trnTranslations = Table('trnTranslations',metadata)
     certMasteries = Table('certMasteries',metadata)
     invTraits = Table('invTraits',metadata)
+    invMetaTypes = Table('invMetaTypes',metadata)
     print("Importing Types")
     print("Opening Yaml")
     with open(os.path.join(sourcePath,'fsd','typeIDs.yaml'),'r') as yamlstream:
@@ -89,4 +90,6 @@ def importyaml(connection,metadata,sourcePath,language='en'):
                         traitid=result.inserted_primary_key
                         for languageid in trait.get('bonusText',{}):
                             connection.execute(trnTranslations.insert(),tcID=1002,keyID=traitid[0],languageID=languageid,text=trait['bonusText'][languageid])
+            if 'metaGroupID' in typeids[typeid] or 'variationParentTypeID' in typeids[typeid]:
+                connection.execute(invMetaTypes.insert(),typeID=typeid,metaGroupID=typeids[typeid].get('metaGroupID'),parentTypeID=typeids[typeid].get('variationParentTypeID'))
     trans.commit()
