@@ -1,6 +1,9 @@
 import requests
 from sqlalchemy import create_engine,MetaData,Table,Column,INTEGER,FLOAT,VARCHAR,UnicodeText,DECIMAL,Boolean,select,literal_column
-import requests_cache
+#import requests_cache
+import redis
+import cachecontrol
+import cachecontrol.caches.redis_cache
 from requests_futures.sessions import FuturesSession
 import requests_futures
 from concurrent.futures import as_completed
@@ -11,9 +14,9 @@ import sys
 
 def getgroups(grouplist):
     groupfuture=[]
-    print "getgroups"
+    print("getgroups")
     for groupid in grouplist:
-        if isinstance(groupid,basestring) and groupid.startswith("https"):
+        if isinstance(groupid,str) and groupid.startswith("https"):
             groupfuture.append(session.get(str(groupid)))
         else:
             groupfuture.append(session.get(grouplookupurl.format(groupid)))
@@ -42,7 +45,7 @@ def getgroups(grouplist):
                                 )
         else:
             badlist.append(groupdata.result().url)
-            print groupdata.result().url
+            print(groupdata.result().url)
         pbar.update(1)
     return badlist
 
@@ -51,7 +54,7 @@ def getgroups(grouplist):
 
 
 if len(sys.argv)<2:
-    print "Load.py destination"
+    print("Load.py destination")
     exit()
 
 
@@ -62,13 +65,16 @@ if len(sys.argv)==3:
 else:
     language='en'
 
-import ConfigParser, os
+import configparser, os
 fileLocation = os.path.dirname(os.path.realpath(__file__))
 inifile=fileLocation+'/sdeloader.cfg'
-config = ConfigParser.ConfigParser()
+config = configparser.ConfigParser()
 config.read(inifile)
 destination=config.get('Database',database)
 sourcePath=config.get('Files','sourcePath')
+redis_server=config.get('Redis', 'server')
+redis_db=config.get('Redis', 'db')
+
 
 schema=None
 if database=="postgresschema":
@@ -108,9 +114,11 @@ groupurl="https://esi.evetech.net/latest/universe/groups/?datasource=tranquility
 grouplookupurl='https://esi.evetech.net/latest/universe/groups/{}/'
 
 errorcount=0
-requests_cache.install_cache("group_cache",backend='redis',expire_after=35000)
+#requests_cache.install_cache("group_cache",backend='redis',expire_after=35000)
 
-base_session=requests_cache.core.CachedSession(cache_name="item_cache",backend='redis',expire_after=35000)
+#base_session=requests_cache.core.CachedSession(cache_name="item_cache",backend='redis',expire_after=35000)
+redis_connection = redis.Redis(host=redis_server, db=redis_db, retry_on_timeout=True, health_check_interval=30)
+base_session = cachecontrol.CacheControl(requests.session(), cachecontrol.caches.redis_cache.RedisCache(redis_connection))
 
 
 lookup=select([invGroups])
@@ -121,7 +129,7 @@ sdegrouplist=[]
 for groupdata in result:
     sdegrouplist.append(groupdata.groupID)
 
-reqs_num_workers=50
+reqs_num_workers=25
 
 session = FuturesSession(max_workers=reqs_num_workers,session=base_session)
 
@@ -146,10 +154,10 @@ while page<=maxpage:
     groupjson=groups.json()
     maingrouplist=maingrouplist+groupjson
 
-print "Page variable is {}".format(page)
+print("Page variable is {}".format(page))
 
 firstbadlist=getgroups(maingrouplist)
-print "Getting badlist"
+print("Getting badlist")
 secondbadlist=getgroups(firstbadlist)
 
 
