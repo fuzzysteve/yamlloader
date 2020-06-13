@@ -1,17 +1,14 @@
 # -*- coding: utf-8 -*-
 import sys
 import os
-import importlib
-importlib.reload(sys)
 from sqlalchemy import Table
 
 from yaml import load,dump
 try:
-	from yaml import CSafeLoader as SafeLoader
-	print("Using CSafeLoader")
+    from yaml import CSafeLoader as SafeLoader
 except ImportError:
-	from yaml import SafeLoader
-	print("Using Python SafeLoader")
+    from yaml import SafeLoader
+    print("Using Python SafeLoader")
 
 
 

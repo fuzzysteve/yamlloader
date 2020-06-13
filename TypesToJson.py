@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
 import sys
-import importlib
-importlib.reload(sys)
-import yaml
-import json
 import os
+import json
+
+import yaml
 try:
 	from yaml import CSafeLoader as SafeLoader
-	print("Using CSafeLoader")
 except ImportError:
 	from yaml import SafeLoader
 	print("Using Python SafeLoader")

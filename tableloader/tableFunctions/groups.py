@@ -1,16 +1,13 @@
 # -*- coding: utf-8 -*-
 from yaml import load, dump
-import importlib
 try:
 	from yaml import CSafeLoader as SafeLoader
-	print("Using CSafeLoader")
 except ImportError:
 	from yaml import SafeLoader
 	print("Using Python SafeLoader")
 
 import os
 import sys
-importlib.reload(sys)
 from sqlalchemy import Table
 
 def importyaml(connection,metadata,sourcePath,language='en'):
@@ -33,7 +30,7 @@ def importyaml(connection,metadata,sourcePath,language='en'):
                             anchorable=groupids[groupid].get('anchorable',0),
                             fittableNonSingleton=groupids[groupid].get('fittableNonSingleton',0),
                             published=groupids[groupid].get('published',0))
-            if ('name' in groupids[groupid]):
+            if 'name' in groupids[groupid]:
                 for lang in groupids[groupid]['name']:
                     connection.execute(trnTranslations.insert(),tcID=7,keyID=groupid,languageID=lang,text=groupids[groupid]['name'][lang])
     trans.commit()

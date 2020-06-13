@@ -1,14 +1,11 @@
 # -*- coding: utf-8 -*-
 import sys
 import os
-import importlib
-importlib.reload(sys)
 from sqlalchemy import Table
 
 from yaml import load
 try:
 	from yaml import CSafeLoader as SafeLoader
-	print("Using CSafeLoader")
 except ImportError:
 	from yaml import SafeLoader
 	print("Using Python SafeLoader")
@@ -36,13 +33,13 @@ def importyaml(connection,metadata,sourcePath,language='en'):
                             hasTypes=marketgroups[marketgroupid].get('hasTypes',False)
             )
             
-            if ('nameID' in marketgroups[marketgroupid]):
+            if 'nameID' in marketgroups[marketgroupid]:
                 for lang in marketgroups[marketgroupid]['nameID']:
                     try:
                         connection.execute(trnTranslations.insert(),tcID=36,keyID=marketgroupid,languageID=lang,text=marketgroups[marketgroupid]['nameID'][lang])
                     except:                        
                         print('{} {} has a category problem'.format(categoryid,lang))
-            if ('descriptionID' in marketgroups[marketgroupid]):
+            if 'descriptionID' in marketgroups[marketgroupid]:
                 for lang in marketgroups[marketgroupid]['descriptionID']:
                     try:
                         connection.execute(trnTranslations.insert(),tcID=37,keyID=marketgroupid,languageID=lang,text=marketgroups[marketgroupid]['descriptionID'][lang])

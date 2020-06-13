@@ -1,16 +1,13 @@
 # -*- coding: utf-8 -*-
 from yaml import load, dump
-import importlib
 try:
 	from yaml import CSafeLoader as SafeLoader
-	print("Using CSafeLoader")
 except ImportError:
 	from yaml import SafeLoader
 	print("Using Python SafeLoader")
 
 import os
 import sys
-importlib.reload(sys)
 from sqlalchemy import Table
 
 def importyaml(connection,metadata,sourcePath,language='en'):
@@ -42,20 +39,20 @@ def importyaml(connection,metadata,sourcePath,language='en'):
                             graphicID=typeids[typeid].get('graphicID',0),
                             iconID=typeids[typeid].get('iconID'),
                             soundID=typeids[typeid].get('soundID'))
-            if  "masteries" in typeids[typeid]:
+            if 'masteries' in typeids[typeid]:
                 for level in typeids[typeid]["masteries"]:
                     for cert in typeids[typeid]["masteries"][level]:
                         connection.execute(certMasteries.insert(),
                                             typeID=typeid,
                                             masteryLevel=level,
                                             certID=cert)
-            if ('name' in typeids[typeid]):
+            if 'name' in typeids[typeid]:
                 for lang in typeids[typeid]['name']:
                     connection.execute(trnTranslations.insert(),tcID=8,keyID=typeid,languageID=lang,text=typeids[typeid]['name'][lang])
-            if ('description' in typeids[typeid]):
+            if 'description' in typeids[typeid]:
                 for lang in typeids[typeid]['description']:
                     connection.execute(trnTranslations.insert(),tcID=33,keyID=typeid,languageID=lang,text=typeids[typeid]['description'][lang])
-            if ('traits' in typeids[typeid]):
+            if 'traits' in typeids[typeid]:
                 if 'types' in typeids[typeid]['traits']:
                     for skill in typeids[typeid]['traits']['types']:
                         for trait in typeids[typeid]['traits']['types'][skill]:
@@ -93,3 +90,4 @@ def importyaml(connection,metadata,sourcePath,language='en'):
             if 'metaGroupID' in typeids[typeid] or 'variationParentTypeID' in typeids[typeid]:
                 connection.execute(invMetaTypes.insert(),typeID=typeid,metaGroupID=typeids[typeid].get('metaGroupID'),parentTypeID=typeids[typeid].get('variationParentTypeID'))
     trans.commit()
+

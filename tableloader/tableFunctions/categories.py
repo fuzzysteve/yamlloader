@@ -1,14 +1,11 @@
 # -*- coding: utf-8 -*-
 import sys
 import os
-import importlib
-importlib.reload(sys)
 from sqlalchemy import Table
 
 from yaml import load
 try:
 	from yaml import CSafeLoader as SafeLoader
-	print("Using CSafeLoader")
 except ImportError:
 	from yaml import SafeLoader
 	print("Using Python SafeLoader")
@@ -33,7 +30,7 @@ def importyaml(connection,metadata,sourcePath,language='en'):
                             iconID=categoryids[categoryid].get('iconID'),
                             published=categoryids[categoryid].get('published',0))
             
-            if ('name' in categoryids[categoryid]):
+            if 'name' in categoryids[categoryid]:
                 for lang in categoryids[categoryid]['name']:
                     try:
                         connection.execute(trnTranslations.insert(),tcID=6,keyID=categoryid,languageID=lang,text=categoryids[categoryid]['name'][lang])

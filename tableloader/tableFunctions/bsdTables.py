@@ -1,15 +1,13 @@
 # -*- coding: utf-8 -*-
 import sys
-import importlib
-importlib.reload(sys)
 import os
 import glob
-from sqlalchemy import Table
+import sqlalchemy
+#from sqlalchemy import Table
 
 from yaml import load
 try:
 	from yaml import CSafeLoader as SafeLoader
-	print("Using CSafeLoader")
 except ImportError:
 	from yaml import SafeLoader
 	print("Using Python SafeLoader")
@@ -21,14 +19,9 @@ def importyaml(connection,metadata,sourcePath):
     files=glob.glob(os.path.join(sourcePath,'bsd','*.yaml'))
     for file in files:
         head, tail = os.path.split(file)
-
         tablename=tail.split('.')[0]
         print(tablename)
-        if tablename in [ 'dgmAttributeCategories', 'dgmAttributeTypes', 'dgmEffects', 'dgmTypeEffects', 'dgmTypeAttributes' ]:
-            print("skipping {}".format(tablename))
-            continue
-
-        tablevar = Table(tablename,metadata)
+        tablevar = sqlalchemy.Table(tablename,metadata)
         print("Importing {}".format(file))
         print("Opening Yaml")
         trans = connection.begin()
@@ -36,5 +29,9 @@ def importyaml(connection,metadata,sourcePath):
             rows=load(yamlstream,Loader=SafeLoader)
             print("Yaml Processed into memory")
             for row in rows:
-                connection.execute(tablevar.insert().values(row))
+                try:
+                    connection.execute(tablevar.insert().values(row))
+                except sqlalchemy.exc.IntegrityError as err:
+                    print("{} skipped {} ({})".format(tablename, row, err))
         trans.commit()
+
