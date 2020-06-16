@@ -20,6 +20,11 @@ def importyaml(connection,metadata,sourcePath):
     for file in files:
         head, tail = os.path.split(file)
         tablename=tail.split('.')[0]
+
+        if tablename[:3] == 'dgm':
+            print("Skipping {}".format(tablename))
+            continue
+
         print(tablename)
         tablevar = sqlalchemy.Table(tablename,metadata)
         print("Importing {}".format(file))

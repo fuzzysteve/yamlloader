@@ -8,3 +8,4 @@ requests
 requests-futures
 tqdm
 urllib3
+openpyxl
