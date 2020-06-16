@@ -544,6 +544,7 @@ def metadataCreator(schema):
 		Column('description',UnicodeText()),
 		Column('mass', FLOAT(precision=53)),
 		Column('volume', FLOAT(precision=53)),
+		Column('packagedVolume', FLOAT(precision=53)),
 		Column('capacity', FLOAT(precision=53)),
 		Column('portionSize', INTEGER()),
 		Column('raceID', INTEGER()),

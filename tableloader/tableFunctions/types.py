@@ -30,6 +30,7 @@ def importyaml(connection,metadata,sourcePath,language='en'):
                             description=typeids[typeid].get('description',{}).get(language,''),
                             mass=typeids[typeid].get('mass',0),
                             volume=typeids[typeid].get('volume',0),
+                            packagedVolume=typeids[typeid].get('packagedVolume', 0),
                             capacity=typeids[typeid].get('capacity',0),
                             portionSize=typeids[typeid].get('portionSize'),
                             raceID=typeids[typeid].get('raceID'),

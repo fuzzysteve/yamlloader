@@ -36,7 +36,9 @@ def getitems(typelist):
                                capacity=itemjson.get('capacity',None),
                                published=itemjson.get('published',False),
                                portionSize=itemjson.get('portion_size',None),
-                               volume=itemjson['volume'])
+                               volume=itemjson.get('volume', None),
+                               packagedVolume=itemjson.get('packaged_volume', None)
+                               )
                 except:
                     pass
             else:
@@ -47,6 +49,7 @@ def getitems(typelist):
                                 groupID=itemjson.get('group_id',None),
                                 published=itemjson.get('published',False),
                                 volume=itemjson.get('volume',None),
+                                packagedVolume=itemjson.get('packaged_volume', None),
                                 capacity=itemjson.get('capacity',None),
                                 portionSize=itemjson.get('portion_size',None),
                                 mass=itemjson.get('mass',None)
@@ -105,6 +108,7 @@ invTypes =  Table('invTypes', metadata,
         Column('description',UnicodeText()),
         Column('mass', FLOAT(precision=53)),
         Column('volume', FLOAT(precision=53)),
+        Column('packagedVolume', FLOAT(precision=53)),
         Column('capacity', FLOAT(precision=53)),
         Column('portionSize', INTEGER()),
         Column('raceID', INTEGER()),
