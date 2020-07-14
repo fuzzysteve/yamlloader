@@ -66,6 +66,7 @@ print "created"
 
 import tableloader.tableFunctions
 
+typeMaterials.importyaml(connection,metadata,sourcePath,language)
 dogmaTypes.importyaml(connection,metadata,sourcePath,language)
 dogmaEffects.importyaml(connection,metadata,sourcePath,language)
 dogmaAttributes.importyaml(connection,metadata,sourcePath,language)

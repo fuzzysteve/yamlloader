@@ -30,6 +30,7 @@ def importyaml(connection,metadata,sourcePath):
         with open(file,'r') as yamlstream:
             rows=load(yamlstream,Loader=SafeLoader)
             print "Yaml Processed into memory"
-            for row in rows:
-                connection.execute(tablevar.insert().values(row))
+            if rows is not None:
+                for row in rows:
+                    connection.execute(tablevar.insert().values(row))
         trans.commit()
