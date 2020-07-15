@@ -24,8 +24,8 @@ def grouplookup(connection,metadata,typeid):
                 invTypes.select().where( invTypes.c.typeID == typeid )
             ).fetchall()[0]['groupID']
     except:
-        print(typeid)
-        exit()
+        print("Group lookup failed on typeid {}".format(typeid))
+        groupid=-1
     typeidcache[typeid]=groupid
     return groupid
 
