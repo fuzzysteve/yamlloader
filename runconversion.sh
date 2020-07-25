@@ -65,6 +65,10 @@ python getgroups-esi.py mysql
 python getgroups-esi.py sqlite
 python getgroups-esi.py postgres
 python getgroups-esi.py postgresschema
+python getfactions-esi.py mysql
+python getfactions-esi.py sqlite
+python getfactions-esi.py postgres
+python getfactions-esi.py postgresschema
 
 
 python TypesToJson.py >typestojson.log
