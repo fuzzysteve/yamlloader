@@ -83,9 +83,12 @@ def importyaml(connection,metadata,sourcePath):
         trans = connection.begin()
         with open(regionfile,'r') as yamlstream:
             region=load(yamlstream,Loader=SafeLoader)
-        regionname=connection.execute(
-            invNames.select().where( invNames.c.itemID == region['regionID'] )
-        ).fetchall()[0]['itemName']
+        try:
+            regionname=connection.execute(
+                invNames.select().where( invNames.c.itemID == region['regionID'] )
+            ).fetchall()[0]['itemName']
+        except:
+            regionname="No Name"
         print "Region {}".format(regionname)
         connection.execute(mapRegions.insert(),
                             regionID=region['regionID'],
@@ -124,9 +127,12 @@ def importyaml(connection,metadata,sourcePath):
             chead, tail = os.path.split(constellationfile)
             with open(constellationfile,'r') as yamlstream:
                 constellation=load(yamlstream,Loader=SafeLoader)
-            constellationname=connection.execute(
-                invNames.select().where( invNames.c.itemID == constellation['constellationID'] )
-            ).fetchall()[0]['itemName']
+            try:
+                constellationname=connection.execute(
+                    invNames.select().where( invNames.c.itemID == constellation['constellationID'] )
+                ).fetchall()[0]['itemName']
+            except:
+                constellationname="No Constellation name"
             print "Constellation {}".format(constellationname)
             connection.execute(mapConstellations.insert(),
                                 regionID=region['regionID'],
@@ -164,9 +170,12 @@ def importyaml(connection,metadata,sourcePath):
             for systemfile in systems:
                 with open(systemfile,'r') as yamlstream:
                     system=load(yamlstream,Loader=SafeLoader)
-                systemname=connection.execute(
-                    invNames.select().where( invNames.c.itemID == system['solarSystemID'] )
-                ).fetchall()[0]['itemName']
+                try:
+                    systemname=connection.execute(
+                        invNames.select().where( invNames.c.itemID == system['solarSystemID'] )
+                    ).fetchall()[0]['itemName']
+                except:
+                    systemname="No System Name"
                 print "System {}".format(systemname)
                 if 'star' in system:
                     starname=connection.execute(

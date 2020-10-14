@@ -29,6 +29,14 @@ def metadataCreator(schema):
             schema=schema
     )
 
+    agtAgentsInSpace =  Table('agtAgentsInSpace', metadata,
+            Column('agentID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+            Column('dungeonID', INTEGER()),
+            Column('solarSystemID', INTEGER(),index=True),
+            Column('spawnPointID', INTEGER()),
+            Column('typeID', INTEGER()),
+            schema=schema
+    )
 
     agtResearchAgents =  Table('agtResearchAgents', metadata,
            Column('agentID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
