@@ -36,7 +36,7 @@ def importyaml(connection,metadata,sourcePath,language='en'):
     trans.commit()
     print "Importing AgentsInSpace"
     print "opening Yaml"
-    with open(os.path.join(sourcePath,'fsd','agents.yaml'),'r') as yamlstream:
+    with open(os.path.join(sourcePath,'fsd','agentsInSpace.yaml'),'r') as yamlstream:
         trans = connection.begin()
         agents=load(yamlstream,Loader=SafeLoader)
         print "Yaml Processed into memory"
