@@ -20,13 +20,11 @@ def importyaml(connection,metadata,sourcePath,language='en'):
     dgmEffects = Table('dgmTypeEffects',metadata)
     dgmAttributes = Table('dgmTypeAttributes',metadata)
     
-    print("opening Yaml")
-        
     trans = connection.begin()
     with open(os.path.join(sourcePath,'fsd','typeDogma.yaml'),'r') as yamlstream:
-        print("importing")
+        print("importing {}".format(os.path.basename(yamlstream.name)))
         dogmaEffects=load(yamlstream,Loader=SafeLoader)
-        print("Yaml Processed into memory")
+        print("{} loaded".format(os.path.basename(yamlstream.name)))
         for typeid in dogmaEffects:
             for effect in dogmaEffects[typeid]['dogmaEffects']:
                 connection.execute(dgmEffects.insert(),

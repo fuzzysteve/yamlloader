@@ -13,11 +13,11 @@ from sqlalchemy import Table
 def importyaml(connection,metadata,sourcePath):
     eveIcons = Table('eveIcons',metadata)
     print("Importing Icons")
-    print("Opening Yaml")
     with open(os.path.join(sourcePath,'fsd','iconIDs.yaml'),'r') as yamlstream:
+        print("importing {}".format(os.path.basename(yamlstream.name)))
         trans = connection.begin()
         icons=load(yamlstream,Loader=SafeLoader)
-        print("Yaml Processed into memory")
+        print("{} loaded".format(os.path.basename(yamlstream.name)))
         for icon in icons:
             connection.execute(eveIcons.insert(),
                             iconID=icon,

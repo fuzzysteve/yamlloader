@@ -14,11 +14,11 @@ def importyaml(connection,metadata,sourcePath,language='en'):
     invGroups = Table('invGroups',metadata)
     trnTranslations = Table('trnTranslations',metadata)
     print("Importing Groups")
-    print("opening Yaml")
     with open(os.path.join(sourcePath,'fsd','groupIDs.yaml'),'r') as yamlstream:
+        print("importing {}".format(os.path.basename(yamlstream.name)))
         trans = connection.begin()
         groupids=load(yamlstream,Loader=SafeLoader)
-        print("Yaml Processed into memory")
+        print("{} loaded".format(os.path.basename(yamlstream.name)))
         for groupid in groupids:
             connection.execute(invGroups.insert(),
                             groupID=groupid,

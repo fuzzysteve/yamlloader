@@ -3,6 +3,7 @@ CacheControl
 PyYAML
 SQLAlchemy
 PyMySQL
+psycopg2
 redis
 requests
 requests-futures

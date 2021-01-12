@@ -17,11 +17,11 @@ def importyaml(connection,metadata,sourcePath):
     skillmap={"basic":0,"standard":1,"improved":2,"advanced":3,"elite":4}
 
     print("Importing Certificates")
-    print("opening Yaml")
     with open(os.path.join(sourcePath,'fsd','certificates.yaml'),'r') as yamlstream:
+        print("importing {}".format(os.path.basename(yamlstream.name)))
         trans = connection.begin()
         certificates=load(yamlstream,Loader=SafeLoader)
-        print("Yaml Processed into memory")
+        print("{} loaded".format(os.path.basename(yamlstream.name)))
         for certificate in certificates:
             connection.execute(certCerts.insert(),
                             certID=certificate,

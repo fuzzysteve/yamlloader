@@ -20,15 +20,13 @@ def importyaml(connection,metadata,sourcePath):
     industryActivitySkills = Table('industryActivitySkills',metadata)
     industryActivityProbabilities = Table('industryActivityProbabilities',metadata)
     
-    
-    
 
     print("importing Blueprints")
-    print("opening Yaml")
     trans = connection.begin()
     with open(os.path.join(sourcePath,'fsd','blueprints.yaml'),'r') as yamlstream:
+        print("importing {}".format(os.path.basename(yamlstream.name)))
         blueprints=load(yamlstream,Loader=SafeLoader)
-        print("Yaml Processed into memory")
+        print("{} loaded".format(os.path.basename(yamlstream.name)))
         for blueprint in blueprints:
             connection.execute(industryBlueprints.insert(),typeID=blueprint,maxProductionLimit=blueprints[blueprint]["maxProductionLimit"])
             for activity in blueprints[blueprint]['activities']:

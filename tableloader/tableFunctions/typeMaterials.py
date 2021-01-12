@@ -15,18 +15,16 @@ def importyaml(connection,metadata,sourcePath,language='en'):
     print("Importing Type Materials")
     invTypeMaterials = Table('invTypeMaterials',metadata)
     
-    print("opening Yaml")
-        
     trans = connection.begin()
     with open(os.path.join(sourcePath,'fsd','typeMaterials.yaml'),'r') as yamlstream:
-        print("importing")
+        print("importing {}".format(os.path.basename(yamlstream.name)))
         materials=load(yamlstream,Loader=SafeLoader)
-        print("Yaml Processed into memory")
+        print("{} loaded".format(os.path.basename(yamlstream.name)))
         for typeid in materials:
             for material in materials[typeid]['materials']:
                 connection.execute(invTypeMaterials.insert(),
                             typeID=typeid,
-                            materialTypeID=material['materialTypeID'],
-                            quantity=material['quantity']
+                            materialTypeID=material.get('materialTypeID'),
+                            quantity=material.get('quantity', 0)
                 )
     trans.commit()

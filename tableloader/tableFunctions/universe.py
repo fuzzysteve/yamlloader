@@ -86,7 +86,7 @@ def importyaml(connection,metadata,sourcePath):
             ).fetchall()[0]['itemName']
         except:
             regionname="No Name"
-        print "Region {}".format(regionname)
+        print("Region {}".format(regionname))
         connection.execute(mapRegions.insert(),
                             regionID=region['regionID'],
                             regionName=regionname,
@@ -130,7 +130,7 @@ def importyaml(connection,metadata,sourcePath):
                 ).fetchall()[0]['itemName']
             except:
                 constellationname="No Constellation name"
-            print "Constellation {}".format(constellationname)
+            print("Constellation {}".format(constellationname))
             connection.execute(mapConstellations.insert(),
                                 regionID=region['regionID'],
                                 constellationID=constellation['constellationID'],
@@ -173,7 +173,7 @@ def importyaml(connection,metadata,sourcePath):
                     ).fetchall()[0]['itemName']
                 except:
                     systemname="No System Name"
-                print "System {}".format(systemname)
+                print("System {}".format(systemname))
                 if 'star' in system:
                     starname=connection.execute(
                         invNames.select().where( invNames.c.itemID == system['star']['id'] )

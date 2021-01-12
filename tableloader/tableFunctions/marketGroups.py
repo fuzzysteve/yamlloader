@@ -16,13 +16,11 @@ def importyaml(connection,metadata,sourcePath,language='en'):
     invMarketGroups = Table('invMarketGroups',metadata)
     trnTranslations = Table('trnTranslations',metadata)
     
-    print("opening Yaml")
-        
     trans = connection.begin()
     with open(os.path.join(sourcePath,'fsd','marketGroups.yaml'),'r') as yamlstream:
-        print("importing")
+        print("importing {}".format(os.path.basename(yamlstream.name)))
         marketgroups=load(yamlstream,Loader=SafeLoader)
-        print("Yaml Processed into memory")
+        print("{} loaded".format(os.path.basename(yamlstream.name)))
         for marketgroupid in marketgroups:
             connection.execute(invMarketGroups.insert(),
                             marketGroupID=marketgroupid,

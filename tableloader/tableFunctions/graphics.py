@@ -13,12 +13,11 @@ from sqlalchemy import Table
 def importyaml(connection,metadata,sourcePath):
     eveGraphics = Table('eveGraphics',metadata)
     print("Importing Graphics")
-    print("opening Yaml")
     with open(os.path.join(sourcePath,'fsd','graphicIDs.yaml'),'r') as yamlstream:
-        print("importing")
+        print("importing {}".format(os.path.basename(yamlstream.name)))
         trans = connection.begin()
         graphics=load(yamlstream,Loader=SafeLoader)
-        print("Yaml Processed into memory")
+        print("{} loaded".format(os.path.basename(yamlstream.name)))
         for graphic in graphics:
             connection.execute(eveGraphics.insert(),
                             graphicID=graphic,

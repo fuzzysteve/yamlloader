@@ -15,13 +15,11 @@ def importyaml(connection,metadata,sourcePath,language='en'):
     print("Importing controlTowerResources")
     invControlTowerResources = Table('invControlTowerResources',metadata)
     
-    print("opening Yaml")
-        
     trans = connection.begin()
     with open(os.path.join(sourcePath,'fsd','controlTowerResources.yaml'),'r') as yamlstream:
-        print("importing")
+        print("importing {}".format(os.path.basename(yamlstream.name)))
         controlTowerResources=load(yamlstream,Loader=SafeLoader)
-        print("Yaml Processed into memory")
+        print("{} loaded".format(os.path.basename(yamlstream.name)))
         for controlTowerResourcesid in controlTowerResources:
             for purpose in controlTowerResources[controlTowerResourcesid]['resources']:
                 connection.execute(invControlTowerResources.insert(),

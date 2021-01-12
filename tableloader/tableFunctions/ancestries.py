@@ -1,30 +1,26 @@
 # -*- coding: utf-8 -*-
 import sys
 import os
-reload(sys)
-sys.setdefaultencoding("utf-8")
+#sys.setdefaultencoding("utf-8")
 from sqlalchemy import Table
 
 from yaml import load
 try:
 	from yaml import CSafeLoader as SafeLoader
-	print "Using CSafeLoader"
 except ImportError:
 	from yaml import SafeLoader
-	print "Using Python SafeLoader"
+	print("Using Python SafeLoader")
 
 
 def importyaml(connection,metadata,sourcePath,language='en'):
-    print "Importing character Ancestries"
+    print("Importing character Ancestries")
     chrAncestries = Table('chrAncestries',metadata)
     
-    print "opening Yaml"
-        
     trans = connection.begin()
     with open(os.path.join(sourcePath,'fsd','ancestries.yaml'),'r') as yamlstream:
-        print "importing"
+        print("importing {}".format(os.path.basename(yamlstream.name)))
         characterancestries=load(yamlstream,Loader=SafeLoader)
-        print "Yaml Processed into memory"
+        print("{} loaded".format(os.path.basename(yamlstream.name)))
         for ancestryid in characterancestries:
             connection.execute(chrAncestries.insert(),
                             ancestryID=ancestryid,

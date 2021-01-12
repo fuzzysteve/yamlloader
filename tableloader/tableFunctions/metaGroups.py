@@ -16,13 +16,11 @@ def importyaml(connection,metadata,sourcePath,language='en'):
     invMetaGroups = Table('invMetaGroups',metadata)
     trnTranslations = Table('trnTranslations',metadata)
     
-    print("opening Yaml")
-        
     trans = connection.begin()
     with open(os.path.join(sourcePath,'fsd','metaGroups.yaml'),'r') as yamlstream:
-        print("importing")
+        print("importing {}".format(os.path.basename(yamlstream.name)))
         metagroups=load(yamlstream,Loader=SafeLoader)
-        print("Yaml Processed into memory")
+        print("{} loaded".format(os.path.basename(yamlstream.name)))
         for metagroupid in metagroups:
             connection.execute(invMetaGroups.insert(),
                             metaGroupID=metagroupid,

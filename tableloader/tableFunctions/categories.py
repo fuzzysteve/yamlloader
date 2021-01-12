@@ -16,13 +16,11 @@ def importyaml(connection,metadata,sourcePath,language='en'):
     invCategories = Table('invCategories',metadata)
     trnTranslations = Table('trnTranslations',metadata)
     
-    print("opening Yaml")
-        
     trans = connection.begin()
     with open(os.path.join(sourcePath,'fsd','categoryIDs.yaml'),'r') as yamlstream:
-        print("importing")
+        print("importing {}".format(os.path.basename(yamlstream.name)))
         categoryids=load(yamlstream,Loader=SafeLoader)
-        print("Yaml Processed into memory")
+        print("{} loaded".format(os.path.basename(yamlstream.name)))
         for categoryid in categoryids:
             connection.execute(invCategories.insert(),
                             categoryID=categoryid,

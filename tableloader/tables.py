@@ -13,10 +13,11 @@ def metadataCreator(schema):
 
 	agtAgentTypes =  Table('agtAgentTypes', metadata,
 		Column('agentTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('agentType', VARCHAR(length=50))
+		Column('agentType', VARCHAR(length=50)),
+		schema=schema
 	)
-
-
+	
+	
 	agtAgents =  Table('agtAgents', metadata,
 		Column('agentID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 		Column('divisionID', INTEGER()),
@@ -28,15 +29,23 @@ def metadataCreator(schema):
 		Column('isLocator', Boolean(name='aa_isloc')),
 		schema=schema
 	)
-
-
+	
+	agtAgentsInSpace =  Table('agtAgentsInSpace', metadata,
+		Column('agentID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+		Column('dungeonID', INTEGER()),
+		Column('solarSystemID', INTEGER(),index=True),
+		Column('spawnPointID', INTEGER()),
+		Column('typeID', INTEGER()),
+		schema=schema
+	)
+	
 	agtResearchAgents =  Table('agtResearchAgents', metadata,
 		Column('agentID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 		Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False,index=True),
 		schema=schema
 	)
-
-
+	
+	
 	certCerts =  Table('certCerts', metadata,
 		Column('certID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 		Column('description',UnicodeText()),
@@ -44,561 +53,563 @@ def metadataCreator(schema):
 		Column('name', VARCHAR(length=255)),
 		schema=schema
 	)
-
-
+	
+	
 	certMasteries =  Table('certMasteries', metadata,
-		Column('typeID', INTEGER()),
-		Column('masteryLevel', INTEGER()),
-		Column('certID', INTEGER()),
-		schema=schema
+			Column('typeID', INTEGER()),
+			Column('masteryLevel', INTEGER()),
+			Column('certID', INTEGER()),
+			schema=schema
 	)
-
-
+	
+	
 	certSkills =  Table('certSkills', metadata,
-		Column('certID', INTEGER()),
-		Column('skillID', INTEGER(),index=True),
-		Column('certLevelInt', INTEGER()),
-		Column('skillLevel', INTEGER()),
-		Column('certLevelText', VARCHAR(length=8)),
-		schema=schema
+			Column('certID', INTEGER()),
+			Column('skillID', INTEGER(),index=True),
+			Column('certLevelInt', INTEGER()),
+			Column('skillLevel', INTEGER()),
+			Column('certLevelText', VARCHAR(length=8)),
+			schema=schema
 	)
-
-
+	
+	
 	chrAncestries =  Table('chrAncestries', metadata,
-		Column('ancestryID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('ancestryName', VARCHAR(length=100)),
-		Column('bloodlineID', INTEGER()),
-		Column('description', VARCHAR(length=1000)),
-		Column('perception', INTEGER()),
-		Column('willpower', INTEGER()),
-		Column('charisma', INTEGER()),
-		Column('memory', INTEGER()),
-		Column('intelligence', INTEGER()),
-		Column('iconID', INTEGER()),
-		Column('shortDescription', VARCHAR(length=500)),
-		schema=schema
+			Column('ancestryID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('ancestryName', VARCHAR(length=100)),
+			Column('bloodlineID', INTEGER()),
+			Column('description', VARCHAR(length=1000)),
+			Column('perception', INTEGER()),
+			Column('willpower', INTEGER()),
+			Column('charisma', INTEGER()),
+			Column('memory', INTEGER()),
+			Column('intelligence', INTEGER()),
+			Column('iconID', INTEGER()),
+			Column('shortDescription', VARCHAR(length=500)),
+			schema=schema
 	)
-
-
+	
+	
 	chrAttributes =  Table('chrAttributes', metadata,
-		Column('attributeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('attributeName', VARCHAR(length=100)),
-		Column('description', VARCHAR(length=1000)),
-		Column('iconID', INTEGER()),
-		Column('shortDescription', VARCHAR(length=500)),
-		Column('notes', VARCHAR(length=500)),
-		schema=schema
+			Column('attributeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('attributeName', VARCHAR(length=100)),
+			Column('description', VARCHAR(length=1000)),
+			Column('iconID', INTEGER()),
+			Column('shortDescription', VARCHAR(length=500)),
+			Column('notes', VARCHAR(length=500)),
+			schema=schema
 	)
-
-
+	
+	
 	chrBloodlines =  Table('chrBloodlines', metadata,
-		Column('bloodlineID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('bloodlineName', VARCHAR(length=100)),
-		Column('raceID', INTEGER()),
-		Column('description', VARCHAR(length=1000)),
-		Column('maleDescription', VARCHAR(length=1000)),
-		Column('femaleDescription', VARCHAR(length=1000)),
-		Column('shipTypeID', INTEGER()),
-		Column('corporationID', INTEGER()),
-		Column('perception', INTEGER()),
-		Column('willpower', INTEGER()),
-		Column('charisma', INTEGER()),
-		Column('memory', INTEGER()),
-		Column('intelligence', INTEGER()),
-		Column('iconID', INTEGER()),
-		Column('shortDescription', VARCHAR(length=500)),
-		Column('shortMaleDescription', VARCHAR(length=500)),
-		Column('shortFemaleDescription', VARCHAR(length=500)),
-		schema=schema
+			Column('bloodlineID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('bloodlineName', VARCHAR(length=100)),
+			Column('raceID', INTEGER()),
+			Column('description', VARCHAR(length=1000)),
+			Column('maleDescription', VARCHAR(length=1000)),
+			Column('femaleDescription', VARCHAR(length=1000)),
+			Column('shipTypeID', INTEGER()),
+			Column('corporationID', INTEGER()),
+			Column('perception', INTEGER()),
+			Column('willpower', INTEGER()),
+			Column('charisma', INTEGER()),
+			Column('memory', INTEGER()),
+			Column('intelligence', INTEGER()),
+			Column('iconID', INTEGER()),
+			Column('shortDescription', VARCHAR(length=500)),
+			Column('shortMaleDescription', VARCHAR(length=500)),
+			Column('shortFemaleDescription', VARCHAR(length=500)),
+			schema=schema
 	)
-
-
+	
+	
 	chrFactions =  Table('chrFactions', metadata,
-		Column('factionID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('factionName', VARCHAR(length=100)),
-		Column('description', VARCHAR(length=1000)),
-		Column('raceIDs', INTEGER()),
-		Column('solarSystemID', INTEGER()),
-		Column('corporationID', INTEGER()),
-		Column('sizeFactor', FLOAT()),
-		Column('stationCount', INTEGER()),
-		Column('stationSystemCount', INTEGER()),
-		Column('militiaCorporationID', INTEGER()),
-		Column('iconID', INTEGER()),
-		schema=schema
+			Column('factionID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('factionName', VARCHAR(length=100)),
+			Column('description', VARCHAR(length=1000)),
+			Column('raceIDs', INTEGER()),
+			Column('solarSystemID', INTEGER()),
+			Column('corporationID', INTEGER()),
+			Column('sizeFactor', FLOAT()),
+			Column('stationCount', INTEGER()),
+			Column('stationSystemCount', INTEGER()),
+			Column('militiaCorporationID', INTEGER()),
+			Column('iconID', INTEGER()),
+			schema=schema
 	)
-
-
+	
+	
 	chrRaces =  Table('chrRaces', metadata,
-		Column('raceID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('raceName', VARCHAR(length=100)),
-		Column('description', VARCHAR(length=1000)),
-		Column('iconID', INTEGER()),
-		Column('shortDescription', VARCHAR(length=500)),
-		schema=schema
+			Column('raceID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('raceName', VARCHAR(length=100)),
+			Column('description', VARCHAR(length=1000)),
+			Column('iconID', INTEGER()),
+			Column('shortDescription', VARCHAR(length=500)),
+			schema=schema
 	)
-
-
+	
+	
 	crpActivities =  Table('crpActivities', metadata,
-		Column('activityID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('activityName', VARCHAR(length=100)),
-		Column('description', VARCHAR(length=1000)),
-		schema=schema
+			Column('activityID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('activityName', VARCHAR(length=100)),
+			Column('description', VARCHAR(length=1000)),
+			schema=schema
 	)
-
-
+	
+	
 	crpNPCCorporationDivisions =  Table('crpNPCCorporationDivisions', metadata,
-		Column('corporationID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('divisionID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('size', INTEGER()),
-		schema=schema
+			Column('corporationID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('divisionID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('size', INTEGER()),
+			schema=schema
 	)
-
-
+	
+	
 	crpNPCCorporationResearchFields =  Table('crpNPCCorporationResearchFields', metadata,
-		Column('skillID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('corporationID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		schema=schema
+			Column('skillID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('corporationID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			schema=schema
 	)
-
-
+	
+	
 	crpNPCCorporationTrades =  Table('crpNPCCorporationTrades', metadata,
-		Column('corporationID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		schema=schema
+			Column('corporationID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			schema=schema
 	)
-
-
+	
+	
 	crpNPCCorporations =  Table('crpNPCCorporations', metadata,
-		Column('corporationID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('size', CHAR(length=1)),
-		Column('extent', CHAR(length=1)),
-		Column('solarSystemID', INTEGER()),
-		Column('investorID1', INTEGER()),
-		Column('investorShares1', INTEGER()),
-		Column('investorID2', INTEGER()),
-		Column('investorShares2', INTEGER()),
-		Column('investorID3', INTEGER()),
-		Column('investorShares3', INTEGER()),
-		Column('investorID4', INTEGER()),
-		Column('investorShares4', INTEGER()),
-		Column('friendID', INTEGER()),
-		Column('enemyID', INTEGER()),
-		Column('publicShares', INTEGER()),
-		Column('initialPrice', INTEGER()),
-		Column('minSecurity', FLOAT()),
-		Column('scattered', Boolean(name='cnpcc_scatt')),
-		Column('fringe', INTEGER()),
-		Column('corridor', INTEGER()),
-		Column('hub', INTEGER()),
-		Column('border', INTEGER()),
-		Column('factionID', INTEGER()),
-		Column('sizeFactor', FLOAT()),
-		Column('stationCount', INTEGER()),
-		Column('stationSystemCount', INTEGER()),
-		Column('description', VARCHAR(length=4000)),
-		Column('iconID', INTEGER()),
-		schema=schema
+			Column('corporationID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('size', CHAR(length=1)),
+			Column('extent', CHAR(length=1)),
+			Column('solarSystemID', INTEGER()),
+			Column('investorID1', INTEGER()),
+			Column('investorShares1', INTEGER()),
+			Column('investorID2', INTEGER()),
+			Column('investorShares2', INTEGER()),
+			Column('investorID3', INTEGER()),
+			Column('investorShares3', INTEGER()),
+			Column('investorID4', INTEGER()),
+			Column('investorShares4', INTEGER()),
+			Column('friendID', INTEGER()),
+			Column('enemyID', INTEGER()),
+			Column('publicShares', INTEGER()),
+			Column('initialPrice', INTEGER()),
+			Column('minSecurity', FLOAT()),
+			Column('scattered', Boolean(name='cnpcc_scatt')),
+			Column('fringe', INTEGER()),
+			Column('corridor', INTEGER()),
+			Column('hub', INTEGER()),
+			Column('border', INTEGER()),
+			Column('factionID', INTEGER()),
+			Column('sizeFactor', FLOAT()),
+			Column('stationCount', INTEGER()),
+			Column('stationSystemCount', INTEGER()),
+			Column('description', VARCHAR(length=4000)),
+			Column('iconID', INTEGER()),
+			schema=schema
 	)
-
-
+	
+	
 	crpNPCDivisions =  Table('crpNPCDivisions', metadata,
-		Column('divisionID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('divisionName', VARCHAR(length=100)),
-		Column('description', VARCHAR(length=1000)),
-		Column('leaderType', VARCHAR(length=100)),
-		schema=schema
+			Column('divisionID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('divisionName', VARCHAR(length=100)),
+			Column('description', VARCHAR(length=1000)),
+			Column('leaderType', VARCHAR(length=100)),
+			schema=schema
 	)
-
-
+	
+	
 	dgmAttributeCategories =  Table('dgmAttributeCategories', metadata,
-		Column('categoryID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('categoryName', VARCHAR(length=50)),
-		Column('categoryDescription', VARCHAR(length=200)),
-		schema=schema
+			Column('categoryID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('categoryName', VARCHAR(length=50)),
+			Column('categoryDescription', VARCHAR(length=200)),
+			schema=schema
 	)
-
-
+	
+	
 	dgmAttributeTypes =  Table('dgmAttributeTypes', metadata,
-		Column('attributeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('attributeName', VARCHAR(length=100)),
-		Column('description', VARCHAR(length=1000)),
-		Column('iconID', INTEGER()),
-		Column('defaultValue', FLOAT()),
-		Column('published', Boolean(name='dat_pub')),
-		Column('displayName', VARCHAR(length=150)),
-		Column('unitID', INTEGER()),
-		Column('stackable', Boolean(name='dat_stack')),
-		Column('highIsGood', Boolean(name='dat_hig')),
-		Column('categoryID', INTEGER()),
-		schema=schema
+			Column('attributeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('attributeName', VARCHAR(length=100)),
+			Column('description', VARCHAR(length=1000)),
+			Column('iconID', INTEGER()),
+			Column('defaultValue', FLOAT()),
+			Column('published', Boolean(name='dat_pub')),
+			Column('displayName', VARCHAR(length=150)),
+			Column('unitID', INTEGER()),
+			Column('stackable', Boolean(name='dat_stack')),
+			Column('highIsGood', Boolean(name='dat_hig')),
+			Column('categoryID', INTEGER()),
+			schema=schema
 	)
-
-
+	
+	
 	dgmEffects =  Table('dgmEffects', metadata,
-		Column('effectID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('effectName', VARCHAR(length=400)),
-		Column('effectCategory', INTEGER()),
-		Column('preExpression', INTEGER()),
-		Column('postExpression', INTEGER()),
-		Column('description', VARCHAR(length=1000)),
-		Column('guid', VARCHAR(length=60)),
-		Column('iconID', INTEGER()),
-		Column('isOffensive', Boolean(name='de_offense')),
-		Column('isAssistance', Boolean(name='de_assist')),
-		Column('durationAttributeID', INTEGER()),
-		Column('trackingSpeedAttributeID', INTEGER()),
-		Column('dischargeAttributeID', INTEGER()),
-		Column('rangeAttributeID', INTEGER()),
-		Column('falloffAttributeID', INTEGER()),
-		Column('disallowAutoRepeat', Boolean(name='de_disallowar')),
-		Column('published', Boolean(name='de_published')),
-		Column('displayName', VARCHAR(length=100)),
-		Column('isWarpSafe', Boolean(name='de_warpsafe')),
-		Column('rangeChance', Boolean(name='de_rangechance')),
-		Column('electronicChance', Boolean(name='de_elecchance')),
-		Column('propulsionChance', Boolean(name='de_propchance')),
-		Column('distribution', INTEGER()),
-		Column('sfxName', VARCHAR(length=20)),
-		Column('npcUsageChanceAttributeID', INTEGER()),
-		Column('npcActivationChanceAttributeID', INTEGER()),
-		Column('fittingUsageChanceAttributeID', INTEGER()),
-		Column('modifierInfo',UnicodeText()),
-		schema=schema
+			Column('effectID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('effectName', VARCHAR(length=400)),
+			Column('effectCategory', INTEGER()),
+			Column('preExpression', INTEGER()),
+			Column('postExpression', INTEGER()),
+			Column('description', VARCHAR(length=1000)),
+			Column('guid', VARCHAR(length=60)),
+			Column('iconID', INTEGER()),
+			Column('isOffensive', Boolean(name='de_offense')),
+			Column('isAssistance', Boolean(name='de_assist')),
+			Column('durationAttributeID', INTEGER()),
+			Column('trackingSpeedAttributeID', INTEGER()),
+			Column('dischargeAttributeID', INTEGER()),
+			Column('rangeAttributeID', INTEGER()),
+			Column('falloffAttributeID', INTEGER()),
+			Column('disallowAutoRepeat', Boolean(name='de_disallowar')),
+			Column('published', Boolean(name='de_published')),
+			Column('displayName', VARCHAR(length=100)),
+			Column('isWarpSafe', Boolean(name='de_warpsafe')),
+			Column('rangeChance', Boolean(name='de_rangechance')),
+			Column('electronicChance', Boolean(name='de_elecchance')),
+			Column('propulsionChance', Boolean(name='de_propchance')),
+			Column('distribution', INTEGER()),
+			Column('sfxName', VARCHAR(length=20)),
+			Column('npcUsageChanceAttributeID', INTEGER()),
+			Column('npcActivationChanceAttributeID', INTEGER()),
+			Column('fittingUsageChanceAttributeID', INTEGER()),
+			Column('modifierInfo',UnicodeText()),
+			schema=schema
 	)
-
-
+	
+	
 	dgmExpressions =  Table('dgmExpressions', metadata,
-		Column('expressionID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('operandID', INTEGER()),
-		Column('arg1', INTEGER()),
-		Column('arg2', INTEGER()),
-		Column('expressionValue', VARCHAR(length=100)),
-		Column('description', VARCHAR(length=1000)),
-		Column('expressionName', VARCHAR(length=500)),
-		Column('expressionTypeID', INTEGER()),
-		Column('expressionGroupID', INTEGER()),
-		Column('expressionAttributeID', INTEGER()),
-		schema=schema
+			Column('expressionID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('operandID', INTEGER()),
+			Column('arg1', INTEGER()),
+			Column('arg2', INTEGER()),
+			Column('expressionValue', VARCHAR(length=100)),
+			Column('description', VARCHAR(length=1000)),
+			Column('expressionName', VARCHAR(length=500)),
+			Column('expressionTypeID', INTEGER()),
+			Column('expressionGroupID', INTEGER()),
+			Column('expressionAttributeID', INTEGER()),
+			schema=schema
 	)
-
-
+	
+	
 	dgmTypeAttributes =  Table('dgmTypeAttributes', metadata,
-		Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('attributeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False,index=True),
-		Column('valueInt', INTEGER()),
-		Column('valueFloat', FLOAT()),
-		schema=schema
+			Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('attributeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False,index=True),
+			Column('valueInt', INTEGER()),
+			Column('valueFloat', FLOAT()),
+			schema=schema
 	)
-
-
+	
+	
 	dgmTypeEffects =  Table('dgmTypeEffects', metadata,
-		Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('effectID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('isDefault', Boolean(name='dte_default')),
-		schema=schema
-    )
-
-
+			Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('effectID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('isDefault', Boolean(name='dte_default')),
+			schema=schema
+	)
+	
+	
 	eveGraphics =  Table('eveGraphics', metadata,
-		Column('graphicID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('sofFactionName', VARCHAR(length=100)),
-		Column('graphicFile', VARCHAR(length=100)),
-		Column('sofHullName', VARCHAR(length=100)),
-		Column('sofRaceName', VARCHAR(length=100)),
-		Column('description',UnicodeText()),
-		schema=schema
+			Column('graphicID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('sofFactionName', VARCHAR(length=100)),
+			Column('graphicFile', VARCHAR(length=100)),
+			Column('sofHullName', VARCHAR(length=100)),
+			Column('sofRaceName', VARCHAR(length=100)),
+			Column('description',UnicodeText()),
+			schema=schema
 	)
-
-
+	
+	
 	eveIcons =  Table('eveIcons', metadata,
-		Column('iconID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('iconFile', VARCHAR(length=500)),
-		Column('description',UnicodeText()),
-		schema=schema
+			Column('iconID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('iconFile', VARCHAR(length=500)),
+			Column('description',UnicodeText()),
+			schema=schema
 	)
-
-
+	
+	
 	eveUnits =  Table('eveUnits', metadata,
-		Column('unitID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('unitName', VARCHAR(length=100)),
-		Column('displayName', VARCHAR(length=50)),
-		Column('description', VARCHAR(length=1000)),
-		schema=schema
+			Column('unitID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('unitName', VARCHAR(length=100)),
+			Column('displayName', VARCHAR(length=50)),
+			Column('description', VARCHAR(length=1000)),
+			schema=schema
 	)
-
-
+	
+	
 	industryActivity =  Table('industryActivity', metadata,
-		Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('activityID', INTEGER(), primary_key=True, autoincrement=False, nullable=False,index=True),
-		Column('time', INTEGER()),
-		schema=schema
+			Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('activityID', INTEGER(), primary_key=True, autoincrement=False, nullable=False,index=True),
+			Column('time', INTEGER()),
+			schema=schema
 	)
-
-
+	
+	
 	industryActivityMaterials =  Table('industryActivityMaterials', metadata,
-		Column('typeID', INTEGER(),index=True),
-		Column('activityID', INTEGER()),
-		Column('materialTypeID', INTEGER()),
-		Column('quantity', INTEGER()),
-		schema=schema
+			Column('typeID', INTEGER(),index=True),
+			Column('activityID', INTEGER()),
+			Column('materialTypeID', INTEGER()),
+			Column('quantity', INTEGER()),
+			schema=schema
 	)
 	Index('industryActivityMaterials_idx1',industryActivityMaterials.c.typeID,industryActivityMaterials.c.activityID)
-
-
+	
+	
 	industryActivityProbabilities =  Table('industryActivityProbabilities', metadata,
-		Column('typeID', INTEGER(),index=True),
-		Column('activityID', INTEGER()),
-		Column('productTypeID', INTEGER(),index=True),
-		Column('probability', DECIMAL(precision=3, scale=2)),
-		schema=schema
+			Column('typeID', INTEGER(),index=True),
+			Column('activityID', INTEGER()),
+			Column('productTypeID', INTEGER(),index=True),
+			Column('probability', DECIMAL(precision=3, scale=2)),
+			schema=schema
 	)
-
-
+	
+	
 	industryActivityProducts =  Table('industryActivityProducts', metadata,
-		Column('typeID', INTEGER(),index=True),
-		Column('activityID', INTEGER()),
-		Column('productTypeID', INTEGER(),index=True),
-		Column('quantity', INTEGER()),
-		schema=schema
+			Column('typeID', INTEGER(),index=True),
+			Column('activityID', INTEGER()),
+			Column('productTypeID', INTEGER(),index=True),
+			Column('quantity', INTEGER()),
+			schema=schema
 	)
-
-
+	
+	
 	industryActivityRaces =  Table('industryActivityRaces', metadata,
-		Column('typeID', INTEGER(),index=True),
-		Column('activityID', INTEGER()),
-		Column('productTypeID', INTEGER(),index=True),
-		Column('raceID', INTEGER()),
-		schema=schema
+			Column('typeID', INTEGER(),index=True),
+			Column('activityID', INTEGER()),
+			Column('productTypeID', INTEGER(),index=True),
+			Column('raceID', INTEGER()),
+			schema=schema
 	)
-
-
+	
+	
 	industryActivitySkills =  Table('industryActivitySkills', metadata,
-		Column('typeID', INTEGER(),index=True),
-		Column('activityID', INTEGER()),
-		Column('skillID', INTEGER(),index=True),
-		Column('level', INTEGER()),
-		schema=schema
+			Column('typeID', INTEGER(),index=True),
+			Column('activityID', INTEGER()),
+			Column('skillID', INTEGER(),index=True),
+			Column('level', INTEGER()),
+			schema=schema
 	)
 	Index('industryActivitySkills_idx1',industryActivitySkills.c.typeID,industryActivitySkills.c.activityID)
-
+	
+	
 	industryBlueprints =  Table('industryBlueprints', metadata,
-		Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('maxProductionLimit', INTEGER()),
-		schema=schema
+			Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('maxProductionLimit', INTEGER()),
+			schema=schema
 	)
-
-
+	
+	
 	invCategories =  Table('invCategories', metadata,
-		Column('categoryID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('categoryName', VARCHAR(length=100)),
-		Column('iconID', INTEGER()),
-		Column('published', Boolean(name='invcat_published')),
-		schema=schema
+			Column('categoryID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('categoryName', VARCHAR(length=100)),
+			Column('iconID', INTEGER()),
+			Column('published', Boolean(name='invcat_published')),
+			schema=schema
 	)
-
-
+	
+	
 	invContrabandTypes =  Table('invContrabandTypes', metadata,
-		Column('factionID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False,index=True),
-		Column('standingLoss', FLOAT(precision=53)),
-		Column('confiscateMinSec', FLOAT(precision=53)),
-		Column('fineByValue', FLOAT(precision=53)),
-		Column('attackMinSec', FLOAT(precision=53)),
-		schema=schema
+			Column('factionID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False,index=True),
+			Column('standingLoss', FLOAT(precision=53)),
+			Column('confiscateMinSec', FLOAT(precision=53)),
+			Column('fineByValue', FLOAT(precision=53)),
+			Column('attackMinSec', FLOAT(precision=53)),
+			schema=schema
 	)
-
-
+	
+	
 	invControlTowerResourcePurposes =  Table('invControlTowerResourcePurposes', metadata,
-		Column('purpose', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('purposeText', VARCHAR(length=100)),
-		schema=schema
+			Column('purpose', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('purposeText', VARCHAR(length=100)),
+			schema=schema
 	)
-
-
+	
+	
 	invControlTowerResources =  Table('invControlTowerResources', metadata,
-		Column('controlTowerTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('resourceTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('purpose', INTEGER()),
-		Column('quantity', INTEGER()),
-		Column('minSecurityLevel', FLOAT(precision=53)),
-		Column('factionID', INTEGER()),
-		schema=schema
+			Column('controlTowerTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('resourceTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('purpose', INTEGER()),
+			Column('quantity', INTEGER()),
+			Column('minSecurityLevel', FLOAT(precision=53)),
+			Column('factionID', INTEGER()),
+			schema=schema
 	)
-
-
+	
+	
 	invFlags =  Table('invFlags', metadata,
-		Column('flagID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('flagName', VARCHAR(length=200)),
-		Column('flagText', VARCHAR(length=100)),
-		Column('orderID', INTEGER()),
-		schema=schema
+			Column('flagID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('flagName', VARCHAR(length=200)),
+			Column('flagText', VARCHAR(length=100)),
+			Column('orderID', INTEGER()),
+			schema=schema
 	)
-
-
+	
+	
 	invGroups =  Table('invGroups', metadata,
-		Column('groupID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('categoryID', INTEGER(),index=True),
-		Column('groupName', VARCHAR(length=100)),
-		Column('iconID', INTEGER()),
-		Column('useBasePrice', Boolean(name='invgroup_usebaseprice')),
-		Column('anchored', Boolean(name='invgroup_anchored')),
-		Column('anchorable', Boolean(name='invgroup_anchorable')),
-		Column('fittableNonSingleton', Boolean(name='invgroup_fitnonsingle')),
-		Column('published', Boolean(name='invgroup_published')),
-		schema=schema
+			Column('groupID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('categoryID', INTEGER(),index=True),
+			Column('groupName', VARCHAR(length=100)),
+			Column('iconID', INTEGER()),
+			Column('useBasePrice', Boolean(name='invgroup_usebaseprice')),
+			Column('anchored', Boolean(name='invgroup_anchored')),
+			Column('anchorable', Boolean(name='invgroup_anchorable')),
+			Column('fittableNonSingleton', Boolean(name='invgroup_fitnonsingle')),
+			Column('published', Boolean(name='invgroup_published')),
+			schema=schema
 	)
-
-
+	
+	
 	invItems =  Table('invItems', metadata,
-		Column('itemID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('typeID', INTEGER(), nullable=False),
-		Column('ownerID', INTEGER(), nullable=False),
-		Column('locationID', INTEGER(), nullable=False,index=True),
-		Column('flagID', INTEGER(), nullable=False),
-		Column('quantity', INTEGER(), nullable=False),
-		schema=schema
+			Column('itemID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('typeID', INTEGER(), nullable=False),
+			Column('ownerID', INTEGER(), nullable=False),
+			Column('locationID', INTEGER(), nullable=False,index=True),
+			Column('flagID', INTEGER(), nullable=False),
+			Column('quantity', INTEGER(), nullable=False),
+			schema=schema
 	)
 	Index('items_IX_OwnerLocation',invItems.c.ownerID,invItems.c.locationID)
-
-
+	
+	
 	invMarketGroups =  Table('invMarketGroups', metadata,
-		Column('marketGroupID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('parentGroupID', INTEGER()),
-		Column('marketGroupName', VARCHAR(length=100)),
-		Column('description', VARCHAR(length=3000)),
-		Column('iconID', INTEGER()),
-		Column('hasTypes', Boolean(name='invmarketgroups_hastypes')),
-		schema=schema
+			Column('marketGroupID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('parentGroupID', INTEGER()),
+			Column('marketGroupName', VARCHAR(length=100)),
+			Column('description', VARCHAR(length=3000)),
+			Column('iconID', INTEGER()),
+			Column('hasTypes', Boolean(name='invmarketgroups_hastypes')),
+			schema=schema
 	)
-
-
+	
+	
 	invMetaGroups =  Table('invMetaGroups', metadata,
-		Column('metaGroupID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('metaGroupName', VARCHAR(length=100)),
-		Column('description', VARCHAR(length=1000)),
-		Column('iconID', INTEGER()),
-		schema=schema
+			Column('metaGroupID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('metaGroupName', VARCHAR(length=100)),
+			Column('description', VARCHAR(length=1000)),
+			Column('iconID', INTEGER()),
+			schema=schema
 	)
-
-
+	
+	
 	invMetaTypes =  Table('invMetaTypes', metadata,
-		Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('parentTypeID', INTEGER()),
-		Column('metaGroupID', INTEGER()),
-		schema=schema
+			Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('parentTypeID', INTEGER()),
+			Column('metaGroupID', INTEGER()),
+			schema=schema
 	)
-
-
+	
+	
 	invNames =  Table('invNames', metadata,
-		Column('itemID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('itemName', VARCHAR(length=200), nullable=False),
-		schema=schema
+			Column('itemID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('itemName', VARCHAR(length=200), nullable=False),
+			schema=schema
 	)
-
-
+	
+	
 	invPositions =  Table('invPositions', metadata,
-		Column('itemID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('x', FLOAT(), nullable=False, default=text("'0'")),
-		Column('y', FLOAT(), nullable=False, default=text("'0'")),
-		Column('z', FLOAT(), nullable=False, default=text("'0'")),
-		Column('yaw', FLOAT(precision=24)),
-		Column('pitch', FLOAT(precision=24)),
-		Column('roll', FLOAT(precision=24)),
-		schema=schema
+			Column('itemID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('x', FLOAT(), nullable=False, default=text(u"'0'")),
+			Column('y', FLOAT(), nullable=False, default=text(u"'0'")),
+			Column('z', FLOAT(), nullable=False, default=text(u"'0'")),
+			Column('yaw', FLOAT(precision=24)),
+			Column('pitch', FLOAT(precision=24)),
+			Column('roll', FLOAT(precision=24)),
+			schema=schema
 	)
-
-
+	
+	
 	invTraits =  Table('invTraits', metadata,
-		Column('traitID', INTEGER(), primary_key=True, autoincrement=True, nullable=False),
-		Column('typeID', INTEGER()),
-		Column('skillID', INTEGER()),
-		Column('bonus', FLOAT()),
-		Column('bonusText',UnicodeText()),
-		Column('unitID', INTEGER()),
-		schema=schema
+			Column('traitID', INTEGER(), primary_key=True, autoincrement=True, nullable=False),
+			Column('typeID', INTEGER()),
+			Column('skillID', INTEGER()),
+			Column('bonus', FLOAT()),
+			Column('bonusText',UnicodeText()),
+			Column('unitID', INTEGER()),
+			schema=schema
 	)
-
-
+	
+	
 	invTypeMaterials =  Table('invTypeMaterials', metadata,
-		Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('materialTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('quantity', INTEGER(), nullable=False, default=text("'0'")),
-		schema=schema
+			Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('materialTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('quantity', INTEGER(), nullable=False, default=text(u"'0'")),
+			schema=schema
 	)
-
-
+	
+	
 	invTypeReactions =  Table('invTypeReactions', metadata,
-		Column('reactionTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('input', Boolean(name='invtypereactions_input'), primary_key=True, autoincrement=False, nullable=False),
-		Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('quantity', INTEGER()),
-		schema=schema
+			Column('reactionTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('input', Boolean(name='invtypereactions_input'), primary_key=True, autoincrement=False, nullable=False),
+			Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('quantity', INTEGER()),
+			schema=schema
 	)
-
-
+	
+	
 	invTypes =  Table('invTypes', metadata,
-		Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('groupID', INTEGER(),index=True),
-		Column('typeName', VARCHAR(length=100)),
-		Column('description',UnicodeText()),
-		Column('mass', FLOAT(precision=53)),
-		Column('volume', FLOAT(precision=53)),
-		Column('packagedVolume', FLOAT(precision=53)),
-		Column('capacity', FLOAT(precision=53)),
-		Column('portionSize', INTEGER()),
-		Column('raceID', INTEGER()),
-		Column('basePrice', DECIMAL(precision=19, scale=4)),
-		Column('published', Boolean(name='invtype_published')),
-		Column('marketGroupID', INTEGER()),
-		Column('iconID', INTEGER()),
-		Column('soundID', INTEGER()),
-		Column('graphicID', INTEGER()),
-		schema=schema
+			Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('groupID', INTEGER(),index=True),
+			Column('typeName', VARCHAR(length=100)),
+			Column('description',UnicodeText()),
+			Column('mass', FLOAT(precision=53)),
+			Column('volume', FLOAT(precision=53)),
+			Column('packagedVolume', FLOAT(precision=53)),
+			Column('capacity', FLOAT(precision=53)),
+			Column('portionSize', INTEGER()),
+			Column('raceID', INTEGER()),
+			Column('basePrice', DECIMAL(precision=19, scale=4)),
+			Column('published', Boolean(name='invtype_published')),
+			Column('marketGroupID', INTEGER()),
+			Column('iconID', INTEGER()),
+			Column('soundID', INTEGER()),
+			Column('graphicID', INTEGER()),
+			schema=schema
 	)
-
-
+	
+	
 	invUniqueNames =  Table('invUniqueNames', metadata,
-		Column('itemID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('itemName', VARCHAR(length=200), nullable=False,index=True,unique=True),
-		Column('groupID', INTEGER()),
-		schema=schema
+			Column('itemID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('itemName', VARCHAR(length=200), nullable=False,index=True,unique=True),
+			Column('groupID', INTEGER()),
+			schema=schema
 	)
 	Index('invUniqueNames_IX_GroupName',invUniqueNames.c.groupID,invUniqueNames.c.itemName)
-
-
+	
+	
+	
 	invVolumes =  Table('invVolumes', metadata,
-		Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('volume', INTEGER()),
-		schema=schema
+			Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('volume', INTEGER()),
+			schema=schema
 	)
-
-
+	
+	
 	mapCelestialStatistics =  Table('mapCelestialStatistics', metadata,
-		Column('celestialID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('temperature', FLOAT(precision=53)),
-		Column('spectralClass', VARCHAR(length=10)),
-		Column('luminosity', FLOAT(precision=53)),
-		Column('age', FLOAT(precision=53)),
-		Column('life', FLOAT(precision=53)),
-		Column('orbitRadius', FLOAT(precision=53)),
-		Column('eccentricity', FLOAT(precision=53)),
-		Column('massDust', FLOAT(precision=53)),
-		Column('massGas', FLOAT(precision=53)),
-		Column('fragmented', Boolean(name='mapcelestialstats_frag')),
-		Column('density', FLOAT(precision=53)),
-		Column('surfaceGravity', FLOAT(precision=53)),
-		Column('escapeVelocity', FLOAT(precision=53)),
-		Column('orbitPeriod', FLOAT(precision=53)),
-		Column('rotationRate', FLOAT(precision=53)),
-		Column('locked', Boolean(name='mapcelestialstats_locked')),
-		Column('pressure', FLOAT(precision=53)),
-		Column('radius', FLOAT(precision=53)),
-		Column('mass', INTEGER()),
-		schema=schema
+			Column('celestialID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('temperature', FLOAT(precision=53)),
+			Column('spectralClass', VARCHAR(length=10)),
+			Column('luminosity', FLOAT(precision=53)),
+			Column('age', FLOAT(precision=53)),
+			Column('life', FLOAT(precision=53)),
+			Column('orbitRadius', FLOAT(precision=53)),
+			Column('eccentricity', FLOAT(precision=53)),
+			Column('massDust', FLOAT(precision=53)),
+			Column('massGas', FLOAT(precision=53)),
+			Column('fragmented', Boolean(name='mapcelestialstats_frag')),
+			Column('density', FLOAT(precision=53)),
+			Column('surfaceGravity', FLOAT(precision=53)),
+			Column('escapeVelocity', FLOAT(precision=53)),
+			Column('orbitPeriod', FLOAT(precision=53)),
+			Column('rotationRate', FLOAT(precision=53)),
+			Column('locked', Boolean(name='mapcelestialstats_locked')),
+			Column('pressure', FLOAT(precision=53)),
+			Column('radius', FLOAT(precision=53)),
+			Column('mass', INTEGER()),
+			schema=schema
 	)
-
-
+	
+	
 	mapConstellationJumps =  Table('mapConstellationJumps', metadata,
 		Column('fromRegionID', INTEGER()),
 		Column('fromConstellationID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
@@ -606,1568 +617,431 @@ def metadataCreator(schema):
 		Column('toRegionID', INTEGER()),
 		schema=schema
 	)
-
-
+	
+	
 	mapConstellations =  Table('mapConstellations', metadata,
-		Column('regionID', INTEGER()),
-		Column('constellationID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('constellationName', VARCHAR(length=100)),
-		Column('x', FLOAT(precision=53)),
-		Column('y', FLOAT(precision=53)),
-		Column('z', FLOAT(precision=53)),
-		Column('xMin', FLOAT(precision=53)),
-		Column('xMax', FLOAT(precision=53)),
-		Column('yMin', FLOAT(precision=53)),
-		Column('yMax', FLOAT(precision=53)),
-		Column('zMin', FLOAT(precision=53)),
-		Column('zMax', FLOAT(precision=53)),
-		Column('factionID', INTEGER()),
-		Column('radius', FLOAT()),
-		schema=schema
+			Column('regionID', INTEGER()),
+			Column('constellationID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('constellationName', VARCHAR(length=100)),
+			Column('x', FLOAT(precision=53)),
+			Column('y', FLOAT(precision=53)),
+			Column('z', FLOAT(precision=53)),
+			Column('xMin', FLOAT(precision=53)),
+			Column('xMax', FLOAT(precision=53)),
+			Column('yMin', FLOAT(precision=53)),
+			Column('yMax', FLOAT(precision=53)),
+			Column('zMin', FLOAT(precision=53)),
+			Column('zMax', FLOAT(precision=53)),
+			Column('factionID', INTEGER()),
+			Column('radius', FLOAT()),
+			schema=schema
 	)
-
-
+	
+	
 	mapDenormalize =  Table('mapDenormalize', metadata,
-		Column('itemID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('typeID', INTEGER(),index=True),
-		Column('groupID', INTEGER()),
-		Column('solarSystemID', INTEGER(),index=True),
-		Column('constellationID', INTEGER(),index=True),
-		Column('regionID', INTEGER(),index=True),
-		Column('orbitID', INTEGER(),index=True),
-		Column('x', FLOAT(precision=53)),
-		Column('y', FLOAT(precision=53)),
-		Column('z', FLOAT(precision=53)),
-		Column('radius', FLOAT(precision=53)),
-		Column('itemName', VARCHAR(length=100)),
-		Column('security', FLOAT(precision=53)),
-		Column('celestialIndex', INTEGER()),
-		Column('orbitIndex', INTEGER()),
-		schema=schema
+			Column('itemID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('typeID', INTEGER(),index=True),
+			Column('groupID', INTEGER()),
+			Column('solarSystemID', INTEGER(),index=True),
+			Column('constellationID', INTEGER(),index=True),
+			Column('regionID', INTEGER(),index=True),
+			Column('orbitID', INTEGER(),index=True),
+			Column('x', FLOAT(precision=53)),
+			Column('y', FLOAT(precision=53)),
+			Column('z', FLOAT(precision=53)),
+			Column('radius', FLOAT(precision=53)),
+			Column('itemName', VARCHAR(length=100)),
+			Column('security', FLOAT(precision=53)),
+			Column('celestialIndex', INTEGER()),
+			Column('orbitIndex', INTEGER()),
+			schema=schema
 	)
 	Index('mapDenormalize_IX_groupRegion',mapDenormalize.c.groupID,mapDenormalize.c.regionID)
 	Index('mapDenormalize_IX_groupSystem',mapDenormalize.c.groupID,mapDenormalize.c.solarSystemID)
 	Index('mapDenormalize_IX_groupConstellation',mapDenormalize.c.groupID,mapDenormalize.c.constellationID)
-
-
-
-
+	
+	
 	mapJumps =  Table('mapJumps', metadata,
-		Column('stargateID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('destinationID', INTEGER()),
-		schema=schema
+			Column('stargateID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('destinationID', INTEGER()),
+			schema=schema
 	)
-
-
+	
+	
 	mapLandmarks =  Table('mapLandmarks', metadata,
-		Column('landmarkID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('landmarkName', VARCHAR(length=100)),
-		Column('description',UnicodeText()),
-		Column('locationID', INTEGER()),
-		Column('x', FLOAT(precision=53)),
-		Column('y', FLOAT(precision=53)),
-		Column('z', FLOAT(precision=53)),
-		Column('iconID', INTEGER()),
-		schema=schema
+			Column('landmarkID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('landmarkName', VARCHAR(length=100)),
+			Column('description',UnicodeText()),
+			Column('locationID', INTEGER()),
+			Column('x', FLOAT(precision=53)),
+			Column('y', FLOAT(precision=53)),
+			Column('z', FLOAT(precision=53)),
+			Column('iconID', INTEGER()),
+			schema=schema
 	)
-
-
+	
+	
 	mapLocationScenes =  Table('mapLocationScenes', metadata,
-		Column('locationID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('graphicID', INTEGER()),
-		schema=schema
+			Column('locationID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('graphicID', INTEGER()),
+			schema=schema
 	)
-
-
+	
+	
 	mapLocationWormholeClasses =  Table('mapLocationWormholeClasses', metadata,
-		Column('locationID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('wormholeClassID', INTEGER()),
-		schema=schema
+			Column('locationID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('wormholeClassID', INTEGER()),
+			schema=schema
 	)
-
-
+	
+	
 	mapRegionJumps =  Table('mapRegionJumps', metadata,
-		Column('fromRegionID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('toRegionID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		schema=schema
+			Column('fromRegionID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('toRegionID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			schema=schema
 	)
-
-
+	
+	
 	mapRegions =  Table('mapRegions', metadata,
-		Column('regionID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('regionName', VARCHAR(length=100)),
-		Column('x', FLOAT(precision=53)),
-		Column('y', FLOAT(precision=53)),
-		Column('z', FLOAT(precision=53)),
-		Column('xMin', FLOAT(precision=53)),
-		Column('xMax', FLOAT(precision=53)),
-		Column('yMin', FLOAT(precision=53)),
-		Column('yMax', FLOAT(precision=53)),
-		Column('zMin', FLOAT(precision=53)),
-		Column('zMax', FLOAT(precision=53)),
-		Column('factionID', INTEGER()),
-		Column('radius', FLOAT()),
-		schema=schema
+			Column('regionID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('regionName', VARCHAR(length=100)),
+			Column('x', FLOAT(precision=53)),
+			Column('y', FLOAT(precision=53)),
+			Column('z', FLOAT(precision=53)),
+			Column('xMin', FLOAT(precision=53)),
+			Column('xMax', FLOAT(precision=53)),
+			Column('yMin', FLOAT(precision=53)),
+			Column('yMax', FLOAT(precision=53)),
+			Column('zMin', FLOAT(precision=53)),
+			Column('zMax', FLOAT(precision=53)),
+			Column('factionID', INTEGER()),
+			Column('radius', FLOAT()),
+			schema=schema
 	)
-
-
+	
+	
 	mapSolarSystemJumps =  Table('mapSolarSystemJumps', metadata,
-		Column('fromRegionID', INTEGER()),
-		Column('fromConstellationID', INTEGER()),
-		Column('fromSolarSystemID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('toSolarSystemID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('toConstellationID', INTEGER()),
-		Column('toRegionID', INTEGER()),
-		schema=schema
+			Column('fromRegionID', INTEGER()),
+			Column('fromConstellationID', INTEGER()),
+			Column('fromSolarSystemID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('toSolarSystemID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('toConstellationID', INTEGER()),
+			Column('toRegionID', INTEGER()),
+			schema=schema
 	)
-
-
+	
+	
 	mapSolarSystems =  Table('mapSolarSystems', metadata,
-		Column('regionID', INTEGER(),index=True),
-		Column('constellationID', INTEGER(),index=True),
-		Column('solarSystemID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('solarSystemName', VARCHAR(length=100)),
-		Column('x', FLOAT(precision=53)),
-		Column('y', FLOAT(precision=53)),
-		Column('z', FLOAT(precision=53)),
-		Column('xMin', FLOAT(precision=53)),
-		Column('xMax', FLOAT(precision=53)),
-		Column('yMin', FLOAT(precision=53)),
-		Column('yMax', FLOAT(precision=53)),
-		Column('zMin', FLOAT(precision=53)),
-		Column('zMax', FLOAT(precision=53)),
-		Column('luminosity', FLOAT(precision=53)),
-		Column('border', Boolean(name='mapss_border')),
-		Column('fringe', Boolean(name='mapss_fringe')),
-		Column('corridor', Boolean(name='mapss_corridor')),
-		Column('hub', Boolean(name='mapss_hub')),
-		Column('international', Boolean(name='mapss_internat')),
-		Column('regional', Boolean(name='mapss_regional')),
-		Column('constellation', Boolean(name='mapss_constel')),
-		Column('security', FLOAT(precision=53),index=True),
-		Column('factionID', INTEGER()),
-		Column('radius', FLOAT(precision=53)),
-		Column('sunTypeID', INTEGER()),
-		Column('securityClass', VARCHAR(length=2)),
-		schema=schema
+			Column('regionID', INTEGER(),index=True),
+			Column('constellationID', INTEGER(),index=True),
+			Column('solarSystemID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('solarSystemName', VARCHAR(length=100)),
+			Column('x', FLOAT(precision=53)),
+			Column('y', FLOAT(precision=53)),
+			Column('z', FLOAT(precision=53)),
+			Column('xMin', FLOAT(precision=53)),
+			Column('xMax', FLOAT(precision=53)),
+			Column('yMin', FLOAT(precision=53)),
+			Column('yMax', FLOAT(precision=53)),
+			Column('zMin', FLOAT(precision=53)),
+			Column('zMax', FLOAT(precision=53)),
+			Column('luminosity', FLOAT(precision=53)),
+			Column('border', Boolean(name='mapss_border')),
+			Column('fringe', Boolean(name='mapss_fringe')),
+			Column('corridor', Boolean(name='mapss_corridor')),
+			Column('hub', Boolean(name='mapss_hub')),
+			Column('international', Boolean(name='mapss_internat')),
+			Column('regional', Boolean(name='mapss_regional')),
+			Column('constellation', Boolean(name='mapss_constel')),
+			Column('security', FLOAT(precision=53),index=True),
+			Column('factionID', INTEGER()),
+			Column('radius', FLOAT(precision=53)),
+			Column('sunTypeID', INTEGER()),
+			Column('securityClass', VARCHAR(length=2)),
+			schema=schema
 	)
-
-
+	
+	
 	mapUniverse =  Table('mapUniverse', metadata,
-		Column('universeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('universeName', VARCHAR(length=100)),
-		Column('x', FLOAT(precision=53)),
-		Column('y', FLOAT(precision=53)),
-		Column('z', FLOAT(precision=53)),
-		Column('xMin', FLOAT(precision=53)),
-		Column('xMax', FLOAT(precision=53)),
-		Column('yMin', FLOAT(precision=53)),
-		Column('yMax', FLOAT(precision=53)),
-		Column('zMin', FLOAT(precision=53)),
-		Column('zMax', FLOAT(precision=53)),
-		Column('radius', FLOAT(precision=53)),
-		schema=schema
+			Column('universeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('universeName', VARCHAR(length=100)),
+			Column('x', FLOAT(precision=53)),
+			Column('y', FLOAT(precision=53)),
+			Column('z', FLOAT(precision=53)),
+			Column('xMin', FLOAT(precision=53)),
+			Column('xMax', FLOAT(precision=53)),
+			Column('yMin', FLOAT(precision=53)),
+			Column('yMax', FLOAT(precision=53)),
+			Column('zMin', FLOAT(precision=53)),
+			Column('zMax', FLOAT(precision=53)),
+			Column('radius', FLOAT(precision=53)),
+			schema=schema
 	)
-
-
+	
+	
 	planetSchematics =  Table('planetSchematics', metadata,
-		Column('schematicID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('schematicName', VARCHAR(length=255)),
-		Column('cycleTime', INTEGER()),
-		schema=schema
+			Column('schematicID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('schematicName', VARCHAR(length=255)),
+			Column('cycleTime', INTEGER()),
+			schema=schema
 	)
-
-
+	
+	
 	planetSchematicsPinMap =  Table('planetSchematicsPinMap', metadata,
-		Column('schematicID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('pinTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		schema=schema
+			Column('schematicID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('pinTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			schema=schema
 	)
-
-
+	
+	
 	planetSchematicsTypeMap =  Table('planetSchematicsTypeMap', metadata,
-		Column('schematicID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('quantity', INTEGER()),
-		Column('isInput', Boolean(name='pstm_input')),
-		schema=schema
+			Column('schematicID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('quantity', INTEGER()),
+			Column('isInput', Boolean(name='pstm_input')),
+			schema=schema
 	)
-
-
+	
+	
 	ramActivities =  Table('ramActivities', metadata,
-		Column('activityID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('activityName', VARCHAR(length=100)),
-		Column('iconNo', VARCHAR(length=5)),
-		Column('description', VARCHAR(length=1000)),
-		Column('published', Boolean(name='ra_pub')),
-		schema=schema
+			Column('activityID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('activityName', VARCHAR(length=100)),
+			Column('iconNo', VARCHAR(length=5)),
+			Column('description', VARCHAR(length=1000)),
+			Column('published', Boolean(name='ra_pub')),
+			schema=schema
 	)
-
-
+	
+	
 	ramAssemblyLineStations =  Table('ramAssemblyLineStations', metadata,
-		Column('stationID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('assemblyLineTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('quantity', INTEGER()),
-		Column('stationTypeID', INTEGER()),
-		Column('ownerID', INTEGER(),index=True),
-		Column('solarSystemID', INTEGER(),index=True),
-		Column('regionID', INTEGER(),index=True),
-		schema=schema
+			Column('stationID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('assemblyLineTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('quantity', INTEGER()),
+			Column('stationTypeID', INTEGER()),
+			Column('ownerID', INTEGER(),index=True),
+			Column('solarSystemID', INTEGER(),index=True),
+			Column('regionID', INTEGER(),index=True),
+			schema=schema
+	
+	
 	)
-
-
+	
+	
 	ramAssemblyLineTypeDetailPerCategory =  Table('ramAssemblyLineTypeDetailPerCategory', metadata,
-		Column('assemblyLineTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('categoryID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('timeMultiplier', FLOAT(precision=53)),
-		Column('materialMultiplier', FLOAT(precision=53)),
-		Column('costMultiplier', FLOAT(precision=53)),
-		schema=schema
+			Column('assemblyLineTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('categoryID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('timeMultiplier', FLOAT(precision=53)),
+			Column('materialMultiplier', FLOAT(precision=53)),
+			Column('costMultiplier', FLOAT(precision=53)),
+			schema=schema
 	)
-
-
+	
+	
 	ramAssemblyLineTypeDetailPerGroup =  Table('ramAssemblyLineTypeDetailPerGroup', metadata,
-		Column('assemblyLineTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('groupID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('timeMultiplier', FLOAT(precision=53)),
-		Column('materialMultiplier', FLOAT(precision=53)),
-		Column('costMultiplier', FLOAT(precision=53)),
-		schema=schema
+			Column('assemblyLineTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('groupID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('timeMultiplier', FLOAT(precision=53)),
+			Column('materialMultiplier', FLOAT(precision=53)),
+			Column('costMultiplier', FLOAT(precision=53)),
+			schema=schema
 	)
-
-
+	
+	
 	ramAssemblyLineTypes =  Table('ramAssemblyLineTypes', metadata,
-		Column('assemblyLineTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('assemblyLineTypeName', VARCHAR(length=100)),
-		Column('description', VARCHAR(length=1000)),
-		Column('baseTimeMultiplier', FLOAT(precision=53)),
-		Column('baseMaterialMultiplier', FLOAT(precision=53)),
-		Column('baseCostMultiplier', FLOAT(precision=53)),
-		Column('volume', FLOAT(precision=53)),
-		Column('activityID', INTEGER()),
-		Column('minCostPerHour', FLOAT(precision=53)),
-		schema=schema
+			Column('assemblyLineTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('assemblyLineTypeName', VARCHAR(length=100)),
+			Column('description', VARCHAR(length=1000)),
+			Column('baseTimeMultiplier', FLOAT(precision=53)),
+			Column('baseMaterialMultiplier', FLOAT(precision=53)),
+			Column('baseCostMultiplier', FLOAT(precision=53)),
+			Column('volume', FLOAT(precision=53)),
+			Column('activityID', INTEGER()),
+			Column('minCostPerHour', FLOAT(precision=53)),
+			schema=schema
+	
+	
 	)
-
-
+	
+	
 	ramInstallationTypeContents =  Table('ramInstallationTypeContents', metadata,
-		Column('installationTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('assemblyLineTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('quantity', INTEGER()),
-		schema=schema
+			Column('installationTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('assemblyLineTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('quantity', INTEGER()),
+			schema=schema
+	
+	
 	)
-
-
+	
+	
 	skinLicense =  Table('skinLicense', metadata,
-		Column('licenseTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('duration', INTEGER()),
-		Column('skinID', INTEGER()),
-		schema=schema
+			Column('licenseTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('duration', INTEGER()),
+			Column('skinID', INTEGER()),
+			schema=schema
+	
+	
 	)
-
-
+	
+	
 	skinMaterials =  Table('skinMaterials', metadata,
-		Column('skinMaterialID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('displayNameID', INTEGER()),
-		Column('materialSetID', INTEGER()),
-		schema=schema
+			Column('skinMaterialID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('displayNameID', INTEGER()),
+			Column('materialSetID', INTEGER()),
+			schema=schema
+	
+	
 	)
-
-
+	
+	
 	skinShip =  Table('skinShip', metadata,
-		Column('skinID', INTEGER(),index=True),
-		Column('typeID', INTEGER(),index=True),
-		schema=schema
+			Column('skinID', INTEGER(),index=True),
+			Column('typeID', INTEGER(),index=True),
+			schema=schema
+	
+	
 	)
-
-
+	
+	
 	skins =  Table('skins', metadata,
-		Column('skinID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('internalName', VARCHAR(length=70)),
-		Column('skinMaterialID', INTEGER()),
-		schema=schema
+			Column('skinID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('internalName', VARCHAR(length=70)),
+			Column('skinMaterialID', INTEGER()),
+			schema=schema
+	
+	
 	)
-
-
+	
+	
 	staOperationServices =  Table('staOperationServices', metadata,
-		Column('operationID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('serviceID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		schema=schema
+			Column('operationID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('serviceID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			schema=schema
+	
+	
 	)
-
-
+	
+	
 	staOperations =  Table('staOperations', metadata,
-		Column('activityID', INTEGER()),
-		Column('operationID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('operationName', VARCHAR(length=100)),
-		Column('description', VARCHAR(length=1000)),
-		Column('fringe', INTEGER()),
-		Column('corridor', INTEGER()),
-		Column('hub', INTEGER()),
-		Column('border', INTEGER()),
-		Column('ratio', INTEGER()),
-		Column('caldariStationTypeID', INTEGER()),
-		Column('minmatarStationTypeID', INTEGER()),
-		Column('amarrStationTypeID', INTEGER()),
-		Column('gallenteStationTypeID', INTEGER()),
-		Column('joveStationTypeID', INTEGER()),
-		schema=schema
+			Column('activityID', INTEGER()),
+			Column('operationID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('operationName', VARCHAR(length=100)),
+			Column('description', VARCHAR(length=1000)),
+			Column('fringe', INTEGER()),
+			Column('corridor', INTEGER()),
+			Column('hub', INTEGER()),
+			Column('border', INTEGER()),
+			Column('ratio', INTEGER()),
+			Column('caldariStationTypeID', INTEGER()),
+			Column('minmatarStationTypeID', INTEGER()),
+			Column('amarrStationTypeID', INTEGER()),
+			Column('gallenteStationTypeID', INTEGER()),
+			Column('joveStationTypeID', INTEGER()),
+			schema=schema
+	
+	
 	)
-
-
+	
+	
 	staServices =  Table('staServices', metadata,
-		Column('serviceID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('serviceName', VARCHAR(length=100)),
-		Column('description', VARCHAR(length=1000)),
-		schema=schema
+			Column('serviceID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('serviceName', VARCHAR(length=100)),
+			Column('description', VARCHAR(length=1000)),
+			schema=schema
+	
+	
 	)
-
-
+	
+	
 	staStationTypes =  Table('staStationTypes', metadata,
-		Column('stationTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('dockEntryX', FLOAT(precision=53)),
-		Column('dockEntryY', FLOAT(precision=53)),
-		Column('dockEntryZ', FLOAT(precision=53)),
-		Column('dockOrientationX', FLOAT(precision=53)),
-		Column('dockOrientationY', FLOAT(precision=53)),
-		Column('dockOrientationZ', FLOAT(precision=53)),
-		Column('operationID', INTEGER()),
-		Column('officeSlots', INTEGER()),
-		Column('reprocessingEfficiency', FLOAT(precision=53)),
-		Column('conquerable', Boolean(name='stastat_conq')),
-		schema=schema
+			Column('stationTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('dockEntryX', FLOAT(precision=53)),
+			Column('dockEntryY', FLOAT(precision=53)),
+			Column('dockEntryZ', FLOAT(precision=53)),
+			Column('dockOrientationX', FLOAT(precision=53)),
+			Column('dockOrientationY', FLOAT(precision=53)),
+			Column('dockOrientationZ', FLOAT(precision=53)),
+			Column('operationID', INTEGER()),
+			Column('officeSlots', INTEGER()),
+			Column('reprocessingEfficiency', FLOAT(precision=53)),
+			Column('conquerable', Boolean(name='stastat_conq')),
+			schema=schema
 	)
-
-
+	
+	
 	staStations =  Table('staStations', metadata,
-		Column('stationID', BigInteger, primary_key=True, autoincrement=False, nullable=False),
-		Column('security', FLOAT(precision=53)),
-		Column('dockingCostPerVolume', FLOAT(precision=53)),
-		Column('maxShipVolumeDockable', FLOAT(precision=53)),
-		Column('officeRentalCost', INTEGER()),
-		Column('operationID', INTEGER(),index=True),
-		Column('stationTypeID', INTEGER(),index=True),
-		Column('corporationID', INTEGER(),index=True),
-		Column('solarSystemID', INTEGER(),index=True),
-		Column('constellationID', INTEGER(),index=True),
-		Column('regionID', INTEGER(),index=True),
-		Column('stationName', VARCHAR(length=100)),
-		Column('x', FLOAT(precision=53)),
-		Column('y', FLOAT(precision=53)),
-		Column('z', FLOAT(precision=53)),
-		Column('reprocessingEfficiency', FLOAT(precision=53)),
-		Column('reprocessingStationsTake', FLOAT(precision=53)),
-		Column('reprocessingHangarFlag', INTEGER()),
-		schema=schema
+			Column('stationID', BigInteger, primary_key=True, autoincrement=False, nullable=False),
+			Column('security', FLOAT(precision=53)),
+			Column('dockingCostPerVolume', FLOAT(precision=53)),
+			Column('maxShipVolumeDockable', FLOAT(precision=53)),
+			Column('officeRentalCost', INTEGER()),
+			Column('operationID', INTEGER(),index=True),
+			Column('stationTypeID', INTEGER(),index=True),
+			Column('corporationID', INTEGER(),index=True),
+			Column('solarSystemID', INTEGER(),index=True),
+			Column('constellationID', INTEGER(),index=True),
+			Column('regionID', INTEGER(),index=True),
+			Column('stationName', VARCHAR(length=100)),
+			Column('x', FLOAT(precision=53)),
+			Column('y', FLOAT(precision=53)),
+			Column('z', FLOAT(precision=53)),
+			Column('reprocessingEfficiency', FLOAT(precision=53)),
+			Column('reprocessingStationsTake', FLOAT(precision=53)),
+			Column('reprocessingHangarFlag', INTEGER()),
+			schema=schema
 	)
-
-
+	
+	
 	translationTables =  Table('translationTables', metadata,
-		Column('sourceTable', VARCHAR(length=200), primary_key=True, autoincrement=False, nullable=False),
-		Column('destinationTable', VARCHAR(length=200)),
-		Column('translatedKey', VARCHAR(length=200), primary_key=True, autoincrement=False, nullable=False),
-		Column('tcGroupID', INTEGER()),
-		Column('tcID', INTEGER()),
-		schema=schema
+			Column('sourceTable', VARCHAR(length=200), primary_key=True, autoincrement=False, nullable=False),
+			Column('destinationTable', VARCHAR(length=200)),
+			Column('translatedKey', VARCHAR(length=200), primary_key=True, autoincrement=False, nullable=False),
+			Column('tcGroupID', INTEGER()),
+			Column('tcID', INTEGER()),
+			schema=schema
 	)
-
-
+	
+	
 	trnTranslationColumns =  Table('trnTranslationColumns', metadata,
-		Column('tcGroupID', INTEGER()),
-		Column('tcID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('tableName', VARCHAR(length=256), nullable=False),
-		Column('columnName', VARCHAR(length=128), nullable=False),
-		Column('masterID', VARCHAR(length=128)),
-		schema=schema
+			Column('tcGroupID', INTEGER()),
+			Column('tcID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('tableName', VARCHAR(length=256), nullable=False),
+			Column('columnName', VARCHAR(length=128), nullable=False),
+			Column('masterID', VARCHAR(length=128)),
+			schema=schema
 	)
-
-
+	
+	
 	trnTranslationLanguages =  Table('trnTranslationLanguages', metadata,
-		Column('numericLanguageID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('languageID', VARCHAR(length=50)),
-		Column('languageName', VARCHAR(length=200)),
-		schema=schema
+			Column('numericLanguageID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('languageID', VARCHAR(length=50)),
+			Column('languageName', VARCHAR(length=200)),
+			schema=schema
 	)
-
-
+	
+	
 	trnTranslations =  Table('trnTranslations', metadata,
-		Column('tcID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('keyID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('languageID', VARCHAR(length=50), primary_key=True, autoincrement=False, nullable=False),
-		Column('text',UnicodeText(), nullable=False),
-		schema=schema
+			Column('tcID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('keyID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('languageID', VARCHAR(length=50), primary_key=True, autoincrement=False, nullable=False),
+			Column('text',UnicodeText(), nullable=False),
+			schema=schema
 	)
-
-
+	
+	
 	warCombatZoneSystems =  Table('warCombatZoneSystems', metadata,
-		Column('solarSystemID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('combatZoneID', INTEGER()),
-		schema=schema
+			Column('solarSystemID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('combatZoneID', INTEGER()),
+			schema=schema
 	)
-
-
+	
+	
 	warCombatZones =  Table('warCombatZones', metadata,
-		Column('combatZoneID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-		Column('combatZoneName', VARCHAR(length=100)),
-		Column('factionID', INTEGER()),
-		Column('centerSystemID', INTEGER()),
-		Column('description', VARCHAR(length=500)),
-		schema=schema
+			Column('combatZoneID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('combatZoneName', VARCHAR(length=100)),
+			Column('factionID', INTEGER()),
+			Column('centerSystemID', INTEGER()),
+			Column('description', VARCHAR(length=500)),
+			schema=schema
 	)
-
+	
 	return metadata
-
-
-    agtAgentTypes =  Table('agtAgentTypes', metadata,
-        Column('agentTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-                Column('agentType', VARCHAR(length=50))
-        )
-
-
-    agtAgents =  Table('agtAgents', metadata,
-            Column('agentID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('divisionID', INTEGER()),
-            Column('corporationID', INTEGER(),index=True),
-            Column('locationID', INTEGER(),index=True),
-            Column('level', INTEGER()),
-            Column('quality', INTEGER()),
-            Column('agentTypeID', INTEGER()),
-            Column('isLocator', Boolean(name='aa_isloc')),
-            schema=schema
-    )
-
-    agtAgentsInSpace =  Table('agtAgentsInSpace', metadata,
-            Column('agentID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('dungeonID', INTEGER()),
-            Column('solarSystemID', INTEGER(),index=True),
-            Column('spawnPointID', INTEGER()),
-            Column('typeID', INTEGER()),
-            schema=schema
-    )
-
-    agtResearchAgents =  Table('agtResearchAgents', metadata,
-           Column('agentID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False,index=True),
-            schema=schema
-
-
-    )
-
-
-    certCerts =  Table('certCerts', metadata,
-            Column('certID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('description',UnicodeText()),
-            Column('groupID', INTEGER()),
-            Column('name', VARCHAR(length=255)),
-            schema=schema
-
-
-    )
-
-
-    certMasteries =  Table('certMasteries', metadata,
-            Column('typeID', INTEGER()),
-            Column('masteryLevel', INTEGER()),
-            Column('certID', INTEGER()),
-            schema=schema
-
-    )
-
-
-    certSkills =  Table('certSkills', metadata,
-            Column('certID', INTEGER()),
-            Column('skillID', INTEGER(),index=True),
-            Column('certLevelInt', INTEGER()),
-            Column('skillLevel', INTEGER()),
-            Column('certLevelText', VARCHAR(length=8)),
-            schema=schema
-
-
-    )
-
-
-    chrAncestries =  Table('chrAncestries', metadata,
-            Column('ancestryID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('ancestryName', VARCHAR(length=100)),
-            Column('bloodlineID', INTEGER()),
-            Column('description', VARCHAR(length=1000)),
-            Column('perception', INTEGER()),
-            Column('willpower', INTEGER()),
-            Column('charisma', INTEGER()),
-            Column('memory', INTEGER()),
-            Column('intelligence', INTEGER()),
-            Column('iconID', INTEGER()),
-            Column('shortDescription', VARCHAR(length=500)),
-            schema=schema
-
-
-    )
-
-
-    chrAttributes =  Table('chrAttributes', metadata,
-            Column('attributeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('attributeName', VARCHAR(length=100)),
-            Column('description', VARCHAR(length=1000)),
-            Column('iconID', INTEGER()),
-            Column('shortDescription', VARCHAR(length=500)),
-            Column('notes', VARCHAR(length=500)),
-            schema=schema
-
-
-    )
-
-
-    chrBloodlines =  Table('chrBloodlines', metadata,
-            Column('bloodlineID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('bloodlineName', VARCHAR(length=100)),
-            Column('raceID', INTEGER()),
-            Column('description', VARCHAR(length=1000)),
-            Column('maleDescription', VARCHAR(length=1000)),
-            Column('femaleDescription', VARCHAR(length=1000)),
-            Column('shipTypeID', INTEGER()),
-            Column('corporationID', INTEGER()),
-            Column('perception', INTEGER()),
-            Column('willpower', INTEGER()),
-            Column('charisma', INTEGER()),
-            Column('memory', INTEGER()),
-            Column('intelligence', INTEGER()),
-            Column('iconID', INTEGER()),
-            Column('shortDescription', VARCHAR(length=500)),
-            Column('shortMaleDescription', VARCHAR(length=500)),
-            Column('shortFemaleDescription', VARCHAR(length=500)),
-            schema=schema
-
-
-    )
-
-
-    chrFactions =  Table('chrFactions', metadata,
-            Column('factionID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('factionName', VARCHAR(length=100)),
-            Column('description', VARCHAR(length=1000)),
-            Column('raceIDs', INTEGER()),
-            Column('solarSystemID', INTEGER()),
-            Column('corporationID', INTEGER()),
-            Column('sizeFactor', FLOAT()),
-            Column('stationCount', INTEGER()),
-            Column('stationSystemCount', INTEGER()),
-            Column('militiaCorporationID', INTEGER()),
-            Column('iconID', INTEGER()),
-            schema=schema
-
-
-    )
-
-
-    chrRaces =  Table('chrRaces', metadata,
-            Column('raceID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('raceName', VARCHAR(length=100)),
-            Column('description', VARCHAR(length=1000)),
-            Column('iconID', INTEGER()),
-            Column('shortDescription', VARCHAR(length=500)),
-            schema=schema
-
-
-    )
-
-
-    crpActivities =  Table('crpActivities', metadata,
-            Column('activityID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('activityName', VARCHAR(length=100)),
-            Column('description', VARCHAR(length=1000)),
-            schema=schema
-
-
-    )
-
-
-    crpNPCCorporationDivisions =  Table('crpNPCCorporationDivisions', metadata,
-            Column('corporationID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('divisionID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('size', INTEGER()),
-            schema=schema
-
-
-    )
-
-
-    crpNPCCorporationResearchFields =  Table('crpNPCCorporationResearchFields', metadata,
-            Column('skillID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('corporationID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            schema=schema
-
-
-    )
-
-
-    crpNPCCorporationTrades =  Table('crpNPCCorporationTrades', metadata,
-            Column('corporationID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            schema=schema
-
-
-    )
-
-
-    crpNPCCorporations =  Table('crpNPCCorporations', metadata,
-            Column('corporationID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('size', CHAR(length=1)),
-            Column('extent', CHAR(length=1)),
-            Column('solarSystemID', INTEGER()),
-            Column('investorID1', INTEGER()),
-            Column('investorShares1', INTEGER()),
-            Column('investorID2', INTEGER()),
-            Column('investorShares2', INTEGER()),
-            Column('investorID3', INTEGER()),
-            Column('investorShares3', INTEGER()),
-            Column('investorID4', INTEGER()),
-            Column('investorShares4', INTEGER()),
-            Column('friendID', INTEGER()),
-            Column('enemyID', INTEGER()),
-            Column('publicShares', INTEGER()),
-            Column('initialPrice', INTEGER()),
-            Column('minSecurity', FLOAT()),
-            Column('scattered', Boolean(name='cnpcc_scatt')),
-            Column('fringe', INTEGER()),
-            Column('corridor', INTEGER()),
-            Column('hub', INTEGER()),
-            Column('border', INTEGER()),
-            Column('factionID', INTEGER()),
-            Column('sizeFactor', FLOAT()),
-            Column('stationCount', INTEGER()),
-            Column('stationSystemCount', INTEGER()),
-            Column('description', VARCHAR(length=4000)),
-            Column('iconID', INTEGER()),
-            schema=schema
-
-
-            )
-
-
-    crpNPCDivisions =  Table('crpNPCDivisions', metadata,
-            Column('divisionID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('divisionName', VARCHAR(length=100)),
-            Column('description', VARCHAR(length=1000)),
-            Column('leaderType', VARCHAR(length=100)),
-            schema=schema
-
-
-    )
-
-
-    dgmAttributeCategories =  Table('dgmAttributeCategories', metadata,
-            Column('categoryID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('categoryName', VARCHAR(length=50)),
-            Column('categoryDescription', VARCHAR(length=200)),
-            schema=schema
-
-
-    )
-
-
-    dgmAttributeTypes =  Table('dgmAttributeTypes', metadata,
-            Column('attributeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('attributeName', VARCHAR(length=100)),
-            Column('description', VARCHAR(length=1000)),
-            Column('iconID', INTEGER()),
-            Column('defaultValue', FLOAT()),
-            Column('published', Boolean(name='dat_pub')),
-            Column('displayName', VARCHAR(length=150)),
-            Column('unitID', INTEGER()),
-            Column('stackable', Boolean(name='dat_stack')),
-            Column('highIsGood', Boolean(name='dat_hig')),
-            Column('categoryID', INTEGER()),
-            schema=schema
-
-
-    )
-
-
-    dgmEffects =  Table('dgmEffects', metadata,
-            Column('effectID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('effectName', VARCHAR(length=400)),
-            Column('effectCategory', INTEGER()),
-            Column('preExpression', INTEGER()),
-            Column('postExpression', INTEGER()),
-            Column('description', VARCHAR(length=1000)),
-            Column('guid', VARCHAR(length=60)),
-            Column('iconID', INTEGER()),
-            Column('isOffensive', Boolean(name='de_offense')),
-            Column('isAssistance', Boolean(name='de_assist')),
-            Column('durationAttributeID', INTEGER()),
-            Column('trackingSpeedAttributeID', INTEGER()),
-            Column('dischargeAttributeID', INTEGER()),
-            Column('rangeAttributeID', INTEGER()),
-            Column('falloffAttributeID', INTEGER()),
-            Column('disallowAutoRepeat', Boolean(name='de_disallowar')),
-            Column('published', Boolean(name='de_published')),
-            Column('displayName', VARCHAR(length=100)),
-            Column('isWarpSafe', Boolean(name='de_warpsafe')),
-            Column('rangeChance', Boolean(name='de_rangechance')),
-            Column('electronicChance', Boolean(name='de_elecchance')),
-            Column('propulsionChance', Boolean(name='de_propchance')),
-            Column('distribution', INTEGER()),
-            Column('sfxName', VARCHAR(length=20)),
-            Column('npcUsageChanceAttributeID', INTEGER()),
-            Column('npcActivationChanceAttributeID', INTEGER()),
-            Column('fittingUsageChanceAttributeID', INTEGER()),
-            Column('modifierInfo',UnicodeText()),
-            schema=schema
-
-
-    )
-
-
-    dgmExpressions =  Table('dgmExpressions', metadata,
-            Column('expressionID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('operandID', INTEGER()),
-            Column('arg1', INTEGER()),
-            Column('arg2', INTEGER()),
-            Column('expressionValue', VARCHAR(length=100)),
-            Column('description', VARCHAR(length=1000)),
-            Column('expressionName', VARCHAR(length=500)),
-            Column('expressionTypeID', INTEGER()),
-            Column('expressionGroupID', INTEGER()),
-            Column('expressionAttributeID', INTEGER()),
-            schema=schema
-
-
-    )
-
-
-    dgmTypeAttributes =  Table('dgmTypeAttributes', metadata,
-            Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('attributeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False,index=True),
-            Column('valueInt', INTEGER()),
-            Column('valueFloat', FLOAT()),
-            schema=schema
-
-
-    )
-
-
-    dgmTypeEffects =  Table('dgmTypeEffects', metadata,
-            Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('effectID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('isDefault', Boolean(name='dte_default')),
-            schema=schema
-
-
-    )
-
-
-    eveGraphics =  Table('eveGraphics', metadata,
-            Column('graphicID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('sofFactionName', VARCHAR(length=100)),
-            Column('graphicFile', VARCHAR(length=100)),
-            Column('sofHullName', VARCHAR(length=100)),
-            Column('sofRaceName', VARCHAR(length=100)),
-            Column('description',UnicodeText()),
-            schema=schema
-
-
-    )
-
-
-    eveIcons =  Table('eveIcons', metadata,
-            Column('iconID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('iconFile', VARCHAR(length=500)),
-            Column('description',UnicodeText()),
-            schema=schema
-
-
-    )
-
-
-    eveUnits =  Table('eveUnits', metadata,
-            Column('unitID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('unitName', VARCHAR(length=100)),
-            Column('displayName', VARCHAR(length=50)),
-            Column('description', VARCHAR(length=1000)),
-            schema=schema
-
-
-    )
-
-
-    industryActivity =  Table('industryActivity', metadata,
-            Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('activityID', INTEGER(), primary_key=True, autoincrement=False, nullable=False,index=True),
-            Column('time', INTEGER()),
-            schema=schema
-    )
-
-
-    industryActivityMaterials =  Table('industryActivityMaterials', metadata,
-            Column('typeID', INTEGER(),index=True),
-            Column('activityID', INTEGER()),
-            Column('materialTypeID', INTEGER()),
-            Column('quantity', INTEGER()),
-            schema=schema
-    )
-    Index('industryActivityMaterials_idx1',industryActivityMaterials.c.typeID,industryActivityMaterials.c.activityID)
-
-
-    industryActivityProbabilities =  Table('industryActivityProbabilities', metadata,
-            Column('typeID', INTEGER(),index=True),
-            Column('activityID', INTEGER()),
-            Column('productTypeID', INTEGER(),index=True),
-            Column('probability', DECIMAL(precision=3, scale=2)),
-            schema=schema
-
-
-    )
-
-
-    industryActivityProducts =  Table('industryActivityProducts', metadata,
-            Column('typeID', INTEGER(),index=True),
-            Column('activityID', INTEGER()),
-            Column('productTypeID', INTEGER(),index=True),
-            Column('quantity', INTEGER()),
-            schema=schema
-
-
-    )
-
-
-    industryActivityRaces =  Table('industryActivityRaces', metadata,
-            Column('typeID', INTEGER(),index=True),
-            Column('activityID', INTEGER()),
-            Column('productTypeID', INTEGER(),index=True),
-            Column('raceID', INTEGER()),
-            schema=schema
-
-
-    )
-
-
-    industryActivitySkills =  Table('industryActivitySkills', metadata,
-            Column('typeID', INTEGER(),index=True),
-            Column('activityID', INTEGER()),
-            Column('skillID', INTEGER(),index=True),
-            Column('level', INTEGER()),
-            schema=schema
-    )
-    Index('industryActivitySkills_idx1',industryActivitySkills.c.typeID,industryActivitySkills.c.activityID)
-
-    industryBlueprints =  Table('industryBlueprints', metadata,
-            Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('maxProductionLimit', INTEGER()),
-            schema=schema
-
-
-    )
-
-
-    invCategories =  Table('invCategories', metadata,
-            Column('categoryID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('categoryName', VARCHAR(length=100)),
-            Column('iconID', INTEGER()),
-            Column('published', Boolean(name='invcat_published')),
-            schema=schema
-
-
-    )
-
-
-    invContrabandTypes =  Table('invContrabandTypes', metadata,
-            Column('factionID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False,index=True),
-            Column('standingLoss', FLOAT(precision=53)),
-            Column('confiscateMinSec', FLOAT(precision=53)),
-            Column('fineByValue', FLOAT(precision=53)),
-            Column('attackMinSec', FLOAT(precision=53)),
-            schema=schema
-
-
-    )
-
-
-    invControlTowerResourcePurposes =  Table('invControlTowerResourcePurposes', metadata,
-            Column('purpose', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('purposeText', VARCHAR(length=100)),
-            schema=schema
-
-
-    )
-
-
-    invControlTowerResources =  Table('invControlTowerResources', metadata,
-            Column('controlTowerTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('resourceTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('purpose', INTEGER()),
-            Column('quantity', INTEGER()),
-            Column('minSecurityLevel', FLOAT(precision=53)),
-            Column('factionID', INTEGER()),
-            schema=schema
-
-
-    )
-
-
-    invFlags =  Table('invFlags', metadata,
-            Column('flagID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('flagName', VARCHAR(length=200)),
-            Column('flagText', VARCHAR(length=100)),
-            Column('orderID', INTEGER()),
-            schema=schema
-
-
-    )
-
-
-    invGroups =  Table('invGroups', metadata,
-            Column('groupID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('categoryID', INTEGER(),index=True),
-            Column('groupName', VARCHAR(length=100)),
-            Column('iconID', INTEGER()),
-            Column('useBasePrice', Boolean(name='invgroup_usebaseprice')),
-            Column('anchored', Boolean(name='invgroup_anchored')),
-            Column('anchorable', Boolean(name='invgroup_anchorable')),
-            Column('fittableNonSingleton', Boolean(name='invgroup_fitnonsingle')),
-            Column('published', Boolean(name='invgroup_published')),
-            schema=schema
-
-
-    )
-
-
-    invItems =  Table('invItems', metadata,
-            Column('itemID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('typeID', INTEGER(), nullable=False),
-            Column('ownerID', INTEGER(), nullable=False),
-            Column('locationID', INTEGER(), nullable=False,index=True),
-            Column('flagID', INTEGER(), nullable=False),
-            Column('quantity', INTEGER(), nullable=False),
-            schema=schema
-    )
-    Index('items_IX_OwnerLocation',invItems.c.ownerID,invItems.c.locationID)
-
-
-    invMarketGroups =  Table('invMarketGroups', metadata,
-            Column('marketGroupID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('parentGroupID', INTEGER()),
-            Column('marketGroupName', VARCHAR(length=100)),
-            Column('description', VARCHAR(length=3000)),
-            Column('iconID', INTEGER()),
-            Column('hasTypes', Boolean(name='invmarketgroups_hastypes')),
-            schema=schema
-
-
-    )
-
-
-    invMetaGroups =  Table('invMetaGroups', metadata,
-            Column('metaGroupID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('metaGroupName', VARCHAR(length=100)),
-            Column('description', VARCHAR(length=1000)),
-            Column('iconID', INTEGER()),
-            schema=schema
-
-
-    )
-
-
-    invMetaTypes =  Table('invMetaTypes', metadata,
-            Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('parentTypeID', INTEGER()),
-            Column('metaGroupID', INTEGER()),
-            schema=schema
-
-
-    )
-
-
-    invNames =  Table('invNames', metadata,
-            Column('itemID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('itemName', VARCHAR(length=200), nullable=False),
-            schema=schema
-
-
-    )
-
-
-    invPositions =  Table('invPositions', metadata,
-            Column('itemID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('x', FLOAT(), nullable=False, default=text(u"'0'")),
-            Column('y', FLOAT(), nullable=False, default=text(u"'0'")),
-            Column('z', FLOAT(), nullable=False, default=text(u"'0'")),
-            Column('yaw', FLOAT(precision=24)),
-            Column('pitch', FLOAT(precision=24)),
-            Column('roll', FLOAT(precision=24)),
-            schema=schema
-
-
-    )
-
-
-    invTraits =  Table('invTraits', metadata,
-            Column('traitID', INTEGER(), primary_key=True, autoincrement=True, nullable=False),
-            Column('typeID', INTEGER()),
-            Column('skillID', INTEGER()),
-            Column('bonus', FLOAT()),
-            Column('bonusText',UnicodeText()),
-            Column('unitID', INTEGER()),
-            schema=schema
-
-
-    )
-
-
-    invTypeMaterials =  Table('invTypeMaterials', metadata,
-            Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('materialTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('quantity', INTEGER(), nullable=False, default=text(u"'0'")),
-            schema=schema
-
-
-    )
-
-
-    invTypeReactions =  Table('invTypeReactions', metadata,
-            Column('reactionTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('input', Boolean(name='invtypereactions_input'), primary_key=True, autoincrement=False, nullable=False),
-            Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('quantity', INTEGER()),
-            schema=schema
-
-
-    )
-
-
-    invTypes =  Table('invTypes', metadata,
-            Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('groupID', INTEGER(),index=True),
-            Column('typeName', VARCHAR(length=100)),
-            Column('description',UnicodeText()),
-            Column('mass', FLOAT(precision=53)),
-            Column('volume', FLOAT(precision=53)),
-            Column('capacity', FLOAT(precision=53)),
-            Column('portionSize', INTEGER()),
-            Column('raceID', INTEGER()),
-            Column('basePrice', DECIMAL(precision=19, scale=4)),
-            Column('published', Boolean(name='invtype_published')),
-            Column('marketGroupID', INTEGER()),
-            Column('iconID', INTEGER()),
-            Column('soundID', INTEGER()),
-            Column('graphicID', INTEGER()),
-            schema=schema
-
-
-    )
-
-
-    invUniqueNames =  Table('invUniqueNames', metadata,
-            Column('itemID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('itemName', VARCHAR(length=200), nullable=False,index=True,unique=True),
-            Column('groupID', INTEGER()),
-            schema=schema
-    )
-    Index('invUniqueNames_IX_GroupName',invUniqueNames.c.groupID,invUniqueNames.c.itemName)
-
-
-    invVolumes =  Table('invVolumes', metadata,
-            Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('volume', INTEGER()),
-            schema=schema
-    )
-
-
-    mapCelestialStatistics =  Table('mapCelestialStatistics', metadata,
-            Column('celestialID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('temperature', FLOAT(precision=53)),
-            Column('spectralClass', VARCHAR(length=10)),
-            Column('luminosity', FLOAT(precision=53)),
-            Column('age', FLOAT(precision=53)),
-            Column('life', FLOAT(precision=53)),
-            Column('orbitRadius', FLOAT(precision=53)),
-            Column('eccentricity', FLOAT(precision=53)),
-            Column('massDust', FLOAT(precision=53)),
-            Column('massGas', FLOAT(precision=53)),
-            Column('fragmented', Boolean(name='mapcelestialstats_frag')),
-            Column('density', FLOAT(precision=53)),
-            Column('surfaceGravity', FLOAT(precision=53)),
-            Column('escapeVelocity', FLOAT(precision=53)),
-            Column('orbitPeriod', FLOAT(precision=53)),
-            Column('rotationRate', FLOAT(precision=53)),
-            Column('locked', Boolean(name='mapcelestialstats_locked')),
-            Column('pressure', FLOAT(precision=53)),
-            Column('radius', FLOAT(precision=53)),
-            Column('mass', INTEGER()),
-            schema=schema
-
-
-    )
-
-
-    mapConstellationJumps =  Table('mapConstellationJumps', metadata,
-        Column('fromRegionID', INTEGER()),
-            Column('fromConstellationID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('toConstellationID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('toRegionID', INTEGER()),
-            schema=schema
-
-
-    )
-
-
-    mapConstellations =  Table('mapConstellations', metadata,
-            Column('regionID', INTEGER()),
-            Column('constellationID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('constellationName', VARCHAR(length=100)),
-            Column('x', FLOAT(precision=53)),
-            Column('y', FLOAT(precision=53)),
-            Column('z', FLOAT(precision=53)),
-            Column('xMin', FLOAT(precision=53)),
-            Column('xMax', FLOAT(precision=53)),
-            Column('yMin', FLOAT(precision=53)),
-            Column('yMax', FLOAT(precision=53)),
-            Column('zMin', FLOAT(precision=53)),
-            Column('zMax', FLOAT(precision=53)),
-            Column('factionID', INTEGER()),
-            Column('radius', FLOAT()),
-            schema=schema
-
-
-    )
-
-
-    mapDenormalize =  Table('mapDenormalize', metadata,
-            Column('itemID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('typeID', INTEGER(),index=True),
-            Column('groupID', INTEGER()),
-            Column('solarSystemID', INTEGER(),index=True),
-            Column('constellationID', INTEGER(),index=True),
-            Column('regionID', INTEGER(),index=True),
-            Column('orbitID', INTEGER(),index=True),
-            Column('x', FLOAT(precision=53)),
-            Column('y', FLOAT(precision=53)),
-            Column('z', FLOAT(precision=53)),
-            Column('radius', FLOAT(precision=53)),
-            Column('itemName', VARCHAR(length=100)),
-            Column('security', FLOAT(precision=53)),
-            Column('celestialIndex', INTEGER()),
-            Column('orbitIndex', INTEGER()),
-            schema=schema
-    )
-    Index('mapDenormalize_IX_groupRegion',mapDenormalize.c.groupID,mapDenormalize.c.regionID)
-    Index('mapDenormalize_IX_groupSystem',mapDenormalize.c.groupID,mapDenormalize.c.solarSystemID)
-    Index('mapDenormalize_IX_groupConstellation',mapDenormalize.c.groupID,mapDenormalize.c.constellationID)
-
-
-
-
-    mapJumps =  Table('mapJumps', metadata,
-            Column('stargateID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('destinationID', INTEGER()),
-            schema=schema
-
-
-    )
-
-
-    mapLandmarks =  Table('mapLandmarks', metadata,
-            Column('landmarkID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('landmarkName', VARCHAR(length=100)),
-            Column('description',UnicodeText()),
-            Column('locationID', INTEGER()),
-            Column('x', FLOAT(precision=53)),
-            Column('y', FLOAT(precision=53)),
-            Column('z', FLOAT(precision=53)),
-            Column('iconID', INTEGER()),
-            schema=schema
-
-
-    )
-
-
-    mapLocationScenes =  Table('mapLocationScenes', metadata,
-            Column('locationID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('graphicID', INTEGER()),
-            schema=schema
-
-
-    )
-
-
-    mapLocationWormholeClasses =  Table('mapLocationWormholeClasses', metadata,
-            Column('locationID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('wormholeClassID', INTEGER()),
-            schema=schema
-
-
-    )
-
-
-    mapRegionJumps =  Table('mapRegionJumps', metadata,
-            Column('fromRegionID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('toRegionID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            schema=schema
-
-
-    )
-
-
-    mapRegions =  Table('mapRegions', metadata,
-            Column('regionID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('regionName', VARCHAR(length=100)),
-            Column('x', FLOAT(precision=53)),
-            Column('y', FLOAT(precision=53)),
-            Column('z', FLOAT(precision=53)),
-            Column('xMin', FLOAT(precision=53)),
-            Column('xMax', FLOAT(precision=53)),
-            Column('yMin', FLOAT(precision=53)),
-            Column('yMax', FLOAT(precision=53)),
-            Column('zMin', FLOAT(precision=53)),
-            Column('zMax', FLOAT(precision=53)),
-            Column('factionID', INTEGER()),
-            Column('radius', FLOAT()),
-            schema=schema
-
-
-    )
-
-
-    mapSolarSystemJumps =  Table('mapSolarSystemJumps', metadata,
-            Column('fromRegionID', INTEGER()),
-            Column('fromConstellationID', INTEGER()),
-            Column('fromSolarSystemID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('toSolarSystemID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('toConstellationID', INTEGER()),
-            Column('toRegionID', INTEGER()),
-            schema=schema
-
-
-    )
-
-
-    mapSolarSystems =  Table('mapSolarSystems', metadata,
-            Column('regionID', INTEGER(),index=True),
-            Column('constellationID', INTEGER(),index=True),
-            Column('solarSystemID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('solarSystemName', VARCHAR(length=100)),
-            Column('x', FLOAT(precision=53)),
-            Column('y', FLOAT(precision=53)),
-            Column('z', FLOAT(precision=53)),
-            Column('xMin', FLOAT(precision=53)),
-            Column('xMax', FLOAT(precision=53)),
-            Column('yMin', FLOAT(precision=53)),
-            Column('yMax', FLOAT(precision=53)),
-            Column('zMin', FLOAT(precision=53)),
-            Column('zMax', FLOAT(precision=53)),
-            Column('luminosity', FLOAT(precision=53)),
-            Column('border', Boolean(name='mapss_border')),
-            Column('fringe', Boolean(name='mapss_fringe')),
-            Column('corridor', Boolean(name='mapss_corridor')),
-            Column('hub', Boolean(name='mapss_hub')),
-            Column('international', Boolean(name='mapss_internat')),
-            Column('regional', Boolean(name='mapss_regional')),
-            Column('constellation', Boolean(name='mapss_constel')),
-            Column('security', FLOAT(precision=53),index=True),
-            Column('factionID', INTEGER()),
-            Column('radius', FLOAT(precision=53)),
-            Column('sunTypeID', INTEGER()),
-            Column('securityClass', VARCHAR(length=2)),
-            schema=schema
-    )
-
-
-    mapUniverse =  Table('mapUniverse', metadata,
-            Column('universeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('universeName', VARCHAR(length=100)),
-            Column('x', FLOAT(precision=53)),
-            Column('y', FLOAT(precision=53)),
-            Column('z', FLOAT(precision=53)),
-            Column('xMin', FLOAT(precision=53)),
-            Column('xMax', FLOAT(precision=53)),
-            Column('yMin', FLOAT(precision=53)),
-            Column('yMax', FLOAT(precision=53)),
-            Column('zMin', FLOAT(precision=53)),
-            Column('zMax', FLOAT(precision=53)),
-            Column('radius', FLOAT(precision=53)),
-            schema=schema
-    )
-
-
-    planetSchematics =  Table('planetSchematics', metadata,
-            Column('schematicID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('schematicName', VARCHAR(length=255)),
-            Column('cycleTime', INTEGER()),
-            schema=schema
-    )
-
-
-    planetSchematicsPinMap =  Table('planetSchematicsPinMap', metadata,
-            Column('schematicID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('pinTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            schema=schema
-    )
-
-
-    planetSchematicsTypeMap =  Table('planetSchematicsTypeMap', metadata,
-            Column('schematicID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('quantity', INTEGER()),
-            Column('isInput', Boolean(name='pstm_input')),
-            schema=schema
-    )
-
-
-    ramActivities =  Table('ramActivities', metadata,
-            Column('activityID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('activityName', VARCHAR(length=100)),
-            Column('iconNo', VARCHAR(length=5)),
-            Column('description', VARCHAR(length=1000)),
-            Column('published', Boolean(name='ra_pub')),
-            schema=schema
-    )
-
-
-    ramAssemblyLineStations =  Table('ramAssemblyLineStations', metadata,
-            Column('stationID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('assemblyLineTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('quantity', INTEGER()),
-            Column('stationTypeID', INTEGER()),
-            Column('ownerID', INTEGER(),index=True),
-            Column('solarSystemID', INTEGER(),index=True),
-            Column('regionID', INTEGER(),index=True),
-            schema=schema
-
-
-    )
-
-
-    ramAssemblyLineTypeDetailPerCategory =  Table('ramAssemblyLineTypeDetailPerCategory', metadata,
-            Column('assemblyLineTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('categoryID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('timeMultiplier', FLOAT(precision=53)),
-            Column('materialMultiplier', FLOAT(precision=53)),
-            Column('costMultiplier', FLOAT(precision=53)),
-            schema=schema
-    )
-
-
-    ramAssemblyLineTypeDetailPerGroup =  Table('ramAssemblyLineTypeDetailPerGroup', metadata,
-            Column('assemblyLineTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('groupID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('timeMultiplier', FLOAT(precision=53)),
-            Column('materialMultiplier', FLOAT(precision=53)),
-            Column('costMultiplier', FLOAT(precision=53)),
-            schema=schema
-    )
-
-
-    ramAssemblyLineTypes =  Table('ramAssemblyLineTypes', metadata,
-            Column('assemblyLineTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('assemblyLineTypeName', VARCHAR(length=100)),
-            Column('description', VARCHAR(length=1000)),
-            Column('baseTimeMultiplier', FLOAT(precision=53)),
-            Column('baseMaterialMultiplier', FLOAT(precision=53)),
-            Column('baseCostMultiplier', FLOAT(precision=53)),
-            Column('volume', FLOAT(precision=53)),
-            Column('activityID', INTEGER()),
-            Column('minCostPerHour', FLOAT(precision=53)),
-            schema=schema
-
-
-    )
-
-
-    ramInstallationTypeContents =  Table('ramInstallationTypeContents', metadata,
-            Column('installationTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('assemblyLineTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('quantity', INTEGER()),
-            schema=schema
-
-
-    )
-
-
-    skinLicense =  Table('skinLicense', metadata,
-            Column('licenseTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('duration', INTEGER()),
-            Column('skinID', INTEGER()),
-            schema=schema
-
-
-    )
-
-
-    skinMaterials =  Table('skinMaterials', metadata,
-            Column('skinMaterialID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('displayNameID', INTEGER()),
-            Column('materialSetID', INTEGER()),
-            schema=schema
-
-
-    )
-
-
-    skinShip =  Table('skinShip', metadata,
-            Column('skinID', INTEGER(),index=True),
-            Column('typeID', INTEGER(),index=True),
-            schema=schema
-
-
-    )
-
-
-    skins =  Table('skins', metadata,
-            Column('skinID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('internalName', VARCHAR(length=70)),
-            Column('skinMaterialID', INTEGER()),
-            schema=schema
-
-
-    )
-
-
-    staOperationServices =  Table('staOperationServices', metadata,
-            Column('operationID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('serviceID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            schema=schema
-
-
-    )
-
-
-    staOperations =  Table('staOperations', metadata,
-            Column('activityID', INTEGER()),
-            Column('operationID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('operationName', VARCHAR(length=100)),
-            Column('description', VARCHAR(length=1000)),
-            Column('fringe', INTEGER()),
-            Column('corridor', INTEGER()),
-            Column('hub', INTEGER()),
-            Column('border', INTEGER()),
-            Column('ratio', INTEGER()),
-            Column('caldariStationTypeID', INTEGER()),
-            Column('minmatarStationTypeID', INTEGER()),
-            Column('amarrStationTypeID', INTEGER()),
-            Column('gallenteStationTypeID', INTEGER()),
-            Column('joveStationTypeID', INTEGER()),
-            schema=schema
-
-
-    )
-
-
-    staServices =  Table('staServices', metadata,
-            Column('serviceID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('serviceName', VARCHAR(length=100)),
-            Column('description', VARCHAR(length=1000)),
-            schema=schema
-
-
-    )
-
-
-    staStationTypes =  Table('staStationTypes', metadata,
-            Column('stationTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('dockEntryX', FLOAT(precision=53)),
-            Column('dockEntryY', FLOAT(precision=53)),
-            Column('dockEntryZ', FLOAT(precision=53)),
-            Column('dockOrientationX', FLOAT(precision=53)),
-            Column('dockOrientationY', FLOAT(precision=53)),
-            Column('dockOrientationZ', FLOAT(precision=53)),
-            Column('operationID', INTEGER()),
-            Column('officeSlots', INTEGER()),
-            Column('reprocessingEfficiency', FLOAT(precision=53)),
-            Column('conquerable', Boolean(name='stastat_conq')),
-            schema=schema
-
-
-    )
-
-
-    staStations =  Table('staStations', metadata,
-            Column('stationID', BigInteger, primary_key=True, autoincrement=False, nullable=False),
-            Column('security', FLOAT(precision=53)),
-            Column('dockingCostPerVolume', FLOAT(precision=53)),
-            Column('maxShipVolumeDockable', FLOAT(precision=53)),
-            Column('officeRentalCost', INTEGER()),
-            Column('operationID', INTEGER(),index=True),
-            Column('stationTypeID', INTEGER(),index=True),
-            Column('corporationID', INTEGER(),index=True),
-            Column('solarSystemID', INTEGER(),index=True),
-            Column('constellationID', INTEGER(),index=True),
-            Column('regionID', INTEGER(),index=True),
-            Column('stationName', VARCHAR(length=100)),
-            Column('x', FLOAT(precision=53)),
-            Column('y', FLOAT(precision=53)),
-            Column('z', FLOAT(precision=53)),
-            Column('reprocessingEfficiency', FLOAT(precision=53)),
-            Column('reprocessingStationsTake', FLOAT(precision=53)),
-            Column('reprocessingHangarFlag', INTEGER()),
-            schema=schema
-
-
-    )
-
-
-    translationTables =  Table('translationTables', metadata,
-            Column('sourceTable', VARCHAR(length=200), primary_key=True, autoincrement=False, nullable=False),
-            Column('destinationTable', VARCHAR(length=200)),
-            Column('translatedKey', VARCHAR(length=200), primary_key=True, autoincrement=False, nullable=False),
-            Column('tcGroupID', INTEGER()),
-            Column('tcID', INTEGER()),
-            schema=schema
-
-
-    )
-
-
-    trnTranslationColumns =  Table('trnTranslationColumns', metadata,
-            Column('tcGroupID', INTEGER()),
-            Column('tcID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('tableName', VARCHAR(length=256), nullable=False),
-            Column('columnName', VARCHAR(length=128), nullable=False),
-            Column('masterID', VARCHAR(length=128)),
-            schema=schema
-
-
-    )
-
-
-    trnTranslationLanguages =  Table('trnTranslationLanguages', metadata,
-            Column('numericLanguageID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('languageID', VARCHAR(length=50)),
-            Column('languageName', VARCHAR(length=200)),
-            schema=schema
-
-
-    )
-
-
-    trnTranslations =  Table('trnTranslations', metadata,
-            Column('tcID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('keyID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('languageID', VARCHAR(length=50), primary_key=True, autoincrement=False, nullable=False),
-            Column('text',UnicodeText(), nullable=False),
-            schema=schema
-
-
-    )
-
-
-    warCombatZoneSystems =  Table('warCombatZoneSystems', metadata,
-            Column('solarSystemID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('combatZoneID', INTEGER()),
-            schema=schema
-
-
-    )
-
-
-    warCombatZones =  Table('warCombatZones', metadata,
-            Column('combatZoneID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
-            Column('combatZoneName', VARCHAR(length=100)),
-            Column('factionID', INTEGER()),
-            Column('centerSystemID', INTEGER()),
-            Column('description', VARCHAR(length=500)),
-            schema=schema
-
-
-    )
-
-    return metadata

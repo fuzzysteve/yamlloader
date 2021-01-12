@@ -28,11 +28,11 @@ def importyaml(connection,metadata,sourcePath):
         print(tablename)
         tablevar = sqlalchemy.Table(tablename,metadata)
         print("Importing {}".format(file))
-        print("Opening Yaml")
         trans = connection.begin()
         with open(file,'r') as yamlstream:
+            print("importing {}".format(os.path.basename(yamlstream.name)))
             rows=load(yamlstream,Loader=SafeLoader)
-            print("Yaml Processed into memory")
+            print("{} loaded".format(os.path.basename(yamlstream.name)))
             if rows is not None:
                 for row in rows:
                     try:

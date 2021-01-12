@@ -16,13 +16,11 @@ def importyaml(connection,metadata,sourcePath,language='en'):
     print("Importing dogma attributes")
     dgmAttributes = Table('dgmAttributeTypes',metadata)
     
-    print("opening Yaml")
-        
     trans = connection.begin()
     with open(os.path.join(sourcePath,'fsd','dogmaAttributes.yaml'),'r') as yamlstream:
-        print("importing")
+        print("importing {}".format(os.path.basename(yamlstream.name)))
         dogmaAttributes=load(yamlstream,Loader=SafeLoader)
-        print("Yaml Processed into memory")
+        print("{} loaded".format(os.path.basename(yamlstream.name)))
         for dogmaAttributeID in dogmaAttributes:
           attribute = dogmaAttributes[dogmaAttributeID]
           connection.execute(dgmAttributes.insert(),
