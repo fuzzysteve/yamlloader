@@ -1,6 +1,9 @@
 import requests
 from sqlalchemy import create_engine,MetaData,Table,Column,INTEGER,FLOAT,VARCHAR,UnicodeText,DECIMAL,Boolean,select,literal_column
-import requests_cache
+#import requests_cache
+import redis
+import cachecontrol
+import cachecontrol.caches.redis_cache
 from requests_futures.sessions import FuturesSession
 import requests_futures
 from concurrent.futures import as_completed
@@ -11,9 +14,9 @@ import sys
 
 def getitems(typelist):
     typefuture=[]
-    print "getitems"
+    print("getitems")
     for typeid in typelist:
-        if isinstance(typeid,basestring) and typeid.startswith("https"):
+        if isinstance(typeid,str) and typeid.startswith("https"):
             typefuture.append(session.get(str(typeid)))
         else:
             typefuture.append(session.get(typelookupurl.format(typeid)))
@@ -33,7 +36,9 @@ def getitems(typelist):
                                capacity=itemjson.get('capacity',None),
                                published=itemjson.get('published',False),
                                portionSize=itemjson.get('portion_size',None),
-                               volume=itemjson['volume'])
+                               volume=itemjson.get('volume', None),
+                               packagedVolume=itemjson.get('packaged_volume', None)
+                               )
                 except:
                     pass
             else:
@@ -44,13 +49,14 @@ def getitems(typelist):
                                 groupID=itemjson.get('group_id',None),
                                 published=itemjson.get('published',False),
                                 volume=itemjson.get('volume',None),
+                                packagedVolume=itemjson.get('packaged_volume', None),
                                 capacity=itemjson.get('capacity',None),
                                 portionSize=itemjson.get('portion_size',None),
                                 mass=itemjson.get('mass',None)
                                 )
         else:
             badlist.append(typedata.result().url)
-            print typedata.result().url
+            print(typedata.result().url)
         pbar.update(1)
     return badlist
 
@@ -59,7 +65,7 @@ def getitems(typelist):
 
 
 if len(sys.argv)<2:
-    print "Load.py destination"
+    print("Load.py destination")
     exit()
 
 
@@ -70,13 +76,15 @@ if len(sys.argv)==3:
 else:
     language='en'
 
-import ConfigParser, os
+import configparser, os
 fileLocation = os.path.dirname(os.path.realpath(__file__))
 inifile=fileLocation+'/sdeloader.cfg'
-config = ConfigParser.ConfigParser()
+config = configparser.ConfigParser()
 config.read(inifile)
 destination=config.get('Database',database)
 sourcePath=config.get('Files','sourcePath')
+redis_server=config.get('Redis', 'server')
+redis_db=config.get('Redis', 'db')
 
 schema=None
 if database=="postgresschema":
@@ -100,6 +108,7 @@ invTypes =  Table('invTypes', metadata,
         Column('description',UnicodeText()),
         Column('mass', FLOAT(precision=53)),
         Column('volume', FLOAT(precision=53)),
+        Column('packagedVolume', FLOAT(precision=53)),
         Column('capacity', FLOAT(precision=53)),
         Column('portionSize', INTEGER()),
         Column('raceID', INTEGER()),
@@ -122,9 +131,11 @@ groupurl="https://esi.evetech.net/latest/universe/types/?datasource=tranquility&
 typelookupurl='https://esi.evetech.net/latest/universe/types/{}/'
 
 errorcount=0
-requests_cache.install_cache("item_cache",backend='redis',expire_after=35000)
+#requests_cache.install_cache("item_cache",backend='redis',expire_after=35000)
 
-base_session=requests_cache.core.CachedSession(cache_name="item_cache",backend='redis',expire_after=35000)
+#base_session=requests_cache.core.CachedSession(cache_name="item_cache",backend='redis',expire_after=35000)
+redis_connection = redis.Redis(host=redis_server, db=redis_db, retry_on_timeout=True, health_check_interval=30)
+base_session = cachecontrol.CacheControl(requests.session(), cachecontrol.caches.redis_cache.RedisCache(redis_connection))
 
 
 lookup=select([invTypes])
@@ -135,7 +146,7 @@ sdetypelist=[]
 for typedata in result:
     sdetypelist.append(typedata.typeID)
 
-reqs_num_workers=50
+reqs_num_workers=25
 
 session = FuturesSession(max_workers=reqs_num_workers,session=base_session)
 
@@ -160,10 +171,10 @@ while page<=maxpage:
     groupjson=groups.json()
     maintypelist=maintypelist+groupjson
 
-print "Page variable is {}".format(page)
+print("Page variable is {}".format(page))
 
 firstbadlist=getitems(maintypelist)
-print "Getting badlist"
+print("Getting badlist")
 secondbadlist=getitems(firstbadlist)
 
 

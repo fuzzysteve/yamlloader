@@ -4,10 +4,10 @@ import sqlalchemy
 
 database='mysql'
 
-import ConfigParser, os
+import configparser, os
 fileLocation = os.path.dirname(os.path.realpath(__file__))
 inifile=fileLocation+'/sdeloader.cfg'
-config = ConfigParser.ConfigParser()
+config = configparser.ConfigParser()
 config.read(inifile)
 source=config.get('Database',database)
 
@@ -32,7 +32,7 @@ ws = wb.create_sheet()
 first=True
 for row in result:
     if first:
-        ws.append(row.keys())
+        ws.append(list(row.keys()))
         first=False
     ws.append(list(row))
 

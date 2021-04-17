@@ -2,16 +2,13 @@
 import sys
 import os
 from sqlalchemy import Table
-reload(sys)
-sys.setdefaultencoding("utf-8")
 
 from yaml import load
 try:
 	from yaml import CSafeLoader as SafeLoader
-	print "Using CSafeLoader"
 except ImportError:
 	from yaml import SafeLoader
-	print "Using Python SafeLoader"
+	print("Using Python SafeLoader")
 
 
 def importyaml(connection,metadata,sourcePath):
@@ -19,12 +16,12 @@ def importyaml(connection,metadata,sourcePath):
     certSkills = Table('certSkills',metadata,)
     skillmap={"basic":0,"standard":1,"improved":2,"advanced":3,"elite":4}
 
-    print "Importing Certificates"
-    print "opening Yaml"
+    print("Importing Certificates")
     with open(os.path.join(sourcePath,'fsd','certificates.yaml'),'r') as yamlstream:
+        print("importing {}".format(os.path.basename(yamlstream.name)))
         trans = connection.begin()
         certificates=load(yamlstream,Loader=SafeLoader)
-        print "Yaml Processed into memory"
+        print("{} loaded".format(os.path.basename(yamlstream.name)))
         for certificate in certificates:
             connection.execute(certCerts.insert(),
                             certID=certificate,

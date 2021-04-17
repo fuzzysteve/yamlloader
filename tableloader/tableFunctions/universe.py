@@ -1,14 +1,11 @@
 # -*- coding: utf-8 -*-
 import sys
-reload(sys)
-sys.setdefaultencoding("utf-8")
 from yaml import load, dump
 try:
 	from yaml import CSafeLoader as SafeLoader
-	print "Using CSafeLoader"
 except ImportError:
 	from yaml import SafeLoader
-	print "Using Python SafeLoader"
+	print("Using Python SafeLoader")
 
 import os
 from sqlalchemy import Table,select
@@ -27,7 +24,7 @@ def grouplookup(connection,metadata,typeid):
                 invTypes.select().where( invTypes.c.typeID == typeid )
             ).fetchall()[0]['groupID']
     except:
-        print "Group lookup failed on typeid {}".format(typeid)
+        print("Group lookup failed on typeid {}".format(typeid))
         groupid=-1
     typeidcache[typeid]=groupid
     return groupid
@@ -44,13 +41,13 @@ def get_distance_squared(c1, c2):
 def get_sorted_objects(planet, key):
     with_radius = [(get_distance_squared(obj, planet), obj_id)
                    for (obj_id, obj)
-                   in planet.get(key, {}).items()]
+                   in list(planet.get(key, {}).items())]
     with_radius.sort()
     return [obj_id for (radius, obj_id) in with_radius]
 
 def importyaml(connection,metadata,sourcePath):
 
-    print "Importing Universe Data"
+    print("Importing Universe Data")
 
     mapCelestialStatistics =  Table('mapCelestialStatistics', metadata) #done
     mapConstellations =  Table('mapConstellations', metadata) # done
@@ -79,7 +76,7 @@ def importyaml(connection,metadata,sourcePath):
     regions=glob.glob(os.path.join(sourcePath,'fsd','universe','*','*','region.staticdata'))
     for regionfile in regions:
         head, tail = os.path.split(regionfile)
-        print "Importing Region {}".format(head)
+        print("Importing Region {}".format(head))
         trans = connection.begin()
         with open(regionfile,'r') as yamlstream:
             region=load(yamlstream,Loader=SafeLoader)
@@ -89,7 +86,7 @@ def importyaml(connection,metadata,sourcePath):
             ).fetchall()[0]['itemName']
         except:
             regionname="No Name"
-        print "Region {}".format(regionname)
+        print("Region {}".format(regionname))
         connection.execute(mapRegions.insert(),
                             regionID=region['regionID'],
                             regionName=regionname,
@@ -119,9 +116,9 @@ def importyaml(connection,metadata,sourcePath):
         if  region.get('wormholeClassID'):
             connection.execute(mapLocationWormholeClasses.insert(),
                                 locationID=region['regionID'],
-                                wormholeClassID=region['wormholeClassID']);
+                                wormholeClassID=region['wormholeClassID'])
                             
-        print "Importing Constellations."
+        print("Importing Constellations.")
         constellations=glob.glob(os.path.join(head,'*','constellation.staticdata'))
         for constellationfile in constellations:
             chead, tail = os.path.split(constellationfile)
@@ -133,7 +130,7 @@ def importyaml(connection,metadata,sourcePath):
                 ).fetchall()[0]['itemName']
             except:
                 constellationname="No Constellation name"
-            print "Constellation {}".format(constellationname)
+            print("Constellation {}".format(constellationname))
             connection.execute(mapConstellations.insert(),
                                 regionID=region['regionID'],
                                 constellationID=constellation['constellationID'],
@@ -163,10 +160,10 @@ def importyaml(connection,metadata,sourcePath):
             if  constellation.get('wormholeClassID'):
                 connection.execute(mapLocationWormholeClasses.insert(),
                                 locationID=constellation['constellationID'],
-                                wormholeClassID=constellation['wormholeClassID']);
+                                wormholeClassID=constellation['wormholeClassID'])
 
             systems=glob.glob(os.path.join(chead,'*','solarsystem.staticdata'))
-            print "Importing Systems"
+            print("Importing Systems")
             for systemfile in systems:
                 with open(systemfile,'r') as yamlstream:
                     system=load(yamlstream,Loader=SafeLoader)
@@ -176,7 +173,7 @@ def importyaml(connection,metadata,sourcePath):
                     ).fetchall()[0]['itemName']
                 except:
                     systemname="No System Name"
-                print "System {}".format(systemname)
+                print("System {}".format(systemname))
                 if 'star' in system:
                     starname=connection.execute(
                         invNames.select().where( invNames.c.itemID == system['star']['id'] )
@@ -238,10 +235,10 @@ def importyaml(connection,metadata,sourcePath):
                 if  system.get('wormholeClassID'):
                     connection.execute(mapLocationWormholeClasses.insert(),
                                 locationID=system['solarSystemID'],
-                                wormholeClassID=system['wormholeClassID']);
+                                wormholeClassID=system['wormholeClassID'])
 
 
-                print "Importing Statistics"
+                print("Importing Statistics")
                 if 'star' in system:
                     sstats=system['star'].get('statistics',{})
                     sstats['celestialID']=system['star']['id']
@@ -258,11 +255,11 @@ def importyaml(connection,metadata,sourcePath):
                         mstats=system['planets'][planet]['moons'][moon].get('statistics',{})
                         mstats['celestialID']=moon
                         connection.execute(mapCelestialStatistics.insert(),mstats)
-                print "Importing Stargates"
+                print("Importing Stargates")
                 for stargate in system.get('stargates',[]):
                     jump={'stargateID':stargate,'destinationID':system['stargates'][stargate]['destination']}
                     connection.execute(mapJumps.insert(),jump)
-                print "Importing to mapDenormalize"
+                print("Importing to mapDenormalize")
                 connection.execute(mapDenormalize.insert(),
                                         itemID=system['solarSystemID'],
                                         typeID=5,

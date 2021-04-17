@@ -1,2 +1,12 @@
+CacheControl
+#PyYAML --global-option="--with-libyaml"
+PyYAML
 SQLAlchemy
-PyYAML --global-option="--with-libyaml"
+PyMySQL
+psycopg2
+redis
+requests
+requests-futures
+tqdm
+urllib3
+openpyxl

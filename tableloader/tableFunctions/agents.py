@@ -2,27 +2,25 @@
 from yaml import load, dump
 try:
 	from yaml import CSafeLoader as SafeLoader
-	print "Using CSafeLoader"
 except ImportError:
 	from yaml import SafeLoader
-	print "Using Python SafeLoader"
+	print("Using Python SafeLoader")
 
 import os
 import sys
-reload(sys)
-sys.setdefaultencoding("utf-8")
+#sys.setdefaultencoding("utf-8")
 from sqlalchemy import Table
 
 def importyaml(connection,metadata,sourcePath,language='en'):
     agtAgents = Table('agtAgents',metadata)
     agtAgentsInSpace = Table('agtAgentsInSpace',metadata)
     agtResearchAgents = Table ('agtResearchAgents',metadata)
-    print "Importing Agents"
-    print "opening Yaml"
+    print("Importing Agents")
     with open(os.path.join(sourcePath,'fsd','agents.yaml'),'r') as yamlstream:
+        print("importing {}".format(os.path.basename(yamlstream.name)))
         trans = connection.begin()
         agents=load(yamlstream,Loader=SafeLoader)
-        print "Yaml Processed into memory"
+        print("{} loaded".format(os.path.basename(yamlstream.name)))
         for agentid in agents:
             connection.execute(agtAgents.insert(),
                             agentID=agentid,
@@ -34,12 +32,12 @@ def importyaml(connection,metadata,sourcePath,language='en'):
                             agentTypeID=agents[agentid].get('agentTypeID',None),
                               )
     trans.commit()
-    print "Importing AgentsInSpace"
-    print "opening Yaml"
+    print("Importing AgentsInSpace")
     with open(os.path.join(sourcePath,'fsd','agentsInSpace.yaml'),'r') as yamlstream:
+        print("importing {}".format(os.path.basename(yamlstream.name)))
         trans = connection.begin()
         agents=load(yamlstream,Loader=SafeLoader)
-        print "Yaml Processed into memory"
+        print("{} loaded".format(os.path.basename(yamlstream.name)))
         for agentid in agents:
             connection.execute(agtAgentsInSpace.insert(),
                             agentID=agentid,
@@ -49,12 +47,12 @@ def importyaml(connection,metadata,sourcePath,language='en'):
                             typeID=agents[agentid].get('typeID',None),
                               )
     trans.commit()
-    print "Importing research agents"
-    print "opening Yaml"
+    print("Importing research agents")
     with open(os.path.join(sourcePath,'fsd','researchAgents.yaml'),'r') as yamlstream:
+        print("importing {}".format(os.path.basename(yamlstream.name)))
         trans = connection.begin()
         agents=load(yamlstream,Loader=SafeLoader)
-        print "Yaml Processed into memory"
+        print("{} loaded".format(os.path.basename(yamlstream.name)))
         for agentid in agents:
             for skill in agents[agentid]['skills']:
                 connection.execute(agtResearchAgents.insert(),

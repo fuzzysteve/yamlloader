@@ -2,26 +2,22 @@
 from yaml import load, dump
 try:
 	from yaml import CSafeLoader as SafeLoader
-	print "Using CSafeLoader"
 except ImportError:
 	from yaml import SafeLoader
-	print "Using Python SafeLoader"
+	print("Using Python SafeLoader")
 
 import os
 import sys
-reload(sys)
-sys.setdefaultencoding("utf-8")
 from sqlalchemy import Table
 
 def importyaml(connection,metadata,sourcePath):
     eveGraphics = Table('eveGraphics',metadata)
-    print "Importing Graphics"
-    print "opening Yaml"
+    print("Importing Graphics")
     with open(os.path.join(sourcePath,'fsd','graphicIDs.yaml'),'r') as yamlstream:
-        print "importing"
+        print("importing {}".format(os.path.basename(yamlstream.name)))
         trans = connection.begin()
         graphics=load(yamlstream,Loader=SafeLoader)
-        print "Yaml Processed into memory"
+        print("{} loaded".format(os.path.basename(yamlstream.name)))
         for graphic in graphics:
             connection.execute(eveGraphics.insert(),
                             graphicID=graphic,
