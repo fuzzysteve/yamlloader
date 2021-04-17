@@ -25,7 +25,7 @@ def importyaml(connection,metadata,sourcePath,language='en'):
         for corpid in npccorps:
             connection.execute(crpNPCCorporations.insert(),
                             corporationID=corpid,
-                            description=npccorps[corpid].get('descriptionID',{}).get(language,'').decode('utf-8'),
+                            description=npccorps[corpid].get('descriptionID',{}).get(language,''),
                             iconID=npccorps[corpid].get('iconID'),
                             enemyID=npccorps[corpid].get('enemyID'),
                             factionID=npccorps[corpid].get('factionID'),
@@ -39,6 +39,6 @@ def importyaml(connection,metadata,sourcePath,language='en'):
                               ) 
 #            connection.execute(invNames.insert(),
 #                           itemID=corpid,
-#                           itemName=npccorps[corpid].get('nameID',{}).get(language,'').decode('utf-8'),
+#                           itemName=npccorps[corpid].get('nameID',{}).get(language,'')
 #                          )
     trans.commit()

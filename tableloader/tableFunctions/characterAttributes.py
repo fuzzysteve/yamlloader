@@ -24,7 +24,7 @@ def importyaml(connection,metadata,sourcePath,language='en'):
         for attributeid in characterattributes:
             connection.execute(chrAttributes.insert(),
                             attributeID=attributeid,
-                            attributeName=characterattributes[attributeid].get('nameID',{}).get(language,'').decode('utf-8'),
+                            attributeName=characterattributes[attributeid].get('nameID',{}).get(language,''),
                             description=characterattributes[attributeid].get('description',''),
                             iconID=characterattributes[attributeid].get('iconID',None),
                             notes=characterattributes[attributeid].get('notes',''),

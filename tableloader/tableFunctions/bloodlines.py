@@ -24,8 +24,8 @@ def importyaml(connection,metadata,sourcePath,language='en'):
         for bloodlineid in bloodlines:
             connection.execute(chrBloodlines.insert(),
                             bloodlineID=bloodlineid,
-                            bloodlineName=bloodlines[bloodlineid].get('nameID',{}).get(language,'').decode('utf-8'),
-                            description=bloodlines[bloodlineid].get('descriptionID',{}).get(language,'').decode('utf-8'),
+                            bloodlineName=bloodlines[bloodlineid].get('nameID',{}).get(language,''),
+                            description=bloodlines[bloodlineid].get('descriptionID',{}).get(language,''),
                             iconID=bloodlines[bloodlineid].get('iconID'),
                             corporationID=bloodlines[bloodlineid].get('corporationID'),
                             charisma=bloodlines[bloodlineid].get('charisma'),

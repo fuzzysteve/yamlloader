@@ -24,8 +24,8 @@ def importyaml(connection,metadata,sourcePath,language='en'):
         for ancestryid in characterancestries:
             connection.execute(chrAncestries.insert(),
                             ancestryID=ancestryid,
-                            ancestryName=characterancestries[ancestryid].get('nameID',{}).get(language,'').decode('utf-8'),
-                            description=characterancestries[ancestryid].get('descriptionID',{}).get(language,'').decode('utf-8'),
+                            ancestryName=characterancestries[ancestryid].get('nameID',{}).get(language,''),
+                            description=characterancestries[ancestryid].get('descriptionID',{}).get(language,''),
                             iconID=characterancestries[ancestryid].get('iconID'),
                             bloodlineID=characterancestries[ancestryid].get('bloodlineID'),
                             charisma=characterancestries[ancestryid].get('charisma'),
