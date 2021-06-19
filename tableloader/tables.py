@@ -692,6 +692,15 @@ def metadataCreator(schema):
 
     )
 
+    mapCelestialGraphics = Table('mapCelestialGraphics', metadata,
+            Column('celestialID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+            Column('heightMap1', INTEGER()),
+            Column('heightMap2', INTEGER()),
+            Column('shaderPreset', INTEGER()),
+            Column('population', Boolean()),
+            schema=schema
+    )
+
 
     mapConstellationJumps =  Table('mapConstellationJumps', metadata,
         Column('fromRegionID', INTEGER()),
@@ -814,6 +823,7 @@ def metadataCreator(schema):
             Column('zMin', FLOAT(precision=53)),
             Column('zMax', FLOAT(precision=53)),
             Column('factionID', INTEGER()),
+            Column('nebula', INTEGER()),
             Column('radius', FLOAT()),
             schema=schema
 
