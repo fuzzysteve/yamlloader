@@ -56,6 +56,7 @@ def importyaml(connection,metadata,sourcePath):
     mapSolarSystems =  Table('mapSolarSystems', metadata) # done
     mapJumps =  Table('mapJumps', metadata) # done
     mapLocationScenes =  Table('mapLocationScenes', metadata) # done
+    mapCelestialGraphics =  Table('mapCelestialGraphics', metadata)
     
 
     mapLandmarks =  Table('mapLandmarks', metadata)
@@ -99,6 +100,7 @@ def importyaml(connection,metadata,sourcePath):
                             xMin=region['min'][0],
                             yMin=region['min'][1],
                             zMin=region['min'][2],
+                            nebula=region.get('nebula'),
                             factionID=region.get('factionID'))
         connection.execute(mapDenormalize.insert(),
                             itemID=region['regionID'],
@@ -255,6 +257,19 @@ def importyaml(connection,metadata,sourcePath):
                         mstats=system['planets'][planet]['moons'][moon].get('statistics',{})
                         mstats['celestialID']=moon
                         connection.execute(mapCelestialStatistics.insert(),mstats)
+
+
+                print("Importing Graphics details")
+                for planet in system.get('planets'):
+                    pstats=system['planets'][planet].get('planetAttributes',{})
+                    pstats['celestialID']=planet
+                    connection.execute(mapCelestialGraphics.insert(),pstats)
+                    for moon in system['planets'][planet].get('moons',[]):
+                        mstats=system['planets'][planet]['moons'][moon].get('planetAttributes',{})
+                        mstats['celestialID']=moon
+                        connection.execute(mapCelestialGraphics.insert(),mstats)
+               
+
                 print("Importing Stargates")
                 for stargate in system.get('stargates',[]):
                     jump={'stargateID':stargate,'destinationID':system['stargates'][stargate]['destination']}

@@ -1,28 +1,24 @@
 # -*- coding: utf-8 -*-
 import sys
-import os
-import importlib
-importlib.reload(sys)
-#sys.setdefaultencoding("utf-8")
-from sqlalchemy import Table
 
 from yaml import load
 try:
-	from yaml import CSafeLoader as SafeLoader
-	print("Using CSafeLoader")
+    from yaml import CSafeLoader as SafeLoader
 except ImportError:
-	from yaml import SafeLoader
-	print("Using Python SafeLoader")
+    from yaml import SafeLoader
+    print("Using Python SafeLoader")
 
+import os
+from sqlalchemy import Table
 
 def importyaml(connection,metadata,sourcePath,language='en'):
     print("Importing marketGroups")
     planetSchematics = Table('planetSchematics',metadata)
     planetSchematicsPinMap = Table('planetSchematicsPinMap',metadata)
     planetSchematicsTypeMap = Table('planetSchematicsTypeMap',metadata)
-    
+
     print("opening Yaml")
-        
+
     trans = connection.begin()
     with open(os.path.join(sourcePath,'fsd','planetSchematics.yaml'),'r') as yamlstream:
         print("importing")
@@ -34,7 +30,7 @@ def importyaml(connection,metadata,sourcePath,language='en'):
                             schematicName=schematics[schematicid].get('nameID',{}).get(language,''),
                             cycleTime=schematics[schematicid].get('cycleTime'),
             )
-            for pin in schematics[schematicid].get('pins',{}): 
+            for pin in schematics[schematicid].get('pins',{}):
                 connection.execute(planetSchematicsPinMap.insert(),
                                 schematicID=schematicid,
                                 pinTypeID=pin,
@@ -47,5 +43,5 @@ def importyaml(connection,metadata,sourcePath,language='en'):
                                 quantity=schematics[schematicid]['types'][typeid].get('quantity',0),
                                 isInput=schematics[schematicid]['types'][typeid].get('isInput',False),
                 )
- 
+
     trans.commit()

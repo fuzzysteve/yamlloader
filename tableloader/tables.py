@@ -16,8 +16,8 @@ def metadataCreator(schema):
 		Column('agentType', VARCHAR(length=50)),
 		schema=schema
 	)
-	
-	
+
+
 	agtAgents =  Table('agtAgents', metadata,
 		Column('agentID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 		Column('divisionID', INTEGER()),
@@ -29,7 +29,7 @@ def metadataCreator(schema):
 		Column('isLocator', Boolean(name='aa_isloc')),
 		schema=schema
 	)
-	
+
 	agtAgentsInSpace =  Table('agtAgentsInSpace', metadata,
 		Column('agentID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 		Column('dungeonID', INTEGER()),
@@ -38,14 +38,14 @@ def metadataCreator(schema):
 		Column('typeID', INTEGER()),
 		schema=schema
 	)
-	
+
 	agtResearchAgents =  Table('agtResearchAgents', metadata,
 		Column('agentID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 		Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False,index=True),
 		schema=schema
 	)
-	
-	
+
+
 	certCerts =  Table('certCerts', metadata,
 		Column('certID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 		Column('description',UnicodeText()),
@@ -53,16 +53,16 @@ def metadataCreator(schema):
 		Column('name', VARCHAR(length=255)),
 		schema=schema
 	)
-	
-	
+
+
 	certMasteries =  Table('certMasteries', metadata,
 			Column('typeID', INTEGER()),
 			Column('masteryLevel', INTEGER()),
 			Column('certID', INTEGER()),
 			schema=schema
 	)
-	
-	
+
+
 	certSkills =  Table('certSkills', metadata,
 			Column('certID', INTEGER()),
 			Column('skillID', INTEGER(),index=True),
@@ -71,8 +71,8 @@ def metadataCreator(schema):
 			Column('certLevelText', VARCHAR(length=8)),
 			schema=schema
 	)
-	
-	
+
+
 	chrAncestries =  Table('chrAncestries', metadata,
 			Column('ancestryID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('ancestryName', VARCHAR(length=100)),
@@ -87,8 +87,8 @@ def metadataCreator(schema):
 			Column('shortDescription', VARCHAR(length=500)),
 			schema=schema
 	)
-	
-	
+
+
 	chrAttributes =  Table('chrAttributes', metadata,
 			Column('attributeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('attributeName', VARCHAR(length=100)),
@@ -98,8 +98,8 @@ def metadataCreator(schema):
 			Column('notes', VARCHAR(length=500)),
 			schema=schema
 	)
-	
-	
+
+
 	chrBloodlines =  Table('chrBloodlines', metadata,
 			Column('bloodlineID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('bloodlineName', VARCHAR(length=100)),
@@ -120,8 +120,8 @@ def metadataCreator(schema):
 			Column('shortFemaleDescription', VARCHAR(length=500)),
 			schema=schema
 	)
-	
-	
+
+
 	chrFactions =  Table('chrFactions', metadata,
 			Column('factionID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('factionName', VARCHAR(length=100)),
@@ -136,8 +136,8 @@ def metadataCreator(schema):
 			Column('iconID', INTEGER()),
 			schema=schema
 	)
-	
-	
+
+
 	chrRaces =  Table('chrRaces', metadata,
 			Column('raceID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('raceName', VARCHAR(length=100)),
@@ -146,38 +146,38 @@ def metadataCreator(schema):
 			Column('shortDescription', VARCHAR(length=500)),
 			schema=schema
 	)
-	
-	
+
+
 	crpActivities =  Table('crpActivities', metadata,
 			Column('activityID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('activityName', VARCHAR(length=100)),
 			Column('description', VARCHAR(length=1000)),
 			schema=schema
 	)
-	
-	
+
+
 	crpNPCCorporationDivisions =  Table('crpNPCCorporationDivisions', metadata,
 			Column('corporationID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('divisionID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('size', INTEGER()),
 			schema=schema
 	)
-	
-	
+
+
 	crpNPCCorporationResearchFields =  Table('crpNPCCorporationResearchFields', metadata,
 			Column('skillID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('corporationID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			schema=schema
 	)
-	
-	
+
+
 	crpNPCCorporationTrades =  Table('crpNPCCorporationTrades', metadata,
 			Column('corporationID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			schema=schema
 	)
-	
-	
+
+
 	crpNPCCorporations =  Table('crpNPCCorporations', metadata,
 			Column('corporationID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('size', CHAR(length=1)),
@@ -209,8 +209,8 @@ def metadataCreator(schema):
 			Column('iconID', INTEGER()),
 			schema=schema
 	)
-	
-	
+
+
 	crpNPCDivisions =  Table('crpNPCDivisions', metadata,
 			Column('divisionID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('divisionName', VARCHAR(length=100)),
@@ -218,16 +218,16 @@ def metadataCreator(schema):
 			Column('leaderType', VARCHAR(length=100)),
 			schema=schema
 	)
-	
-	
+
+
 	dgmAttributeCategories =  Table('dgmAttributeCategories', metadata,
 			Column('categoryID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('categoryName', VARCHAR(length=50)),
 			Column('categoryDescription', VARCHAR(length=200)),
 			schema=schema
 	)
-	
-	
+
+
 	dgmAttributeTypes =  Table('dgmAttributeTypes', metadata,
 			Column('attributeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('attributeName', VARCHAR(length=100)),
@@ -242,8 +242,8 @@ def metadataCreator(schema):
 			Column('categoryID', INTEGER()),
 			schema=schema
 	)
-	
-	
+
+
 	dgmEffects =  Table('dgmEffects', metadata,
 			Column('effectID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('effectName', VARCHAR(length=400)),
@@ -275,8 +275,8 @@ def metadataCreator(schema):
 			Column('modifierInfo',UnicodeText()),
 			schema=schema
 	)
-	
-	
+
+
 	dgmExpressions =  Table('dgmExpressions', metadata,
 			Column('expressionID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('operandID', INTEGER()),
@@ -290,8 +290,8 @@ def metadataCreator(schema):
 			Column('expressionAttributeID', INTEGER()),
 			schema=schema
 	)
-	
-	
+
+
 	dgmTypeAttributes =  Table('dgmTypeAttributes', metadata,
 			Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('attributeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False,index=True),
@@ -299,16 +299,16 @@ def metadataCreator(schema):
 			Column('valueFloat', FLOAT()),
 			schema=schema
 	)
-	
-	
+
+
 	dgmTypeEffects =  Table('dgmTypeEffects', metadata,
 			Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('effectID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('isDefault', Boolean(name='dte_default')),
 			schema=schema
 	)
-	
-	
+
+
 	eveGraphics =  Table('eveGraphics', metadata,
 			Column('graphicID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('sofFactionName', VARCHAR(length=100)),
@@ -318,16 +318,16 @@ def metadataCreator(schema):
 			Column('description',UnicodeText()),
 			schema=schema
 	)
-	
-	
+
+
 	eveIcons =  Table('eveIcons', metadata,
 			Column('iconID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('iconFile', VARCHAR(length=500)),
 			Column('description',UnicodeText()),
 			schema=schema
 	)
-	
-	
+
+
 	eveUnits =  Table('eveUnits', metadata,
 			Column('unitID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('unitName', VARCHAR(length=100)),
@@ -335,16 +335,16 @@ def metadataCreator(schema):
 			Column('description', VARCHAR(length=1000)),
 			schema=schema
 	)
-	
-	
+
+
 	industryActivity =  Table('industryActivity', metadata,
 			Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('activityID', INTEGER(), primary_key=True, autoincrement=False, nullable=False,index=True),
 			Column('time', INTEGER()),
 			schema=schema
 	)
-	
-	
+
+
 	industryActivityMaterials =  Table('industryActivityMaterials', metadata,
 			Column('typeID', INTEGER(),index=True),
 			Column('activityID', INTEGER()),
@@ -353,8 +353,8 @@ def metadataCreator(schema):
 			schema=schema
 	)
 	Index('industryActivityMaterials_idx1',industryActivityMaterials.c.typeID,industryActivityMaterials.c.activityID)
-	
-	
+
+
 	industryActivityProbabilities =  Table('industryActivityProbabilities', metadata,
 			Column('typeID', INTEGER(),index=True),
 			Column('activityID', INTEGER()),
@@ -362,8 +362,8 @@ def metadataCreator(schema):
 			Column('probability', DECIMAL(precision=3, scale=2)),
 			schema=schema
 	)
-	
-	
+
+
 	industryActivityProducts =  Table('industryActivityProducts', metadata,
 			Column('typeID', INTEGER(),index=True),
 			Column('activityID', INTEGER()),
@@ -371,8 +371,8 @@ def metadataCreator(schema):
 			Column('quantity', INTEGER()),
 			schema=schema
 	)
-	
-	
+
+
 	industryActivityRaces =  Table('industryActivityRaces', metadata,
 			Column('typeID', INTEGER(),index=True),
 			Column('activityID', INTEGER()),
@@ -380,8 +380,8 @@ def metadataCreator(schema):
 			Column('raceID', INTEGER()),
 			schema=schema
 	)
-	
-	
+
+
 	industryActivitySkills =  Table('industryActivitySkills', metadata,
 			Column('typeID', INTEGER(),index=True),
 			Column('activityID', INTEGER()),
@@ -390,15 +390,15 @@ def metadataCreator(schema):
 			schema=schema
 	)
 	Index('industryActivitySkills_idx1',industryActivitySkills.c.typeID,industryActivitySkills.c.activityID)
-	
-	
+
+
 	industryBlueprints =  Table('industryBlueprints', metadata,
 			Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('maxProductionLimit', INTEGER()),
 			schema=schema
 	)
-	
-	
+
+
 	invCategories =  Table('invCategories', metadata,
 			Column('categoryID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('categoryName', VARCHAR(length=100)),
@@ -406,8 +406,8 @@ def metadataCreator(schema):
 			Column('published', Boolean(name='invcat_published')),
 			schema=schema
 	)
-	
-	
+
+
 	invContrabandTypes =  Table('invContrabandTypes', metadata,
 			Column('factionID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False,index=True),
@@ -417,15 +417,15 @@ def metadataCreator(schema):
 			Column('attackMinSec', FLOAT(precision=53)),
 			schema=schema
 	)
-	
-	
+
+
 	invControlTowerResourcePurposes =  Table('invControlTowerResourcePurposes', metadata,
 			Column('purpose', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('purposeText', VARCHAR(length=100)),
 			schema=schema
 	)
-	
-	
+
+
 	invControlTowerResources =  Table('invControlTowerResources', metadata,
 			Column('controlTowerTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('resourceTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
@@ -435,8 +435,8 @@ def metadataCreator(schema):
 			Column('factionID', INTEGER()),
 			schema=schema
 	)
-	
-	
+
+
 	invFlags =  Table('invFlags', metadata,
 			Column('flagID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('flagName', VARCHAR(length=200)),
@@ -444,8 +444,8 @@ def metadataCreator(schema):
 			Column('orderID', INTEGER()),
 			schema=schema
 	)
-	
-	
+
+
 	invGroups =  Table('invGroups', metadata,
 			Column('groupID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('categoryID', INTEGER(),index=True),
@@ -458,8 +458,8 @@ def metadataCreator(schema):
 			Column('published', Boolean(name='invgroup_published')),
 			schema=schema
 	)
-	
-	
+
+
 	invItems =  Table('invItems', metadata,
 			Column('itemID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('typeID', INTEGER(), nullable=False),
@@ -470,8 +470,8 @@ def metadataCreator(schema):
 			schema=schema
 	)
 	Index('items_IX_OwnerLocation',invItems.c.ownerID,invItems.c.locationID)
-	
-	
+
+
 	invMarketGroups =  Table('invMarketGroups', metadata,
 			Column('marketGroupID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('parentGroupID', INTEGER()),
@@ -481,8 +481,8 @@ def metadataCreator(schema):
 			Column('hasTypes', Boolean(name='invmarketgroups_hastypes')),
 			schema=schema
 	)
-	
-	
+
+
 	invMetaGroups =  Table('invMetaGroups', metadata,
 			Column('metaGroupID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('metaGroupName', VARCHAR(length=100)),
@@ -490,23 +490,23 @@ def metadataCreator(schema):
 			Column('iconID', INTEGER()),
 			schema=schema
 	)
-	
-	
+
+
 	invMetaTypes =  Table('invMetaTypes', metadata,
 			Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('parentTypeID', INTEGER()),
 			Column('metaGroupID', INTEGER()),
 			schema=schema
 	)
-	
-	
+
+
 	invNames =  Table('invNames', metadata,
 			Column('itemID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('itemName', VARCHAR(length=200), nullable=False),
 			schema=schema
 	)
-	
-	
+
+
 	invPositions =  Table('invPositions', metadata,
 			Column('itemID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('x', FLOAT(), nullable=False, default=text(u"'0'")),
@@ -517,8 +517,8 @@ def metadataCreator(schema):
 			Column('roll', FLOAT(precision=24)),
 			schema=schema
 	)
-	
-	
+
+
 	invTraits =  Table('invTraits', metadata,
 			Column('traitID', INTEGER(), primary_key=True, autoincrement=True, nullable=False),
 			Column('typeID', INTEGER()),
@@ -528,16 +528,16 @@ def metadataCreator(schema):
 			Column('unitID', INTEGER()),
 			schema=schema
 	)
-	
-	
+
+
 	invTypeMaterials =  Table('invTypeMaterials', metadata,
 			Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('materialTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('quantity', INTEGER(), nullable=False, default=text(u"'0'")),
 			schema=schema
 	)
-	
-	
+
+
 	invTypeReactions =  Table('invTypeReactions', metadata,
 			Column('reactionTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('input', Boolean(name='invtypereactions_input'), primary_key=True, autoincrement=False, nullable=False),
@@ -545,8 +545,8 @@ def metadataCreator(schema):
 			Column('quantity', INTEGER()),
 			schema=schema
 	)
-	
-	
+
+
 	invTypes =  Table('invTypes', metadata,
 			Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('groupID', INTEGER(),index=True),
@@ -566,8 +566,8 @@ def metadataCreator(schema):
 			Column('graphicID', INTEGER()),
 			schema=schema
 	)
-	
-	
+
+
 	invUniqueNames =  Table('invUniqueNames', metadata,
 			Column('itemID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('itemName', VARCHAR(length=200), nullable=False,index=True,unique=True),
@@ -575,16 +575,16 @@ def metadataCreator(schema):
 			schema=schema
 	)
 	Index('invUniqueNames_IX_GroupName',invUniqueNames.c.groupID,invUniqueNames.c.itemName)
-	
-	
-	
+
+
+
 	invVolumes =  Table('invVolumes', metadata,
 			Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('volume', INTEGER()),
 			schema=schema
 	)
-	
-	
+
+
 	mapCelestialStatistics =  Table('mapCelestialStatistics', metadata,
 			Column('celestialID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('temperature', FLOAT(precision=53)),
@@ -608,8 +608,18 @@ def metadataCreator(schema):
 			Column('mass', INTEGER()),
 			schema=schema
 	)
-	
-	
+
+
+	mapCelestialGraphics =  Table('mapCelestialGraphics', metadata,
+			Column('celestialID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
+			Column('heightMap1', INTEGER()),
+			Column('heightMap2', INTEGER()),
+			Column('shaderPreset', INTEGER()),
+			Column('population', Boolean()),
+			schema=schema
+	)
+
+
 	mapConstellationJumps =  Table('mapConstellationJumps', metadata,
 		Column('fromRegionID', INTEGER()),
 		Column('fromConstellationID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
@@ -617,8 +627,8 @@ def metadataCreator(schema):
 		Column('toRegionID', INTEGER()),
 		schema=schema
 	)
-	
-	
+
+
 	mapConstellations =  Table('mapConstellations', metadata,
 			Column('regionID', INTEGER()),
 			Column('constellationID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
@@ -636,8 +646,8 @@ def metadataCreator(schema):
 			Column('radius', FLOAT()),
 			schema=schema
 	)
-	
-	
+
+
 	mapDenormalize =  Table('mapDenormalize', metadata,
 			Column('itemID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('typeID', INTEGER(),index=True),
@@ -659,15 +669,15 @@ def metadataCreator(schema):
 	Index('mapDenormalize_IX_groupRegion',mapDenormalize.c.groupID,mapDenormalize.c.regionID)
 	Index('mapDenormalize_IX_groupSystem',mapDenormalize.c.groupID,mapDenormalize.c.solarSystemID)
 	Index('mapDenormalize_IX_groupConstellation',mapDenormalize.c.groupID,mapDenormalize.c.constellationID)
-	
-	
+
+
 	mapJumps =  Table('mapJumps', metadata,
 			Column('stargateID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('destinationID', INTEGER()),
 			schema=schema
 	)
-	
-	
+
+
 	mapLandmarks =  Table('mapLandmarks', metadata,
 			Column('landmarkID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('landmarkName', VARCHAR(length=100)),
@@ -679,29 +689,29 @@ def metadataCreator(schema):
 			Column('iconID', INTEGER()),
 			schema=schema
 	)
-	
-	
+
+
 	mapLocationScenes =  Table('mapLocationScenes', metadata,
 			Column('locationID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('graphicID', INTEGER()),
 			schema=schema
 	)
-	
-	
+
+
 	mapLocationWormholeClasses =  Table('mapLocationWormholeClasses', metadata,
 			Column('locationID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('wormholeClassID', INTEGER()),
 			schema=schema
 	)
-	
-	
+
+
 	mapRegionJumps =  Table('mapRegionJumps', metadata,
 			Column('fromRegionID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('toRegionID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			schema=schema
 	)
-	
-	
+
+
 	mapRegions =  Table('mapRegions', metadata,
 			Column('regionID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('regionName', VARCHAR(length=100)),
@@ -715,11 +725,12 @@ def metadataCreator(schema):
 			Column('zMin', FLOAT(precision=53)),
 			Column('zMax', FLOAT(precision=53)),
 			Column('factionID', INTEGER()),
+			Column('nebula', INTEGER()),
 			Column('radius', FLOAT()),
 			schema=schema
 	)
-	
-	
+
+
 	mapSolarSystemJumps =  Table('mapSolarSystemJumps', metadata,
 			Column('fromRegionID', INTEGER()),
 			Column('fromConstellationID', INTEGER()),
@@ -729,8 +740,8 @@ def metadataCreator(schema):
 			Column('toRegionID', INTEGER()),
 			schema=schema
 	)
-	
-	
+
+
 	mapSolarSystems =  Table('mapSolarSystems', metadata,
 			Column('regionID', INTEGER(),index=True),
 			Column('constellationID', INTEGER(),index=True),
@@ -760,8 +771,8 @@ def metadataCreator(schema):
 			Column('securityClass', VARCHAR(length=2)),
 			schema=schema
 	)
-	
-	
+
+
 	mapUniverse =  Table('mapUniverse', metadata,
 			Column('universeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('universeName', VARCHAR(length=100)),
@@ -777,23 +788,23 @@ def metadataCreator(schema):
 			Column('radius', FLOAT(precision=53)),
 			schema=schema
 	)
-	
-	
+
+
 	planetSchematics =  Table('planetSchematics', metadata,
 			Column('schematicID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('schematicName', VARCHAR(length=255)),
 			Column('cycleTime', INTEGER()),
 			schema=schema
 	)
-	
-	
+
+
 	planetSchematicsPinMap =  Table('planetSchematicsPinMap', metadata,
 			Column('schematicID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('pinTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			schema=schema
 	)
-	
-	
+
+
 	planetSchematicsTypeMap =  Table('planetSchematicsTypeMap', metadata,
 			Column('schematicID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('typeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
@@ -801,8 +812,8 @@ def metadataCreator(schema):
 			Column('isInput', Boolean(name='pstm_input')),
 			schema=schema
 	)
-	
-	
+
+
 	ramActivities =  Table('ramActivities', metadata,
 			Column('activityID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('activityName', VARCHAR(length=100)),
@@ -811,8 +822,8 @@ def metadataCreator(schema):
 			Column('published', Boolean(name='ra_pub')),
 			schema=schema
 	)
-	
-	
+
+
 	ramAssemblyLineStations =  Table('ramAssemblyLineStations', metadata,
 			Column('stationID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('assemblyLineTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
@@ -822,11 +833,11 @@ def metadataCreator(schema):
 			Column('solarSystemID', INTEGER(),index=True),
 			Column('regionID', INTEGER(),index=True),
 			schema=schema
-	
-	
+
+
 	)
-	
-	
+
+
 	ramAssemblyLineTypeDetailPerCategory =  Table('ramAssemblyLineTypeDetailPerCategory', metadata,
 			Column('assemblyLineTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('categoryID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
@@ -835,8 +846,8 @@ def metadataCreator(schema):
 			Column('costMultiplier', FLOAT(precision=53)),
 			schema=schema
 	)
-	
-	
+
+
 	ramAssemblyLineTypeDetailPerGroup =  Table('ramAssemblyLineTypeDetailPerGroup', metadata,
 			Column('assemblyLineTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('groupID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
@@ -845,8 +856,8 @@ def metadataCreator(schema):
 			Column('costMultiplier', FLOAT(precision=53)),
 			schema=schema
 	)
-	
-	
+
+
 	ramAssemblyLineTypes =  Table('ramAssemblyLineTypes', metadata,
 			Column('assemblyLineTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('assemblyLineTypeName', VARCHAR(length=100)),
@@ -858,69 +869,69 @@ def metadataCreator(schema):
 			Column('activityID', INTEGER()),
 			Column('minCostPerHour', FLOAT(precision=53)),
 			schema=schema
-	
-	
+
+
 	)
-	
-	
+
+
 	ramInstallationTypeContents =  Table('ramInstallationTypeContents', metadata,
 			Column('installationTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('assemblyLineTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('quantity', INTEGER()),
 			schema=schema
-	
-	
+
+
 	)
-	
-	
+
+
 	skinLicense =  Table('skinLicense', metadata,
 			Column('licenseTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('duration', INTEGER()),
 			Column('skinID', INTEGER()),
 			schema=schema
-	
-	
+
+
 	)
-	
-	
+
+
 	skinMaterials =  Table('skinMaterials', metadata,
 			Column('skinMaterialID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('displayNameID', INTEGER()),
 			Column('materialSetID', INTEGER()),
 			schema=schema
-	
-	
+
+
 	)
-	
-	
+
+
 	skinShip =  Table('skinShip', metadata,
 			Column('skinID', INTEGER(),index=True),
 			Column('typeID', INTEGER(),index=True),
 			schema=schema
-	
-	
+
+
 	)
-	
-	
+
+
 	skins =  Table('skins', metadata,
 			Column('skinID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('internalName', VARCHAR(length=70)),
 			Column('skinMaterialID', INTEGER()),
 			schema=schema
-	
-	
+
+
 	)
-	
-	
+
+
 	staOperationServices =  Table('staOperationServices', metadata,
 			Column('operationID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('serviceID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			schema=schema
-	
-	
+
+
 	)
-	
-	
+
+
 	staOperations =  Table('staOperations', metadata,
 			Column('activityID', INTEGER()),
 			Column('operationID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
@@ -937,21 +948,21 @@ def metadataCreator(schema):
 			Column('gallenteStationTypeID', INTEGER()),
 			Column('joveStationTypeID', INTEGER()),
 			schema=schema
-	
-	
+
+
 	)
-	
-	
+
+
 	staServices =  Table('staServices', metadata,
 			Column('serviceID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('serviceName', VARCHAR(length=100)),
 			Column('description', VARCHAR(length=1000)),
 			schema=schema
-	
-	
+
+
 	)
-	
-	
+
+
 	staStationTypes =  Table('staStationTypes', metadata,
 			Column('stationTypeID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('dockEntryX', FLOAT(precision=53)),
@@ -966,8 +977,8 @@ def metadataCreator(schema):
 			Column('conquerable', Boolean(name='stastat_conq')),
 			schema=schema
 	)
-	
-	
+
+
 	staStations =  Table('staStations', metadata,
 			Column('stationID', BigInteger, primary_key=True, autoincrement=False, nullable=False),
 			Column('security', FLOAT(precision=53)),
@@ -989,8 +1000,8 @@ def metadataCreator(schema):
 			Column('reprocessingHangarFlag', INTEGER()),
 			schema=schema
 	)
-	
-	
+
+
 	translationTables =  Table('translationTables', metadata,
 			Column('sourceTable', VARCHAR(length=200), primary_key=True, autoincrement=False, nullable=False),
 			Column('destinationTable', VARCHAR(length=200)),
@@ -999,8 +1010,8 @@ def metadataCreator(schema):
 			Column('tcID', INTEGER()),
 			schema=schema
 	)
-	
-	
+
+
 	trnTranslationColumns =  Table('trnTranslationColumns', metadata,
 			Column('tcGroupID', INTEGER()),
 			Column('tcID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
@@ -1009,16 +1020,16 @@ def metadataCreator(schema):
 			Column('masterID', VARCHAR(length=128)),
 			schema=schema
 	)
-	
-	
+
+
 	trnTranslationLanguages =  Table('trnTranslationLanguages', metadata,
 			Column('numericLanguageID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('languageID', VARCHAR(length=50)),
 			Column('languageName', VARCHAR(length=200)),
 			schema=schema
 	)
-	
-	
+
+
 	trnTranslations =  Table('trnTranslations', metadata,
 			Column('tcID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('keyID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
@@ -1026,15 +1037,15 @@ def metadataCreator(schema):
 			Column('text',UnicodeText(), nullable=False),
 			schema=schema
 	)
-	
-	
+
+
 	warCombatZoneSystems =  Table('warCombatZoneSystems', metadata,
 			Column('solarSystemID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('combatZoneID', INTEGER()),
 			schema=schema
 	)
-	
-	
+
+
 	warCombatZones =  Table('warCombatZones', metadata,
 			Column('combatZoneID', INTEGER(), primary_key=True, autoincrement=False, nullable=False),
 			Column('combatZoneName', VARCHAR(length=100)),
@@ -1043,5 +1054,5 @@ def metadataCreator(schema):
 			Column('description', VARCHAR(length=500)),
 			schema=schema
 	)
-	
+
 	return metadata

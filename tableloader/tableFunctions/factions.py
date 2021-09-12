@@ -24,8 +24,8 @@ def importyaml(connection,metadata,sourcePath,language='en'):
         for factionid in characterfactions:
             connection.execute(chrFactions.insert(),
                             factionID=factionid,
-                            factionName=characterfactions[factionid].get('nameID',{}).get(language,''),
-                            description=characterfactions[factionid].get('descriptionID',{}).get(language,''),
+                            factionName=characterfactions[factionid].get('nameID',{}).get(language,'en'),
+                            description=characterfactions[factionid].get('descriptionID',{}).get(language,'en'),
                             iconID=characterfactions[factionid].get('iconID'),
                             raceIDs=characterfactions[factionid].get('memberRaces',[0])[0],
                             solarSystemID=characterfactions[factionid].get('solarSystemID'),

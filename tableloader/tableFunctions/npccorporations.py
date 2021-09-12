@@ -39,6 +39,6 @@ def importyaml(connection,metadata,sourcePath,language='en'):
                               ) 
 #            connection.execute(invNames.insert(),
 #                           itemID=corpid,
-#                           itemName=npccorps[corpid].get('nameID',{}).get(language,'')
+#                           itemName=npccorps[corpid].get('nameID',{}).get(language,''),
 #                          )
     trans.commit()
