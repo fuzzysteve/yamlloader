@@ -268,7 +268,7 @@ def importyaml(connection,metadata,sourcePath):
                         mstats=system['planets'][planet]['moons'][moon].get('planetAttributes',{})
                         mstats['celestialID']=moon
                         connection.execute(mapCelestialGraphics.insert(),mstats)
-               
+
 
                 print("Importing Stargates")
                 for stargate in system.get('stargates',[]):

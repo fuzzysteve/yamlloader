@@ -34,5 +34,5 @@ def importyaml(connection,metadata,sourcePath,language='en'):
                             perception=bloodlines[bloodlineid].get('perception'),
                             raceID=bloodlines[bloodlineid].get('raceID'),
                             shipTypeID=bloodlines[bloodlineid].get('shipTypeID'),
-                              ) 
+                            ) 
     trans.commit()

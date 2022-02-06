@@ -4,9 +4,9 @@
 
 
 DATE=$(date +%Y%m%d)
-BASE_DIR=/opt
 SCRIPT_PATH=$(realpath -s ${BASH_SOURCE})
 SCRIPT_DIR=$(dirname ${SCRIPT_PATH})
+BASE_DIR=${SCRIPT_DIR}/data
 
 SDE_SOURCE="https://eve-static-data-export.s3-eu-west-1.amazonaws.com/tranquility/sde.zip"
 SDE_DEST=${BASE_DIR}/sde.zip
