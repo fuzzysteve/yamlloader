@@ -1,9 +1,6 @@
 import requests
+from requests_cache import CachedSession
 from sqlalchemy import create_engine,MetaData,Table,Column,INTEGER,FLOAT,VARCHAR,UnicodeText,DECIMAL,Boolean,select,literal_column
-#import requests_cache
-import redis
-import cachecontrol
-import cachecontrol.caches.redis_cache
 from requests_futures.sessions import FuturesSession
 import requests_futures
 from concurrent.futures import as_completed
@@ -114,11 +111,8 @@ groupurl="https://esi.evetech.net/latest/universe/groups/?datasource=tranquility
 grouplookupurl='https://esi.evetech.net/latest/universe/groups/{}/'
 
 errorcount=0
-#requests_cache.install_cache("group_cache",backend='redis',expire_after=35000)
 
-#base_session=requests_cache.core.CachedSession(cache_name="item_cache",backend='redis',expire_after=35000)
-redis_connection = redis.Redis(host=redis_server, db=redis_db, retry_on_timeout=True, health_check_interval=30)
-base_session = cachecontrol.CacheControl(requests.session(), cachecontrol.caches.redis_cache.RedisCache(redis_connection))
+base_session = CachedSession("evesde", backend="redis")
 
 
 lookup=select([invGroups])

@@ -3,6 +3,7 @@
 ## this is the script I run to build everything. It will not be directly useful for you. 
 
 
+set -x
 DATE=$(date +%Y%m%d)
 SCRIPT_PATH=$(realpath -s ${BASH_SOURCE})
 SCRIPT_DIR=$(dirname ${SCRIPT_PATH})
@@ -22,19 +23,16 @@ OUTPUT_DIR="/home/web/fuzzwork"
 cd ${BASE_DIR}
 
 
-STATUS=$(curl -s -I -o /dev/null -w "%{http_code}" ${SDE_SOURCE})
-if [ $STATUS -eq 404 ]
-   then
+SDE_STATUS=$(curl -s -I -o /dev/null -w "%{http_code}" ${SDE_SOURCE})
+if [ $SDE_STATUS -eq 404 ]; then
     echo "no file on server"
     exit
 fi
 
 
-if [ -f ${SDE_DEST} ]
-then
+if [ -f ${SDE_DEST} && ! -d ${SDE_DIR} ]; then
 	unzip -qq -t ${SDE_DEST} > /dev/null 2>&1
-	if [ $? != 0 ]
-	then
+	if [ $? != 0 ]; then
 		echo "\"${SDE_DEST}\" invalid, downloading replacement"
 		rm ${SDE_DEST} ${SDE_DIR}/etag
 	fi
@@ -42,52 +40,55 @@ fi
 
 
 SDE_ETAG=$(curl -s -I ${SDE_SOURCE} | grep ETag)
-if [ -f ${SDE_DIR}/etag ]
-then
+SDE_ETAG_MATCH=0
+if [ -f ${SDE_DIR}/etag ]; then
 	OLD_ETAG=$(cat ${SDE_DIR}/etag)
-
-	if [ "$SDE_ETAG" = "$OLD_ETAG" ]
-	then
-		echo "No etag change"
-		exit
+	if [ "$SDE_ETAG" = "$OLD_ETAG" ]; then
+		SDE_ETAG_MATCH=1
 	fi
 fi
 
-
-echo "downloading \"${SDE_SOURCE}\" to \"${SDE_DEST}\""
-rm -f ${SDE_DEST}
-curl -s -o ${SDE_DEST} ${SDE_SOURCE}
-if [ $? != 0 ]
-then
-	echo "Download failed"
-	exit
+if [ ${SDE_ETAG_MATCH} > 0 ]; then
+	echo "No etag change"
+	#exit
 fi
 
-if [ -f ${SDE_DEST} ]
-then
-	echo "unzipping"
-	unzip -u -o ${SDE_DEST}
-	if [ $? != 0 ]
-	then
-		echo "unzip failed"
+
+if [ ${SDE_ETAG_MATCH} = 0 ]; then
+	echo "downloading \"${SDE_SOURCE}\" to \"${SDE_DEST}\""
+	rm -f ${SDE_DEST}
+	curl -s -o ${SDE_DEST} ${SDE_SOURCE}
+	if [ $? != 0 ]; then
+		echo "Download failed"
 		exit
 	fi
+	
+	if [ -f ${SDE_DEST} ]; then
+		echo "unzipping"
+		unzip -u -o ${SDE_DEST}
+		if [ $? != 0 ]; then
+			echo "unzip failed"
+			exit
+		fi
+	fi
+	echo "$SDE_ETAG" > ${SDE_DIR}/etag
 fi
-echo "$SDE_ETAG" > ${SDE_DIR}/etag
 
 
 cd ${SDE_DIR}
 
 
-if [ -d ${SDE_DIR}/.git ]
-then
+if [ ! -d ${SDE_DIR}/.git ]; then
+    (cd ${SDE_DIR} && git init)
+fi
+
+if [ -d ${SDE_DIR}/.git ]; then
 	echo "git add"
 	git add -A .
 	echo "git commit"
 	git commit -m "$DATE update"
 	git ls-remote >/dev/null 2>&1
-	if [ $? = 0 ]
-	then
+	if [ $? = 0 ]; then
 		echo "git push"
 		git push origin master
 	fi
@@ -96,21 +97,18 @@ else
 fi
 
 
-if [ ! -d ${BASE_DIR}/env ]
-then
+if [ ! -d ${BASE_DIR}/env ]; then
 	python3 -m venv ${BASE_DIR}/env
 	. ${BASE_DIR}/env/bin/activate
 	pip install -U pip wheel setuptools
-	if [ -r ${SCRIPT_DIR}/requirements.txt ]
-	then
+	if [ -r ${SCRIPT_DIR}/requirements.txt ]; then
 		pip install -U --prefer-binary -r ${SCRIPT_DIR}/requirements.txt
 	fi
 	deactivate
 fi
 
 
-if [ -f ${BASE_DIR}/env/bin/activate ]
-then
+if [ -f ${BASE_DIR}/env/bin/activate ]; then
 	. ${BASE_DIR}/env/bin/activate
 fi
 
@@ -118,8 +116,8 @@ fi
 cd ${SCRIPT_DIR}
 
 
-for DRIVER in "sqlite" "mysql" "postgres" "postgresschema"
-do
+#for DRIVER in "sqlite" "mysql" "postgres" "postgresschema"; do
+for DRIVER in "sqlite" "mysql" "postgres" ; do
 	echo "${DRIVER}"
 	python Load.py ${DRIVER} >${DRIVER}.log
 	python getitems-esi.py ${DRIVER} >>${DRIVER}.log
@@ -132,8 +130,7 @@ python TypesToJson.py >typestojson.log
 python exportTypesxlsx.py
 
 
-if [ -d ${OUTPUT_DIR} ]
-then
+if [ -d ${OUTPUT_DIR} ]; then
 	echo "exporting"
 	cd ${OUTPUT_DIR}/htdocs/dump/
 	mkdir sde-$DATE-TRANQUILITY

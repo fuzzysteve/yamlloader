@@ -1,12 +1,8 @@
 import requests
 from sqlalchemy import create_engine,MetaData,Table,Column,INTEGER,FLOAT,VARCHAR,UnicodeText,DECIMAL,Boolean,select,literal_column
-#import requests_cache
-from requests_futures.sessions import FuturesSession
-import requests_futures
-from concurrent.futures import as_completed
 
-from tqdm import tqdm
 import sys
+import os
 
 
 def getfactions():

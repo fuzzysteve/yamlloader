@@ -1,10 +1,7 @@
 import requests
 from sqlalchemy import create_engine,MetaData,Table,Column,INTEGER,FLOAT,VARCHAR,UnicodeText,DECIMAL,Boolean,select,literal_column,CHAR
-import cachecontrol
-import cachecontrol.caches.redis_cache
-import redis
+from requests_cache import CachedSession
 from requests_futures.sessions import FuturesSession
-import requests_futures
 from concurrent.futures import as_completed
 
 from tqdm import tqdm
@@ -16,7 +13,7 @@ def getcorps(corplist):
     print("get corps")
     for corpid in corplist:
         if isinstance(corpid,str) and corpid.startswith("https"):
-            corpfputure.append(session.get(str(corpid)))
+            corpfuture.append(session.get(str(corpid)))
         else:
             corpfuture.append(session.get(corplookupurl.format(corpid)))
     badlist=[]
@@ -35,8 +32,8 @@ def getcorps(corplist):
                             description=corpjson.get('description',None),
                             )
         else:
-            badlist.append(typedata.result().url)
-            print(typedata.result().url)
+            badlist.append(corpdata.result().url)
+            print(corpdata.result().url)
         pbar.update(1)
     return badlist
 
@@ -130,8 +127,7 @@ corplookupurl='https://esi.evetech.net/latest/corporations/{}/?datasource=tranqu
 
 errorcount=0
 
-redis_connection = redis.Redis(host=redis_server, db=redis_db, retry_on_timeout=True, health_check_interval=30)
-base_session = cachecontrol.CacheControl(requests.session(), cachecontrol.caches.redis_cache.RedisCache(redis_connection))
+base_session = CachedSession("evesde", backend="redis")
 
 
 reqs_num_workers=50
