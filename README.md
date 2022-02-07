@@ -21,7 +21,7 @@ For PostgreSQL, you will also need:
 
     brew install psycopg2
 
-## Ubunutu 20
+## Ubuntu 20
 
     sudo update
     sudo -y dist-upgrade
