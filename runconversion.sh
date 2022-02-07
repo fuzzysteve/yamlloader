@@ -50,7 +50,7 @@ fi
 
 if [ ${SDE_ETAG_MATCH} > 0 ]; then
 	echo "No etag change"
-	#exit
+	exit
 fi
 
 
