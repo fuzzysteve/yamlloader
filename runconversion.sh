@@ -30,9 +30,9 @@ if [ $SDE_STATUS -eq 404 ]; then
 fi
 
 
-if [ -f ${SDE_DEST} && ! -d ${SDE_DIR} ]; then
+if [ -f ${SDE_DEST} ] && ! [ -d ${SDE_DIR} ]; then
 	unzip -qq -t ${SDE_DEST} > /dev/null 2>&1
-	if [ $? != 0 ]; then
+	if [ $? -ne 0 ]; then
 		echo "\"${SDE_DEST}\" invalid, downloading replacement"
 		rm ${SDE_DEST} ${SDE_DIR}/etag
 	fi
@@ -43,22 +43,24 @@ SDE_ETAG=$(curl -s -I ${SDE_SOURCE} | grep ETag)
 SDE_ETAG_MATCH=0
 if [ -f ${SDE_DIR}/etag ]; then
 	OLD_ETAG=$(cat ${SDE_DIR}/etag)
-	if [ "$SDE_ETAG" = "$OLD_ETAG" ]; then
+	if [ "$SDE_ETAG" == "$OLD_ETAG" ]; then
 		SDE_ETAG_MATCH=1
+	else
+		echo "New ETag: ${SDE_ETAG}"
 	fi
 fi
 
-if [ ${SDE_ETAG_MATCH} > 0 ]; then
+if [ ${SDE_ETAG_MATCH} -gt 0 ]; then
 	echo "No etag change"
 	exit
 fi
 
 
-if [ ${SDE_ETAG_MATCH} = 0 ]; then
+if [ ${SDE_ETAG_MATCH} -eq 0 ]; then
 	echo "downloading \"${SDE_SOURCE}\" to \"${SDE_DEST}\""
 	rm -f ${SDE_DEST}
 	curl -s -o ${SDE_DEST} ${SDE_SOURCE}
-	if [ $? != 0 ]; then
+	if [ $? -ne 0 ]; then
 		echo "Download failed"
 		exit
 	fi
@@ -66,7 +68,7 @@ if [ ${SDE_ETAG_MATCH} = 0 ]; then
 	if [ -f ${SDE_DEST} ]; then
 		echo "unzipping"
 		unzip -u -o ${SDE_DEST}
-		if [ $? != 0 ]; then
+		if [ $? -ne 0 ]; then
 			echo "unzip failed"
 			exit
 		fi
