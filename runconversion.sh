@@ -3,7 +3,6 @@
 ## this is the script I run to build everything. It will not be directly useful for you. 
 
 
-set -x
 DATE=$(date +%Y%m%d)
 SCRIPT_PATH=$(realpath -s ${BASH_SOURCE})
 SCRIPT_DIR=$(dirname ${SCRIPT_PATH})
