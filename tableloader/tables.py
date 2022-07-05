@@ -588,6 +588,7 @@ def metadataCreator(schema):
                                  sa.Column('zMin', sa.FLOAT(precision=53)),
                                  sa.Column('zMax', sa.FLOAT(precision=53)),
                                  sa.Column('factionID', sa.INTEGER()),
+                                 sa.Column('nebula', sa.INTEGER()),
                                  sa.Column('radius', sa.FLOAT()),
                                  schema=schema
                                  )
