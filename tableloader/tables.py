@@ -288,7 +288,7 @@ def metadataCreator(schema):
     eveGraphics = sa.Table('eveGraphics', metadata,
                            sa.Column('graphicID', sa.INTEGER(), primary_key=True, autoincrement=False, nullable=False),
                            sa.Column('sofFactionName', sa.VARCHAR(length=100)),
-                           sa.Column('graphicFile', sa.VARCHAR(length=100)),
+                           sa.Column('graphicFile', sa.VARCHAR(length=500)),
                            sa.Column('sofHullName', sa.VARCHAR(length=100)),
                            sa.Column('sofRaceName', sa.VARCHAR(length=100)),
                            sa.Column('description', sa.UnicodeText()),
