@@ -1,5 +1,5 @@
 CacheControl==0.12.6
-certifi==2019.6.16
+certifi==2022.12.7
 chardet==3.0.4
 discord-webhook==0.13.0
 et-xmlfile==1.0.1
