@@ -1,42 +1,39 @@
-# -*- coding: utf-8 -*-
-import sys
 import os
-reload(sys)
-sys.setdefaultencoding("utf-8")
-from sqlalchemy import Table
+import sys
+import typing
 
+import sqlalchemy.exc
+from sqlalchemy import Table
 from yaml import load
+
 try:
 	from yaml import CSafeLoader as SafeLoader
-	print "Using CSafeLoader"
 except ImportError:
 	from yaml import SafeLoader
-	print "Using Python SafeLoader"
+	print("Using Python SafeLoader")
 
 
 def importyaml(connection,metadata,sourcePath,language='en'):
-    print "Importing Categories"
-    invCategories = Table('invCategories',metadata)
-    trnTranslations = Table('trnTranslations',metadata)
+    print("Importing Categories")
+    invCategories = Table('invCategories',metadata, autoload_with=connection)
+    trnTranslations = Table('trnTranslations',metadata, autoload_with=connection)
     
-    print "opening Yaml"
-        
     trans = connection.begin()
-    with open(os.path.join(sourcePath,'fsd','categoryIDs.yaml'),'r') as yamlstream:
-        print "importing"
-        categoryids=load(yamlstream,Loader=SafeLoader)
-        print "Yaml Processed into memory"
-        for categoryid in categoryids:
-            connection.execute(invCategories.insert(),
+    with open(os.path.join(sourcePath,'fsd','categoryIDs.yaml')) as yamlstream:
+        print(f"importing {os.path.basename(yamlstream.name)}")
+        categoryids: dict[int, dict] = load(yamlstream,Loader=SafeLoader)
+        print(f"{os.path.basename(yamlstream.name)} loaded")
+        for categoryid, categorydata in categoryids.items():
+            connection.execute(invCategories.insert().values(
                             categoryID=categoryid,
-                            categoryName=categoryids[categoryid].get('name',{}).get(language,'').decode('utf-8'),
-                            iconID=categoryids[categoryid].get('iconID'),
-                            published=categoryids[categoryid].get('published',0))
+                            categoryName=categorydata.get('name',{}).get(language,''),
+                            iconID=categorydata.get('iconID', 0),
+                            published=categorydata.get('published',0)))
             
-            if (categoryids[categoryid].has_key('name')):
-                for lang in categoryids[categoryid]['name']:
+            if 'name' in categorydata.keys():
+                for lang in categorydata['name']:
                     try:
-                        connection.execute(trnTranslations.insert(),tcID=6,keyID=categoryid,languageID=lang,text=categoryids[categoryid]['name'][lang].decode('utf-8'));
+                        connection.execute(trnTranslations.insert().values(tcID=6,keyID=categoryid,languageID=lang,text=categoryids[categoryid]['name'][lang]))
                     except:                        
-                        print '{} {} has a category problem'.format(categoryid,lang)
+                        print(f'{categoryid} {lang} has a category problem')
     trans.commit()

@@ -1,36 +1,42 @@
-# -*- coding: utf-8 -*-
 import sys
-reload(sys)
-sys.setdefaultencoding("utf-8")
 import os
 import glob
-from sqlalchemy import Table
+import sqlalchemy
+import sqlalchemy.exc
+#from sqlalchemy import Table
 
 from yaml import load
 try:
 	from yaml import CSafeLoader as SafeLoader
-	print "Using CSafeLoader"
 except ImportError:
 	from yaml import SafeLoader
-	print "Using Python SafeLoader"
+	print("Using Python SafeLoader")
 
-def importyaml(connection,metadata,sourcePath):
+def importyaml(connection: sqlalchemy.Connection, metadata: sqlalchemy.MetaData, sourcePath: os.PathLike):
 
-    print "Importing BSD Tables"
+    print("Importing BSD Tables")
 
     files=glob.glob(os.path.join(sourcePath,'bsd','*.yaml'))
     for file in files:
         head, tail = os.path.split(file)
         tablename=tail.split('.')[0]
-        print tablename
-        tablevar = Table(tablename,metadata)
-        print "Importing {}".format(file)
-        print "Opening Yaml"
+
+        if tablename[:3] == 'dgm':
+            print(f"Skipping {tablename}")
+            continue
+
+        print(tablename)
+        tablevar = sqlalchemy.Table(tablename, metadata, autoload_with=connection)
+        print(f"Importing {file}")
         trans = connection.begin()
-        with open(file,'r') as yamlstream:
+        with open(file) as yamlstream:
+            print(f"importing {os.path.basename(yamlstream.name)}")
             rows=load(yamlstream,Loader=SafeLoader)
-            print "Yaml Processed into memory"
+            print(f"{os.path.basename(yamlstream.name)} loaded")
             if rows is not None:
                 for row in rows:
-                    connection.execute(tablevar.insert().values(row))
+                    try:
+                        connection.execute(tablevar.insert().values(row))
+                    except sqlalchemy.exc.IntegrityError as err:
+                        print(f"{tablename} skipped {row} ({err})")
         trans.commit()

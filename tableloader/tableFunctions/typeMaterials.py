@@ -1,35 +1,29 @@
-# -*- coding: utf-8 -*-
 import sys
 import os
-reload(sys)
-sys.setdefaultencoding("utf-8")
 from sqlalchemy import Table
 
 from yaml import load
 try:
 	from yaml import CSafeLoader as SafeLoader
-	print "Using CSafeLoader"
 except ImportError:
 	from yaml import SafeLoader
-	print "Using Python SafeLoader"
+	print("Using Python SafeLoader")
 
 
 def importyaml(connection,metadata,sourcePath,language='en'):
-    print "Importing Type Materials"
+    print("Importing Type Materials")
     invTypeMaterials = Table('invTypeMaterials',metadata)
     
-    print "opening Yaml"
-        
     trans = connection.begin()
-    with open(os.path.join(sourcePath,'fsd','typeMaterials.yaml'),'r') as yamlstream:
-        print "importing"
+    with open(os.path.join(sourcePath,'fsd','typeMaterials.yaml')) as yamlstream:
+        print(f"importing {os.path.basename(yamlstream.name)}")
         materials=load(yamlstream,Loader=SafeLoader)
-        print "Yaml Processed into memory"
+        print(f"{os.path.basename(yamlstream.name)} loaded")
         for typeid in materials:
             for material in materials[typeid]['materials']:
-                connection.execute(invTypeMaterials.insert(),
+                connection.execute(invTypeMaterials.insert().values(
                             typeID=typeid,
-                            materialTypeID=material['materialTypeID'],
-                            quantity=material['quantity']
-                )
+                            materialTypeID=material.get('materialTypeID'),
+                            quantity=material.get('quantity', 0)
+                ))
     trans.commit()
