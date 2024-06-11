@@ -22,7 +22,7 @@ def importyaml(connection,metadata,sourcePath,language='en'):
     print "opening Yaml"
         
     trans = connection.begin()
-    with open(os.path.join(sourcePath,'fsd','categoryIDs.yaml'),'r') as yamlstream:
+    with open(os.path.join(sourcePath,'fsd','categories.yaml'),'r') as yamlstream:
         print "importing"
         categoryids=load(yamlstream,Loader=SafeLoader)
         print "Yaml Processed into memory"

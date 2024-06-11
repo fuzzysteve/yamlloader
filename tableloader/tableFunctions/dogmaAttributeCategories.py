@@ -31,6 +31,6 @@ def importyaml(connection,metadata,sourcePath,language='en'):
           connection.execute(dgmAttributeCategories.insert(),
                              categoryID=dogmaAttributeCategoryID,
                              categoryName=attribute['name'],
-                             categoryDescription=attribute['description']
+                             categoryDescription=attribute.get('description','')
                 )
     trans.commit()

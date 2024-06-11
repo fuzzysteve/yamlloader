@@ -77,7 +77,7 @@ def importyaml(connection,metadata,sourcePath):
     
     
     
-    regions=glob.glob(os.path.join(sourcePath,'fsd','universe','*','*','region.staticdata'))
+    regions=glob.glob(os.path.join(sourcePath,'fsd','universe','*','*','region.yaml'))
     for regionfile in regions:
         head, tail = os.path.split(regionfile)
         print "Importing Region {}".format(head)
@@ -124,7 +124,7 @@ def importyaml(connection,metadata,sourcePath):
                                 wormholeClassID=region['wormholeClassID']);
                             
         print "Importing Constellations."
-        constellations=glob.glob(os.path.join(head,'*','constellation.staticdata'))
+        constellations=glob.glob(os.path.join(head,'*','constellation.yaml'))
         for constellationfile in constellations:
             chead, tail = os.path.split(constellationfile)
             with open(constellationfile,'r') as yamlstream:
@@ -167,7 +167,7 @@ def importyaml(connection,metadata,sourcePath):
                                 locationID=constellation['constellationID'],
                                 wormholeClassID=constellation['wormholeClassID']);
 
-            systems=glob.glob(os.path.join(chead,'*','solarsystem.staticdata'))
+            systems=glob.glob(os.path.join(chead,'*','solarsystem.yaml'))
             print "Importing Systems"
             for systemfile in systems:
                 with open(systemfile,'r') as yamlstream:
@@ -389,6 +389,7 @@ def importyaml(connection,metadata,sourcePath):
                                                 security=system['security'])
                         
                 for stargate in system.get('stargates',[]):
+                    gatename=connection.execute(invNames.select().where( invNames.c.itemID == stargate ) ).fetchall()[0]['itemName']
                     connection.execute(mapDenormalize.insert(),
                                         itemID=stargate,
                                         typeID=system['stargates'][stargate]['typeID'],
@@ -399,6 +400,7 @@ def importyaml(connection,metadata,sourcePath):
                                         x=system['stargates'][stargate]['position'][0],
                                         y=system['stargates'][stargate]['position'][1],
                                         z=system['stargates'][stargate]['position'][2],
+                                        itemname=gatename,
                                         security=system['security'])
 
         trans.commit()
