@@ -400,7 +400,7 @@ def importyaml(connection,metadata,sourcePath):
                                         x=system['stargates'][stargate]['position'][0],
                                         y=system['stargates'][stargate]['position'][1],
                                         z=system['stargates'][stargate]['position'][2],
-                                        itemname=gatename,
+                                        itemName=gatename,
                                         security=system['security'])
 
         trans.commit()
